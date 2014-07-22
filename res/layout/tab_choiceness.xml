@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/tab_text_color"
+    android:background="@color/activity_bg_color"
     android:gravity="center_horizontal"
     android:orientation="vertical" >
 
@@ -24,7 +24,7 @@
             android:layout_marginRight="15dip"
             android:background="@drawable/write_secret"
             android:paddingLeft="10dip"
-            android:paddingRight="10dip" /> 
+            android:paddingRight="10dip" />
     </RelativeLayout>
 
     <FrameLayout
@@ -36,9 +36,11 @@
             android:id="@+id/list_choiceness"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="8dip"
+            android:layout_marginRight="8dip"
             android:cacheColorHint="@android:color/transparent"
-            android:divider="@drawable/base_horizontal_line"
-            android:dividerHeight="1dp"
+            android:divider="@null"
+            android:dividerHeight="8dip"
             android:fadingEdgeLength="0dp"
             android:fastScrollEnabled="true"
             android:paddingBottom="10dp" />
