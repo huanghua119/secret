@@ -103,14 +103,22 @@ public class BaseActivity extends FragmentActivity {
 
     public void startAnimActivity(Class<?> cla) {
         this.startActivity(new Intent(this, cla));
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
     }
 
     public void startAnimActivity(Intent intent) {
         this.startActivity(intent);
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
     }
 
     public void showLog(String msg) {
         Log.i(CustomApplcation.TAG, msg);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 
 }

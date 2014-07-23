@@ -1,6 +1,7 @@
 package com.huanghua.mysecret.frament;
 
 import com.huanghua.mysecret.CustomApplcation;
+import com.huanghua.mysecret.R;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -73,10 +74,12 @@ public abstract class FragmentBase extends Fragment {
      */
     public void startAnimActivity(Intent intent) {
         this.startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.right_in, R.anim.right_out);
     }
 
     public void startAnimActivity(Class<?> cla) {
         getActivity().startActivity(new Intent(getActivity(), cla));
+        getActivity().overridePendingTransition(R.anim.right_in, R.anim.right_out);
     }
 
     public void showLog(String msg) {

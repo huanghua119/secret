@@ -4,6 +4,9 @@
     <color name="tab_text_color">#f3f3f3</color>
     <color name="base_bg">#f4f6f6</color>
     <color name="activity_bg_color">#2D2D2D</color>
+    <color name="xlistview_footer_textcolor">#0033AA</color>
+    <color name="item_text_color">#d6d4d7</color>
+    <color name="list_item_black_color">#1c1a1d</color>
     <drawable name="item_btn_bg_normal">#242225</drawable>
     <drawable name="item_btn_bg_press">#E8B24D</drawable>
 

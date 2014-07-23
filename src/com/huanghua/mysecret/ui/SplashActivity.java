@@ -5,6 +5,7 @@ import com.huanghua.mysecret.config.Config;
 
 import cn.bmob.v3.Bmob;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -38,7 +39,7 @@ public class SplashActivity extends BaseActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
             case GO_HOME:
-                startAnimActivity(MainActivity.class);
+                startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 finish();
                 break;
             case GO_LOGIN:

@@ -8,6 +8,8 @@ public class User extends BmobUser {
 
     private boolean sex;
 
+    private String avatar;
+
     public User() {
 
     }
@@ -28,6 +30,14 @@ public class User extends BmobUser {
         } else {
             return false;
         }
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
 }
