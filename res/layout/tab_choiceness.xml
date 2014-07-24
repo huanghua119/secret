@@ -9,11 +9,9 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/title_height"
         android:background="@drawable/title"
-        android:gravity="center_vertical"
-        android:paddingBottom="8dip"
-        android:paddingTop="8dip" >
+        android:gravity="center_vertical" >
 
         <ImageButton
             android:id="@+id/write_secret"

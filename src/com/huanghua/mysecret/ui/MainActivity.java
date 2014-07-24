@@ -2,6 +2,7 @@ package com.huanghua.mysecret.ui;
 
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.frament.ChoicenessFragment;
+import com.huanghua.mysecret.frament.MoreFragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,7 +22,7 @@ public class MainActivity extends BaseActivity {
 
     private ChoicenessFragment mChoicenessFrament;
     private ChoicenessFragment mChoicenessFrament2;
-    private ChoicenessFragment mChoicenessFrament3;
+    private MoreFragment mMoreFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +46,9 @@ public class MainActivity extends BaseActivity {
     private void initTab() {
         mChoicenessFrament = new ChoicenessFragment();
         mChoicenessFrament2 = new ChoicenessFragment();
-        mChoicenessFrament3 = new ChoicenessFragment();
+        mMoreFragment = new MoreFragment();
         fragments = new Fragment[] { mChoicenessFrament, mChoicenessFrament2,
-                mChoicenessFrament3 };
+                mMoreFragment };
         // 添加显示第一个fragment
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, mChoicenessFrament)

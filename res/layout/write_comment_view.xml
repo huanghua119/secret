@@ -9,20 +9,18 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/title_height"
         android:background="@drawable/title"
         android:gravity="center_vertical" >
 
         <TextView
             android:id="@+id/btn_cancel"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
-            android:layout_gravity="center"
             android:clickable="true"
-            android:paddingBottom="10dip"
+            android:gravity="center_vertical"
             android:paddingLeft="15dip"
-            android:paddingTop="10dip"
             android:text="@string/back"
             android:textColor="@android:color/white"
             android:textSize="13sp" />
@@ -50,9 +48,9 @@
             android:divider="@null"
             android:dividerHeight="0dip"
             android:fadingEdgeLength="0dp"
-            android:paddingTop="8dip"
+            android:fastScrollEnabled="true"
             android:paddingBottom="8dip"
-            android:fastScrollEnabled="true" />
+            android:paddingTop="8dip" />
     </FrameLayout>
 
     <LinearLayout
