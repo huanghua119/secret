@@ -12,6 +12,7 @@ import com.huanghua.mysecret.bean.Comment;
 import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.util.ImageLoadOptions;
+import com.huanghua.mysecret.view.DateTextView;
 import com.huanghua.mysecret.view.SupportView;
 import com.huanghua.mysecret.view.xlist.XListView;
 import com.huanghua.mysecret.view.xlist.XListView.IXListViewListener;
@@ -73,9 +74,6 @@ public class WriteCommentActivity extends BaseActivity implements
         initSecretView();
         mCommentListView.addHeaderView(mSecretView);
         mCommentListView.setAdapter(mListAdapter);
-        mQueryComent = new BmobQuery<Comment>();
-        mQueryComent.addWhereEqualTo("secret", mCurrentSecret);
-        mQueryComent.include("fromUser");
     }
 
     private void initSecretView() {
@@ -83,7 +81,8 @@ public class WriteCommentActivity extends BaseActivity implements
         ImageView mPhoto = (ImageView) mSecretView
                 .findViewById(R.id.item_photo);
         TextView mName = (TextView) mSecretView.findViewById(R.id.item_name);
-        TextView mDate = (TextView) mSecretView.findViewById(R.id.item_date);
+        DateTextView mDate = (DateTextView) mSecretView.findViewById(R.id.item_date);
+        mDate.setInitDate(mCurrentSecret.getCreatedAt());
         TextView mContents = (TextView) mSecretView
                 .findViewById(R.id.item_contents);
         String avatar = user.getAvatar();
@@ -94,7 +93,6 @@ public class WriteCommentActivity extends BaseActivity implements
             mPhoto.setImageResource(R.drawable.user_photo_default);
         }
 
-        mDate.setText(mCurrentSecret.getCreatedAt());
         mContents.setText(mCurrentSecret.getContents());
         mName.setText(user.getUsername());
         Drawable drawable = getResources().getDrawable(
@@ -110,6 +108,9 @@ public class WriteCommentActivity extends BaseActivity implements
     @Override
     public void onClick(View v) {
         if (v == mGoToComment) {
+            if (!checkNetwork()) {
+                return;
+            }
             Intent intent = new Intent();
             intent.putExtra("write_type", WriteSecretActivity.WRITE_TYPE_COMMENT);
             intent.putExtra("toUser", mCurrentSecret.getUser());
@@ -137,6 +138,7 @@ public class WriteCommentActivity extends BaseActivity implements
         if (mQueryComent == null) {
             mQueryComent = new BmobQuery<Comment>();
             mQueryComent.addWhereEqualTo("secret", mCurrentSecret);
+            mQueryComent.order("-createdAt");
             mQueryComent.include("fromUser");
         }
         mQueryComent.findObjects(this, mFindCommentListener);

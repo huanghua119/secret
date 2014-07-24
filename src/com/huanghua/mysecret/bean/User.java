@@ -25,7 +25,7 @@ public class User extends BmobUser {
     @Override
     public boolean equals(Object o) {
         User u = (User) o;
-        if (u.getObjectId().equals(this.getObjectId())) {
+        if (u != null && u.getObjectId() != null && getObjectId() != null && u.getObjectId().equals(this.getObjectId())) {
             return true;
         } else {
             return false;

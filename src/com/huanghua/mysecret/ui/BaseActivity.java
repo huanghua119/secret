@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.huanghua.mysecret.CustomApplcation;
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.manager.UserManager;
+import com.huanghua.mysecret.util.CommonUtils;
 
 public class BaseActivity extends FragmentActivity {
 
@@ -121,4 +122,11 @@ public class BaseActivity extends FragmentActivity {
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 
+    public boolean checkNetwork() {
+        if (!CommonUtils.isNetworkAvailable(this)) {
+            ShowToast(R.string.no_conn_network);
+            return false;
+        }
+        return true;
+    }
 }

@@ -13,6 +13,7 @@ import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.util.ImageLoadOptions;
+import com.huanghua.mysecret.view.DateTextView;
 import com.huanghua.mysecret.view.SupportView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -33,9 +34,10 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
         User user = secret.getUser();
         ImageView mPhoto = (ImageView) view.findViewById(R.id.item_photo);
         TextView mName = (TextView) view.findViewById(R.id.item_name);
-        TextView mDate = (TextView) view.findViewById(R.id.item_date);
+        DateTextView mDate = (DateTextView) view.findViewById(R.id.item_date);
+        mDate.setInitDate(secret.getCreatedAt());
         TextView mContents = (TextView) view.findViewById(R.id.item_contents);
-        
+
         String avatar = user.getAvatar();
         if (avatar != null && !avatar.equals("")) {
             ImageLoader.getInstance()
@@ -44,7 +46,6 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
             mPhoto.setImageResource(R.drawable.user_photo_default);
         }
 
-        mDate.setText(secret.getCreatedAt());
         mContents.setText(secret.getContents());
         mName.setText(user.getUsername());
         Drawable drawable = mContext.getResources().getDrawable(
@@ -55,6 +56,7 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
 
         SupportView sv = (SupportView) view.findViewById(R.id.item_bottom);
         sv.setSecret(secret);
+        view.setTag(secret);
         return view;
     }
 

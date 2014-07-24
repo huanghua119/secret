@@ -19,10 +19,19 @@
     <string name="publication_faile">提交失败！请重试 ！</string>
     <string name="publication_success">提交成功，待审核通过后发表！</string>
     <string name="write_secret_hint">您的投稿公在审核后发表，审核通过的标准：真实事件的吐槽、内容新鲜的事件、心中隐藏的秘密，请不要使用您或其他人的其实信息（电话 地址等，）以免给您或其他人带来麻烦。</string>
+    <string name="write_comment_hint">网络也有秩序，请文明用语，拒绝粗俗，违者永久封禁帐号~</string>
     <string name="comment_title">评论</string>
     <string name="back">返回</string>
     <string name="add_one">+1</string>
     <string name="write_comment">写评论</string>
     <string name="publication_comment">发表评论</string>
+    <string name="no_conn_network">网络未连接，请检查网络设置 !</string>
+    <string name="loading">加载中.....</string>
+    <string name="say">说:</string>
+    <string name="date_now">刚才</string>
+    <string name="date_min_befor">分钟前</string>
+    <string name="date_hour_befor">小时前</string>
+    <string name="date_day_befor">天前</string>
+    <string name="date_month_befor">个月前</string>
 
 </resources>

@@ -40,17 +40,22 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
         mWriteType = getIntent().getIntExtra("write_type", WRITE_TYPE_SECRET);
 
         mTitle = (TextView) findViewById(R.id.title);
-        if (mWriteType == WRITE_TYPE_SECRET) {
-            mTitle.setText(R.string.publication_secret);
-        } else if (mWriteType == WRITE_TYPE_COMMENT) {
-            mTitle.setText(R.string.publication_comment);
-        }
         mContents = (EditText) findViewById(R.id.contents);
         mContents.addTextChangedListener(this);
         mContentsCountView = (TextView) findViewById(R.id.contents_count);
+        if (mWriteType == WRITE_TYPE_SECRET) {
+            mTitle.setText(R.string.publication_secret);
+            mContents.setHint(R.string.write_secret_hint);
+        } else if (mWriteType == WRITE_TYPE_COMMENT) {
+            mTitle.setText(R.string.publication_comment);
+            mContents.setHint(R.string.write_comment_hint);
+        }
     }
 
-    public void onPublication(View v) {
+    public void onPublication(final View v) {
+        if (!checkNetwork()) {
+            return;
+        }
         String content = mContents.getText().toString();
         if (content != null && !"".endsWith(content)) {
             if (mWriteType == WRITE_TYPE_SECRET) {
@@ -68,13 +73,14 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
                             public void run() {
                                 finish();
                             }
-                        }, 2000);
+                        }, 100);
                     }
 
                     @Override
                     public void onFailure(int arg0, String arg1) {
                         showLog("save secret failure " + arg1);
                         ShowToast(R.string.publication_faile);
+                        v.setClickable(true);
                     }
                 });
             } else {
@@ -96,16 +102,18 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
                             public void run() {
                                 finish();
                             }
-                        }, 2000);
+                        }, 100);
                     }
 
                     @Override
                     public void onFailure(int arg0, String arg1) {
                         showLog("save comment failure " + arg1);
                         ShowToast(R.string.publication_faile);
+                        v.setClickable(true);
                     }
                 });
             }
+            v.setClickable(false);
         }
     }
 

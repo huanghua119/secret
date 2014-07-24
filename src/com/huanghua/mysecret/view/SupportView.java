@@ -110,7 +110,7 @@ public class SupportView extends LinearLayout implements View.OnClickListener {
     }
 
     private void checkClick(SecretSupport ss) {
-        if (!mIsCheck && ss.getFromUser().equals(mCurrentUser)) {
+        if (!mIsCheck && ss.getFromUser() != null && ss.getFromUser().equals(mCurrentUser)) {
             mCuSupport = ss;
             mIsCheck = true;
             if (ss.isSupport()) {
