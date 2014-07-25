@@ -23,10 +23,60 @@
             android:textSize="16sp" />
     </RelativeLayout>
 
-    <FrameLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0.0dip"
-        android:layout_weight="1.0" >
-    </FrameLayout>
+        android:layout_height="0dip"
+        android:layout_marginTop="10dip"
+        android:layout_weight="1"
+        android:paddingLeft="8dip"
+        android:paddingRight="8dip" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:id="@+id/user_login"
+                android:layout_width="match_parent"
+                android:layout_height="48dip"
+                android:background="@drawable/more_single_bg"
+                android:clickable="true"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:id="@+id/user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="8dip"
+                    android:gravity="center_vertical"
+                    android:text="@string/user_nologin"
+                    android:textColor="@android:color/white"
+                    android:textSize="17sp" />
+
+                <ImageView
+                    android:id="@+id/user_photo"
+                    android:layout_width="35dip"
+                    android:layout_height="35dip"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="24dip"
+                    android:background="@drawable/default_icon"
+                    android:contentDescription="@string/app_name" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dip"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/near_right" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

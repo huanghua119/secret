@@ -33,5 +33,31 @@
     <string name="date_hour_befor">小时前</string>
     <string name="date_day_befor">天前</string>
     <string name="date_month_befor">个月前</string>
+    <string name="user_nologin">未登陆</string>
+    <string name="user_login">登陆</string>
+    <string name="user_register">注册</string>
+    <string name="my_user">我的帐户</string>
+    <string name="user_name">用户帐号</string>
+    <string name="user_pass">登陆密码</string>
+    <string name="twopass">确认密码</string>
+    <string name="sex">性别</string>
+    <string name="sex_man">男</string>
+    <string name="sex_woman">女</string>
+    <string name="commit">提交</string>
+    <string name="notid">请输入帐号</string>
+    <string name="notpass">请输入密码</string>
+    <string name="passerror">你输入的密码不正确</string>
+    <string name="usernotfind">你输入的帐号不存在</string>
+    <string name="login_now">正在登陆....</string>
+    <string name="logout">退出登陆</string>
+    <string name="namenotnull">请输入用户昵称!</string>
+    <string name="passnotnull">请输入登陆密码!</string>
+    <string name="twopassnotpass">确认密码和登陆密码不一置!</string>
+    <string name="pass_so_easy">密码至少6位!</string>
+    <string name="beingRegister">注册中......</string>
+    <string name="register_succes">注册成功</string>
+    <string name="registerFail">注册失败，请重试！</string>
+    <string name="login_fail">帐号或密码错误!</string>
+    <string name="register_fail_username">注册失败，帐户已存在！</string>
 
 </resources>

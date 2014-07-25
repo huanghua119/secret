@@ -1,11 +1,8 @@
 package com.huanghua.mysecret.manager;
 
-import java.util.List;
-
 import android.content.Context;
 import android.util.Log;
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SaveListener;
 
 import com.huanghua.mysecret.CustomApplcation;
 import com.huanghua.mysecret.bean.User;
@@ -15,6 +12,12 @@ public class UserManager {
     private static UserManager mUserManager;
     private static Context sContext;
     private User mCurrentUser;
+
+    public interface UserManagerListener {
+        public void onError(int arg0, String arg1);
+
+        public void onSuccess(User u);
+    }
 
     private UserManager() {
     }
@@ -32,26 +35,63 @@ public class UserManager {
     }
 
     public void initCurrentUser() {
+        mCurrentUser = User.getCurrentUser(sContext, User.class);
+    }
+
+    public void login(String userName, String passWord,
+            final UserManagerListener userListener) {
         mCurrentUser = new User();
-        BmobQuery<User> query = new BmobQuery<User>();
-        query.addWhereEqualTo("username", "HH");
-        query.addWhereEqualTo("password", "123456");
-        query.findObjects(sContext, new FindListener<User>() {
+        mCurrentUser.setUsername(userName);
+        mCurrentUser.setPassword(passWord);
+        mCurrentUser.login(sContext, new SaveListener() {
             @Override
-            public void onSuccess(List<User> arg0) {
-                mCurrentUser = arg0.get(0);
-                showLog("query currentUser success:" + arg0);
+            public void onSuccess() {
+                if (userListener != null) {
+                    userListener.onSuccess(mCurrentUser);
+                }
             }
 
             @Override
-            public void onError(int arg0, String arg1) {
-                showLog("query currentUser error:" + arg0);
+            public void onFailure(int arg0, String arg1) {
+                mCurrentUser = null;
+                if (userListener != null) {
+                    userListener.onError(arg0, arg1);
+                }
             }
         });
     }
 
+    public void logout() {
+        User.logOut(sContext);
+        mCurrentUser = null;
+    }
+
     public User getCurrentUser() {
         return mCurrentUser;
+    }
+
+    public void signUp(User u, final UserManagerListener userListener) {
+        u.signUp(sContext, new SaveListener() {
+            @Override
+            public void onSuccess() {
+                if (userListener != null) {
+                    userListener.onSuccess(mCurrentUser);
+                }
+            }
+
+            @Override
+            public void onFailure(int arg0, String arg1) {
+                if (userListener != null) {
+                    userListener.onError(arg0, arg1);
+                }
+                mCurrentUser = null;
+            }
+        });
+        mCurrentUser = u;
+    }
+
+    public void setCreentUser(User u) {
+        this.mCurrentUser = u;
     }
 
     public void showLog(String msg) {
@@ -59,4 +99,5 @@ public class UserManager {
             Log.i(CustomApplcation.TAG, msg);
         }
     }
+
 }

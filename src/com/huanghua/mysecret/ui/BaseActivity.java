@@ -129,4 +129,18 @@ public class BaseActivity extends FragmentActivity {
         }
         return true;
     }
+
+    public void onBack(View view) {
+        onBackPressed();
+    }
+
+    public boolean checkUserLogin() {
+        if (userManager == null || userManager.getCurrentUser() == null) {
+            Intent intent = new Intent();
+            intent.setClass(this, UserLoginActivity.class);
+            startAnimActivity(intent);
+            return true;
+        }
+        return false;
+    }
 }

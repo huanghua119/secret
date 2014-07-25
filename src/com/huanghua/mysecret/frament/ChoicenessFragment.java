@@ -25,6 +25,7 @@ import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.adapter.base.ChoicenessListAdapter;
 import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.bean.User;
+import com.huanghua.mysecret.ui.BaseActivity;
 import com.huanghua.mysecret.ui.WriteCommentActivity;
 import com.huanghua.mysecret.ui.WriteSecretActivity;
 import com.huanghua.mysecret.view.xlist.XListView;
@@ -164,6 +165,9 @@ public class ChoicenessFragment extends FragmentBase implements
 
     @Override
     public void onClick(View v) {
+        if (((BaseActivity)getActivity()).checkUserLogin()) {
+            return;
+        }
         if (v == mWriteSecret) {
             Intent intent = new Intent();
             intent.setClass(getActivity(), WriteSecretActivity.class);

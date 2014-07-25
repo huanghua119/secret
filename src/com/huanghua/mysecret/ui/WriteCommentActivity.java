@@ -111,6 +111,9 @@ public class WriteCommentActivity extends BaseActivity implements
             if (!checkNetwork()) {
                 return;
             }
+            if (checkUserLogin()) {
+                return;
+            }
             Intent intent = new Intent();
             intent.putExtra("write_type", WriteSecretActivity.WRITE_TYPE_COMMENT);
             intent.putExtra("toUser", mCurrentSecret.getUser());

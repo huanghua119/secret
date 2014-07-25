@@ -22,6 +22,7 @@ import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.bean.SecretSupport;
 import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.manager.UserManager;
+import com.huanghua.mysecret.ui.BaseActivity;
 import com.huanghua.mysecret.ui.WriteCommentActivity;
 
 /***
@@ -49,7 +50,6 @@ public class SupportView extends LinearLayout implements View.OnClickListener {
 
     public SupportView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mCurrentUser = UserManager.getInstance(getContext()).getCurrentUser();
     }
 
     @Override
@@ -61,12 +61,13 @@ public class SupportView extends LinearLayout implements View.OnClickListener {
         mCry.setOnClickListener(this);
         mHappy.setOnClickListener(this);
         mComment.setOnClickListener(this);
-
     }
 
     public void startQuery() {
         mIsCheck = false;
         mCuSupport = null;
+        mHappy.setSelected(false);
+        mCry.setSelected(false);
         BmobQuery<SecretSupport> ssQuery = new BmobQuery<SecretSupport>();
         ssQuery.addWhereEqualTo("secret", mCurrentSecret);
         ssQuery.findObjects(getContext(), new FindListener<SecretSupport>() {
@@ -76,7 +77,12 @@ public class SupportView extends LinearLayout implements View.OnClickListener {
                 int happy = 0;
                 int cry = 0;
                 for (SecretSupport ss : arg0) {
-                    checkClick(ss);
+                    if (getCurrentUser() == null) {
+                        mHappy.setSelected(false);
+                        mCry.setSelected(false);
+                    } else {
+                        checkClick(ss);
+                    }
                     if (ss.isSupport()) {
                         happy++;
                     } else {
@@ -110,17 +116,14 @@ public class SupportView extends LinearLayout implements View.OnClickListener {
     }
 
     private void checkClick(SecretSupport ss) {
-        if (!mIsCheck && ss.getFromUser() != null && ss.getFromUser().equals(mCurrentUser)) {
+        if (!mIsCheck && ss.getFromUser() != null
+                && ss.getFromUser().equals(getCurrentUser())) {
             mCuSupport = ss;
             mIsCheck = true;
             if (ss.isSupport()) {
-                mCry.setClickable(true);
-                mHappy.setClickable(false);
                 mHappy.setSelected(true);
                 mCry.setSelected(false);
             } else {
-                mHappy.setClickable(true);
-                mCry.setClickable(false);
                 mHappy.setSelected(false);
                 mCry.setSelected(true);
             }
@@ -135,17 +138,28 @@ public class SupportView extends LinearLayout implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        if (((BaseActivity) getContext()).checkUserLogin()) {
+            return;
+        }
         if (v == mComment) {
             if (!mIsComment) {
                 Intent intent = new Intent();
                 intent.setClass(getContext(), WriteCommentActivity.class);
                 intent.putExtra("secret", mCurrentSecret);
                 getContext().startActivity(intent);
-                ((Activity) getContext()).overridePendingTransition(R.anim.right_in, R.anim.right_out);
+                ((Activity) getContext()).overridePendingTransition(
+                        R.anim.right_in, R.anim.right_out);
             }
         } else {
             if (!mClickEable) {
                 return;
+            }
+            if (mCuSupport != null
+                    && mCuSupport.getFromUser().equals(getCurrentUser())) {
+                if ((mCuSupport.isSupport() && v == mHappy)
+                        || (!mCuSupport.isSupport() && v == mCry)) {
+                    return;
+                }
             }
             if (mCuSupport != null) {
                 mCuSupport.setSupport(v == mHappy);
@@ -194,5 +208,10 @@ public class SupportView extends LinearLayout implements View.OnClickListener {
 
     public void setInComment(boolean in) {
         mIsComment = in;
+    }
+
+    private User getCurrentUser() {
+        mCurrentUser = UserManager.getInstance(getContext()).getCurrentUser();
+        return mCurrentUser;
     }
 }
