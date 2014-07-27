@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.bean.Comment;
 import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.bean.User;
+import com.huanghua.mysecret.util.LocationUtil;
 
 /***
  * 发布秘密
@@ -57,12 +59,19 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
             return;
         }
         String content = mContents.getText().toString();
+        LocationUtil lu = new LocationUtil(this);
         if (content != null && !"".endsWith(content)) {
             if (mWriteType == WRITE_TYPE_SECRET) {
                 Secret s = new Secret();
                 s.setContents(content);
                 s.setUser(userManager.getCurrentUser());
                 s.setStatus(0);
+                try {
+					s.setLocation(lu.findLocation());
+					s.setAddress(lu.getAddress(lu.findLocation()));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
                 s.save(this, new SaveListener() {
                     @Override
                     public void onSuccess() {

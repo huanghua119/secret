@@ -14,6 +14,7 @@ import android.widget.EditText;
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.util.CommonUtils;
+import com.huanghua.mysecret.util.LocationUtil;
 import com.huanghua.mysecret.manager.UserManager.UserManagerListener;
 
 public class UserLoginActivity extends BaseActivity implements OnClickListener {

@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,6 +14,7 @@ import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.util.ImageLoadOptions;
+import com.huanghua.mysecret.util.LocationUtil;
 import com.huanghua.mysecret.view.DateTextView;
 import com.huanghua.mysecret.view.SupportView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -34,6 +36,7 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
         User user = secret.getUser();
         ImageView mPhoto = (ImageView) view.findViewById(R.id.item_photo);
         TextView mName = (TextView) view.findViewById(R.id.item_name);
+        TextView mLocation = (TextView) view.findViewById(R.id.item_location);
         DateTextView mDate = (DateTextView) view.findViewById(R.id.item_date);
         mDate.setInitDate(secret.getCreatedAt());
         TextView mContents = (TextView) view.findViewById(R.id.item_contents);
@@ -48,6 +51,10 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
 
         mContents.setText(secret.getContents());
         mName.setText(user.getUsername());
+        Log.e("hewei", "msg =================" + secret.getLocation());
+        
+        	mLocation.setText(secret.getAddress());
+
         Drawable drawable = mContext.getResources().getDrawable(
                 user.isSex() ? R.drawable.man : R.drawable.women);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(),

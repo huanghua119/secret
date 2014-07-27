@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:layout_alignParentBottom="true"
-        android:background="#000000"
+        android:background="#2f1747"
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 
@@ -39,7 +39,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="30dp"
-                android:layout_marginTop="7dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/notice"
                 android:contentDescription="@string/action_settings"
                 android:gravity="center"
@@ -74,7 +74,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="30dp"
-                android:layout_marginTop="7dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/notice"
                 android:contentDescription="@string/action_settings"
                 android:gravity="center"

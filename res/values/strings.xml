@@ -59,5 +59,6 @@
     <string name="registerFail">注册失败，请重试！</string>
     <string name="login_fail">帐号或密码错误!</string>
     <string name="register_fail_username">注册失败，帐户已存在！</string>
+    <string name="unknown_address">火星</string>
 
 </resources>

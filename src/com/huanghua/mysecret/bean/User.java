@@ -1,6 +1,7 @@
 package com.huanghua.mysecret.bean;
 
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobGeoPoint;
 
 public class User extends BmobUser {
 
@@ -8,9 +9,9 @@ public class User extends BmobUser {
 
     private boolean sex;
 
-    private String avatar;
+    private String avatar; 
 
-    public User() {
+	public User() {
 
     }
 
@@ -39,5 +40,4 @@ public class User extends BmobUser {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
-
 }

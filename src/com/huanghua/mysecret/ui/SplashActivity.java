@@ -1,7 +1,9 @@
 package com.huanghua.mysecret.ui;
 
 import com.huanghua.mysecret.R;
+import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.config.Config;
+import com.huanghua.mysecret.util.LocationUtil;
 
 import cn.bmob.v3.Bmob;
 import android.annotation.SuppressLint;
@@ -9,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 /**
  * 引导页

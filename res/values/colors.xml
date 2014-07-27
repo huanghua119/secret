@@ -10,5 +10,8 @@
     <color name="list_item_black_color">#38274c</color>
     <drawable name="item_btn_bg_normal">#38274c</drawable>
     <drawable name="item_btn_bg_press">#361f4c</drawable>
-
+    
+    <!--  bottom tab color -->
+    <drawable name="bottom_btn_bg_press">#2f1747</drawable>
+	<drawable name="bottom_btn_bg_normal">#2f1747</drawable>   
 </resources>
