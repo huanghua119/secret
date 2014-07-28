@@ -1,17 +1,14 @@
 package com.huanghua.mysecret.ui;
 
-import com.huanghua.mysecret.R;
-import com.huanghua.mysecret.bean.User;
-import com.huanghua.mysecret.config.Config;
-import com.huanghua.mysecret.util.LocationUtil;
-
-import cn.bmob.v3.Bmob;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
+import cn.bmob.v3.Bmob;
+
+import com.huanghua.mysecret.R;
+import com.huanghua.mysecret.config.Config;
 
 /**
  * 引导页
@@ -29,11 +26,8 @@ public class SplashActivity extends BaseActivity {
         Bmob.initialize(this, Config.applicationId);
         userManager.initCurrentUser();
 
-        if (true) {
-            mHandler.sendEmptyMessageDelayed(GO_HOME, 2000);
-        } else {
-            mHandler.sendEmptyMessageDelayed(GO_LOGIN, 2000);
-        }
+        mHandler.sendEmptyMessageDelayed(GO_HOME, 2000);
+        mRunFinishAnim = false;
     }
 
     @SuppressLint("HandlerLeak")

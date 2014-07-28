@@ -3,10 +3,11 @@ package com.huanghua.mysecret.view;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,7 +16,6 @@ import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
-import com.huanghua.mysecret.CustomApplcation;
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.bean.Comment;
 import com.huanghua.mysecret.bean.Secret;
@@ -24,6 +24,7 @@ import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.manager.UserManager;
 import com.huanghua.mysecret.ui.BaseActivity;
 import com.huanghua.mysecret.ui.WriteCommentActivity;
+import com.huanghua.mysecret.util.CommonUtils;
 
 /***
  * 笑脸哭脸点击View
@@ -73,7 +74,7 @@ public class SupportView extends LinearLayout implements View.OnClickListener {
         ssQuery.findObjects(getContext(), new FindListener<SecretSupport>() {
             @Override
             public void onSuccess(List<SecretSupport> arg0) {
-                showLog("query SecretSupport success: " + arg0);
+                CommonUtils.showLog("query SecretSupport success: " + arg0);
                 int happy = 0;
                 int cry = 0;
                 for (SecretSupport ss : arg0) {
@@ -96,7 +97,7 @@ public class SupportView extends LinearLayout implements View.OnClickListener {
 
             @Override
             public void onError(int arg0, String arg1) {
-                showLog("query SecretSupport error: " + arg1);
+                CommonUtils.showLog("query SecretSupport error: " + arg1);
                 mClickEable = true;
             }
         });
@@ -130,12 +131,6 @@ public class SupportView extends LinearLayout implements View.OnClickListener {
         }
     }
 
-    public void showLog(String msg) {
-        if (CustomApplcation.DEBUG) {
-            Log.i(CustomApplcation.TAG, msg);
-        }
-    }
-
     @Override
     public void onClick(View v) {
         if (((BaseActivity) getContext()).checkUserLogin()) {
@@ -166,14 +161,18 @@ public class SupportView extends LinearLayout implements View.OnClickListener {
                 mCuSupport.update(getContext(), new UpdateListener() {
                     @Override
                     public void onSuccess() {
-                        showLog("save updateSupport success");
-                        startQuery();
+                        CommonUtils.showLog("save updateSupport success");
+                        if (mIsComment) {
+                            getContext().sendBroadcast(new Intent(DATE_COMMENT_CHANGER));
+                        } else {
+                            startQuery();
+                        }
                     }
 
                     @Override
                     public void onFailure(int arg0, String arg1) {
                         mClickEable = true;
-                        showLog("save updateSupport failure");
+                        CommonUtils.showLog("save updateSupport failure");
                     }
                 });
             } else {
@@ -185,14 +184,18 @@ public class SupportView extends LinearLayout implements View.OnClickListener {
                 ss.save(getContext(), new SaveListener() {
                     @Override
                     public void onSuccess() {
-                        showLog("save secretSupport success");
-                        startQuery();
+                        CommonUtils.showLog("save secretSupport success");
+                        if (mIsComment) {
+                            getContext().sendBroadcast(new Intent(DATE_COMMENT_CHANGER));
+                        } else {
+                            startQuery();
+                        }
                     }
 
                     @Override
                     public void onFailure(int arg0, String arg1) {
                         mClickEable = true;
-                        showLog("save secretSupport failure");
+                        CommonUtils.showLog("save secretSupport failure");
                     }
                 });
             }
@@ -213,4 +216,32 @@ public class SupportView extends LinearLayout implements View.OnClickListener {
         mCurrentUser = UserManager.getInstance(getContext()).getCurrentUser();
         return mCurrentUser;
     }
+
+    @Override
+    protected void onAttachedToWindow() {
+        if (mDateChangerReciver == null) {
+            mDateChangerReciver = new DateChangerReciver();
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(DATE_COMMENT_CHANGER);
+            getContext().registerReceiver(mDateChangerReciver, filter);
+        }
+        super.onAttachedToWindow();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        getContext().unregisterReceiver(mDateChangerReciver);
+        super.onDetachedFromWindow();
+    }
+
+    public static final String DATE_COMMENT_CHANGER = "date_comment_changer";
+    private DateChangerReciver mDateChangerReciver = null;
+
+    private class DateChangerReciver extends BroadcastReceiver  {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            startQuery();
+        }
+    }
+
 }

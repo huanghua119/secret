@@ -80,6 +80,7 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private void login() {
         String name = mUserName.getText().toString();
         String password = mUserPass.getText().toString();

@@ -1,5 +1,6 @@
 package com.huanghua.mysecret.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -14,6 +15,7 @@ import com.huanghua.mysecret.bean.Comment;
 import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.util.LocationUtil;
+import com.huanghua.mysecret.view.SupportView;
 
 /***
  * 发布秘密
@@ -105,6 +107,7 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
                     public void onSuccess() {
                         showLog("save comment success ");
                         ShowToastOld(R.string.publication_success);
+                        sendBroadcast(new Intent(SupportView.DATE_COMMENT_CHANGER));
                         mHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {

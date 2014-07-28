@@ -8,10 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import cn.bmob.v3.BmobQuery;
@@ -40,8 +37,10 @@ public class ChoicenessFragment extends FragmentBase implements
     private List<Secret> mSecretList = new ArrayList<Secret>();
     private BmobQuery<Secret> mQuerySecret = null;
     private ImageButton mWriteSecret = null;
+    /*
     private View mLoadView = null;
     private ImageView mLoadImage = null;
+    */
     private static final int LIST_DEFALUT_LIMIT = 20;
     private int mListPage = 1;
 
@@ -49,12 +48,24 @@ public class ChoicenessFragment extends FragmentBase implements
         @Override
         public void onSuccess(List<Secret> list) {
             showLog("query secret success:" + list.size());
-            mChoicenessAdapter.setList(list);
+            if (mChoicenessAdapter.getList() != null) {
+                if (mChoicenessAdapter.getList().size() != list.size()) {
+                    mChoicenessAdapter.setList(list);
+                } else {
+                    if (mListPage > 1) {
+                        mListPage--;
+                    }
+                }
+            } else {
+                mChoicenessAdapter.setList(list);
+            }
             refreshPull();
+            /*
             if (mLoadView.getVisibility() == View.VISIBLE) {
                 mLoadView.setVisibility(View.GONE);
                 mLoadImage.clearAnimation();
             }
+            */
             mListChoiceness.setPullRefreshEnable(true);
             mListChoiceness.setPullLoadEnable(true);
         }
@@ -87,15 +98,17 @@ public class ChoicenessFragment extends FragmentBase implements
         mWriteSecret = (ImageButton) findViewById(R.id.write_secret);
         mWriteSecret.setOnClickListener(this);
 
+        /*
         mLoadView = findViewById(R.id.load_view);
         mLoadImage = (ImageView) findViewById(R.id.load_img);
         Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(
                 getActivity(), R.anim.loading_animation);
         mLoadImage.startAnimation(hyperspaceJumpAnimation);
+        */
 
         mListChoiceness = (XListView) findViewById(R.id.list_choiceness);
         mListChoiceness.setPullLoadEnable(false);
-        mListChoiceness.setPullRefreshEnable(false);
+        mListChoiceness.setPullRefreshEnable(true);
         mListChoiceness.setXListViewListener(this);
         mListChoiceness.pullRefreshing();
         mChoicenessAdapter = new ChoicenessListAdapter(getActivity(),
@@ -113,8 +126,9 @@ public class ChoicenessFragment extends FragmentBase implements
             mQuerySecret.include("user");
             mListPage = 1;
             mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
+            //mQuerySecret.findObjects(getActivity(), mFindSecretListener);
+            toTopSelect();
         }
-        mQuerySecret.findObjects(getActivity(), mFindSecretListener);
     }
 
     @Override

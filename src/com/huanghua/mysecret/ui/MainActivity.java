@@ -1,15 +1,12 @@
 package com.huanghua.mysecret.ui;
 
 import com.huanghua.mysecret.R;
-import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.frament.ChoicenessFragment;
 import com.huanghua.mysecret.frament.MoreFragment;
-import com.huanghua.mysecret.util.LocationUtil;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -99,5 +96,26 @@ public class MainActivity extends BaseActivity {
         super.onResume();
         mChoiceness_tips.setVisibility(View.GONE);
         mNearby_tips.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void finish() {
+        mRunFinishAnim = false;
+        super.finish();
+    }
+
+    private static long firstTime;
+
+    /**
+     * 连续按两次返回键就退出
+     */
+    @Override
+    public void onBackPressed() {
+        if (firstTime + 2000 > System.currentTimeMillis()) {
+            super.onBackPressed();
+        } else {
+            ShowToastOld(R.string.pass_exit);
+        }
+        firstTime = System.currentTimeMillis();
     }
 }

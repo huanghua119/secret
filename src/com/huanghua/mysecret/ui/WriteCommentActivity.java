@@ -147,6 +147,7 @@ public class WriteCommentActivity extends BaseActivity implements
             mQueryComent.include("fromUser");
         }
         mQueryComent.findObjects(this, mFindCommentListener);
+        mSupportView.startQuery();
     }
 
 }

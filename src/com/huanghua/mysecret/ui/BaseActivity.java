@@ -26,6 +26,7 @@ public class BaseActivity extends FragmentActivity {
     protected int mScreenHeight;
     public LayoutInflater mInFlater;
     public UserManager userManager;
+    public boolean mRunFinishAnim = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +128,9 @@ public class BaseActivity extends FragmentActivity {
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        if (mRunFinishAnim) {
+            overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        }
     }
 
     public boolean checkNetwork() {
