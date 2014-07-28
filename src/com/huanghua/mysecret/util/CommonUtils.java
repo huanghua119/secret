@@ -1,11 +1,13 @@
 package com.huanghua.mysecret.util;
 
+import com.huanghua.mysecret.CustomApplcation;
 import com.huanghua.mysecret.R;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -77,5 +79,17 @@ public class CommonUtils {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT));
         return loadingDialog;
+    }
+
+    public static void showLog(String msg) {
+        if (CustomApplcation.DEBUG) {
+            Log.i(CustomApplcation.TAG, msg);
+        }
+    }
+
+    public static void showLog(String tag, String msg) {
+        if (CustomApplcation.DEBUG) {
+            Log.i(tag, msg);
+        }
     }
 }

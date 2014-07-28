@@ -13,6 +13,7 @@ import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.util.ImageLoadOptions;
+import com.huanghua.mysecret.util.ViewHolder;
 import com.huanghua.mysecret.view.DateTextView;
 import com.huanghua.mysecret.view.SupportView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -32,12 +33,12 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
         List<Secret> list = getList();
         Secret secret = list.get(position);
         User user = secret.getUser();
-        ImageView mPhoto = (ImageView) view.findViewById(R.id.item_photo);
-        TextView mName = (TextView) view.findViewById(R.id.item_name);
-        TextView mLocation = (TextView) view.findViewById(R.id.item_location);
-        DateTextView mDate = (DateTextView) view.findViewById(R.id.item_date);
+        ImageView mPhoto = ViewHolder.get(view, R.id.item_photo);
+        TextView mName = ViewHolder.get(view, R.id.item_name);
+        TextView mLocation = ViewHolder.get(view, R.id.item_location);
+        DateTextView mDate = ViewHolder.get(view, R.id.item_date);
         mDate.setInitDate(secret.getCreatedAt());
-        TextView mContents = (TextView) view.findViewById(R.id.item_contents);
+        TextView mContents = ViewHolder.get(view, R.id.item_contents);
 
         String avatar = user.getAvatar();
         if (avatar != null && !avatar.equals("")) {
@@ -58,9 +59,32 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
                 drawable.getMinimumHeight());
         mName.setCompoundDrawables(drawable, null, null, null);
 
-        SupportView sv = (SupportView) view.findViewById(R.id.item_bottom);
+        final SupportView sv = ViewHolder.get(view, R.id.item_bottom);
         sv.setSecret(secret);
-        view.setTag(secret);
+        setOnInViewClickListener(R.id.item_commit,
+                new onInternalClickListener() {
+                    @Override
+                    public void OnClickListener(View parentV, View v,
+                            Integer position, Object values) {
+                        sv.onClick(v);
+                    }
+                });
+        setOnInViewClickListener(R.id.item_support_cry,
+                new onInternalClickListener() {
+                    @Override
+                    public void OnClickListener(View parentV, View v,
+                            Integer position, Object values) {
+                        sv.onClick(v);
+                    }
+                });
+        setOnInViewClickListener(R.id.item_support_happy,
+                new onInternalClickListener() {
+                    @Override
+                    public void OnClickListener(View parentV, View v,
+                            Integer position, Object values) {
+                        sv.onClick(v);
+                    }
+                });
         return view;
     }
 

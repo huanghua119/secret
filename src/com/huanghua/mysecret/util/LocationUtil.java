@@ -11,7 +11,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.util.Log;
 import cn.bmob.v3.datatype.BmobGeoPoint;
 
 public class LocationUtil {
@@ -29,6 +28,7 @@ public class LocationUtil {
         if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
             Location location = locationManager
                     .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            CommonUtils.showLog("findLocation location:" + location);
             if (location != null) {
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
@@ -59,6 +59,7 @@ public class LocationUtil {
                 return sb.toString();
             }
         } catch (IOException e) {
+            CommonUtils.showLog("getAddress error:" + e);
             e.printStackTrace();
         }
         return mContext.getResources().getString(R.string.unknown_address);

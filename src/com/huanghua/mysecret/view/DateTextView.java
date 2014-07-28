@@ -84,8 +84,8 @@ public class DateTextView extends TextView {
             } else {
                 setText(mInitDate);
             }
-            showLog("nowDate: " + nowDate + " initDate:" + initDate + " day:"
-                    + day);
+            //showLog("nowDate: " + nowDate + " initDate:" + initDate + " day:"
+            //        + day);
         } catch (ParseException e) {
             e.printStackTrace();
         }

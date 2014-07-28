@@ -1,7 +1,5 @@
 package com.huanghua.mysecret.ui;
 
-import java.util.List;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +12,6 @@ import android.widget.EditText;
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.util.CommonUtils;
-import com.huanghua.mysecret.util.LocationUtil;
 import com.huanghua.mysecret.manager.UserManager.UserManagerListener;
 
 public class UserLoginActivity extends BaseActivity implements OnClickListener {
@@ -33,7 +30,8 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.user_login_view);
+        //setContentView(R.layout.user_login_view);
+        setContentView(R.layout.user_login_view_purple);
         init();
     }
 

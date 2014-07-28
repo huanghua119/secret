@@ -6,7 +6,6 @@ public class SecretSupport extends BmobObject {
 
     private static final long serialVersionUID = 1L;
     private User fromUser;
-    private User toUser;
     private Secret secret;
     private boolean support;
 
@@ -16,14 +15,6 @@ public class SecretSupport extends BmobObject {
 
     public void setFromUser(User fromUser) {
         this.fromUser = fromUser;
-    }
-
-    public User getToUser() {
-        return toUser;
-    }
-
-    public void setToUser(User toUser) {
-        this.toUser = toUser;
     }
 
     public Secret getSecret() {

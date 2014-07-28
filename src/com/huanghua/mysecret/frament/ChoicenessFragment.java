@@ -3,8 +3,6 @@ package com.huanghua.mysecret.frament;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,10 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import cn.bmob.v3.BmobQuery;
@@ -24,7 +20,6 @@ import cn.bmob.v3.listener.FindListener;
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.adapter.base.ChoicenessListAdapter;
 import com.huanghua.mysecret.bean.Secret;
-import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.ui.BaseActivity;
 import com.huanghua.mysecret.ui.WriteCommentActivity;
 import com.huanghua.mysecret.ui.WriteSecretActivity;
@@ -39,16 +34,16 @@ import com.huanghua.mysecret.view.xlist.XListView.IXListViewListener;
  */
 public class ChoicenessFragment extends FragmentBase implements
         IXListViewListener, View.OnClickListener, OnItemClickListener {
-    private InputMethodManager inputMethodManager;
 
     private XListView mListChoiceness;
     private ChoicenessListAdapter mChoicenessAdapter;
     private List<Secret> mSecretList = new ArrayList<Secret>();
     private BmobQuery<Secret> mQuerySecret = null;
     private ImageButton mWriteSecret = null;
-    private User mUser = null;
     private View mLoadView = null;
     private ImageView mLoadImage = null;
+    private static final int LIST_DEFALUT_LIMIT = 20;
+    private int mListPage = 1;
 
     private FindListener<Secret> mFindSecretListener = new FindListener<Secret>() {
         @Override
@@ -61,11 +56,15 @@ public class ChoicenessFragment extends FragmentBase implements
                 mLoadImage.clearAnimation();
             }
             mListChoiceness.setPullRefreshEnable(true);
+            mListChoiceness.setPullLoadEnable(true);
         }
 
         @Override
         public void onError(int arg0, String arg1) {
             showLog("query secret error:" + arg1);
+            if (mListPage > 1) {
+                mListPage--;
+            }
             refreshPull();
             mListChoiceness.setPullRefreshEnable(true);
         }
@@ -80,36 +79,7 @@ public class ChoicenessFragment extends FragmentBase implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        inputMethodManager = (InputMethodManager) getActivity()
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        /*
-         * BmobQuery<User> query = new BmobQuery<User>();
-         * query.getObject(getActivity(), "m57yAAAe", new GetListener<User>() {
-         * 
-         * @Override public void onSuccess(User arg0) { mUser = arg0;
-         * showLog("query user onSuccess:" + arg0); }
-         * 
-         * @Override public void onFailure(int arg0, String arg1) {
-         * showLog("query user onFailure:" + arg1); } });
-         * 
-         * BmobQuery<Secret> q = new BmobQuery<Secret>();
-         * q.findObjects(getActivity(), new FindListener<Secret>() {
-         * 
-         * @Override public void onSuccess(List<Secret> list) {
-         * //mChoicenessAdapter.setList(list); showLog("query secret success:" +
-         * list.size()); Secret s = list.get(0); s.setUser(mUser);
-         * s.update(getActivity(), new UpdateListener() {
-         * 
-         * @Override public void onSuccess() { showLog("update secret success");
-         * }
-         * 
-         * @Override public void onFailure(int arg0, String arg1) {
-         * showLog("update secret onFailure:" + arg1); } }); }
-         * 
-         * @Override public void onError(int arg0, String arg1) {
-         * showLog("error:" + arg1); } });
-         */
         init();
     }
 
@@ -141,7 +111,8 @@ public class ChoicenessFragment extends FragmentBase implements
             mQuerySecret = new BmobQuery<Secret>();
             mQuerySecret.order("-createdAt");
             mQuerySecret.include("user");
-            mQuerySecret.setLimit(20);
+            mListPage = 1;
+            mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
         }
         mQuerySecret.findObjects(getActivity(), mFindSecretListener);
     }
@@ -149,18 +120,26 @@ public class ChoicenessFragment extends FragmentBase implements
     @Override
     public void onRefresh() {
         showLog("choiceness onRefresh");
+        mListPage = 1;
+        mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
         mQuerySecret.findObjects(getActivity(), mFindSecretListener);
     }
 
     @Override
     public void onLoadMore() {
-        showLog("choiceness onLoadMore");
+        showLog("choiceness onLoadMore:" + mListChoiceness.getPullLoading());
+        mListPage++;
+        mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
+        mQuerySecret.findObjects(getActivity(), mFindSecretListener);
     }
 
     private void refreshPull() {
         showLog("refreshPull :" + mListChoiceness.getPullRefreshing());
         if (mListChoiceness.getPullRefreshing()) {
             mListChoiceness.stopRefresh();
+        }
+        if (mListChoiceness.getPullLoading()) {
+            mListChoiceness.stopLoadMore();
         }
     }
 
@@ -179,12 +158,19 @@ public class ChoicenessFragment extends FragmentBase implements
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
             long id) {
-        Secret s = (Secret) view.getTag();
+        Secret s = mChoicenessAdapter.getList().get(position - 1);
         if (s != null) {
             Intent intent = new Intent();
             intent.setClass(getActivity(), WriteCommentActivity.class);
             intent.putExtra("secret", s);
             startAnimActivity(intent);
+        }
+    }
+
+    public void toTopSelect() {
+        if (mListChoiceness != null && mListChoiceness.getCount() > 0) {
+            mListChoiceness.setSelection(0);
+            mListChoiceness.startRefresh();
         }
     }
 }

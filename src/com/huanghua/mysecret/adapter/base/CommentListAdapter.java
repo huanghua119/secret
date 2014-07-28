@@ -18,6 +18,7 @@ import com.huanghua.mysecret.bean.CommentSupport;
 import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.manager.UserManager;
 import com.huanghua.mysecret.util.ImageLoadOptions;
+import com.huanghua.mysecret.util.ViewHolder;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class CommentListAdapter extends BaseListAdapter<Comment> {
@@ -35,11 +36,9 @@ public class CommentListAdapter extends BaseListAdapter<Comment> {
         Comment coment = (Comment) getList().get(position);
 
         User user = coment.getFromUser();
-        ImageView mPhoto = (ImageView) view
-                .findViewById(R.id.item_comment_photo);
-        TextView mName = (TextView) view.findViewById(R.id.item_comment_name);
-        TextView mContents = (TextView) view
-                .findViewById(R.id.item_comment_contents);
+        ImageView mPhoto = ViewHolder.get(view, R.id.item_comment_photo);
+        TextView mName = ViewHolder.get(view, R.id.item_comment_name);
+        TextView mContents = ViewHolder.get(view, R.id.item_comment_contents);
 
         String avatar = user.getAvatar();
         if (avatar != null && !avatar.equals("")) {
@@ -57,8 +56,7 @@ public class CommentListAdapter extends BaseListAdapter<Comment> {
         mName.setCompoundDrawables(drawable, null, null, null);
         mName.setText(user.getUsername() + mContext.getString(R.string.say));
 
-        TextView csView = (TextView) view
-                .findViewById(R.id.item_comment_support);
+        TextView csView = ViewHolder.get(view, R.id.item_comment_support);
         setDingTextView(coment, csView);
         setOnInViewClickListener(R.id.item_comment_support,
                 new onInternalClickListener() {
@@ -84,8 +82,10 @@ public class CommentListAdapter extends BaseListAdapter<Comment> {
                             @Override
                             public void onFailure(int arg0, String arg1) {
                                 showLog("save commentSupport failure");
+                                vv.setClickable(true);
                             }
                         });
+                        vv.setClickable(false);
                     }
                 });
         return view;
@@ -109,7 +109,7 @@ public class CommentListAdapter extends BaseListAdapter<Comment> {
                 if (count == 0) {
                     csView.setText(R.string.add_one);
                 } else {
-                    csView.setText(arg0.size() + "");
+                    csView.setText("" + arg0.size());
                 }
             }
 

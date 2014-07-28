@@ -180,7 +180,6 @@ public class SupportView extends LinearLayout implements View.OnClickListener {
                 SecretSupport ss = new SecretSupport();
                 ss.setFromUser(UserManager.getInstance(getContext())
                         .getCurrentUser());
-                ss.setToUser(mCurrentSecret.getUser());
                 ss.setSecret(mCurrentSecret);
                 ss.setSupport(v == mHappy);
                 ss.save(getContext(), new SaveListener() {

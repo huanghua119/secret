@@ -28,7 +28,8 @@ public class UserRegisterActivity extends BaseActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.user_register_view);
+        //setContentView(R.layout.user_register_view);
+        setContentView(R.layout.user_register_view_purple);
         init();
     }
 

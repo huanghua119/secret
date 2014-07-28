@@ -45,7 +45,7 @@
             android:layout_alignParentTop="true"
             android:clickable="true"
             android:drawableLeft="@drawable/ic_ding_bg"
-            android:gravity="center_vertical"
+            android:gravity="left|center_vertical"
             android:text="@string/add_one"
             android:textColor="@color/item_text_color"
             android:textSize="12sp" />

@@ -68,6 +68,9 @@ public class MainActivity extends BaseActivity {
         switch (view.getId()) {
         case R.id.btn_choiceness:
             mIndex = 0;
+            if (mCurrentTabIndex == mIndex) {
+                mChoicenessFrament.toTopSelect();
+            }
             break;
         case R.id.btn_nearby:
             mIndex = 1;
