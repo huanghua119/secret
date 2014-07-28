@@ -67,12 +67,10 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
                 s.setContents(content);
                 s.setUser(userManager.getCurrentUser());
                 s.setStatus(0);
-                try {
-                    s.setLocation(lu.findLocation());
-                    s.setAddress(lu.getAddress(lu.findLocation()));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                s.setLocation(lu.findLocation());
+                showLog("lu.findLocation ===" + lu.findLocation());
+                s.setAddress(lu.getAddress(lu.findLocation()));
+                showLog("lu.getAddress ===" + lu.getAddress(lu.findLocation()));
                 s.save(this, new SaveListener() {
                     @Override
                     public void onSuccess() {

@@ -10,6 +10,12 @@ import android.media.MediaPlayer;
 import android.preference.PreferenceManager;
 import cn.bmob.v3.datatype.BmobGeoPoint;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.GeofenceClient;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+import com.baidu.location.LocationClientOption.LocationMode;
 import com.huanghua.mysecret.util.SharePreferenceUtil;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -29,18 +35,30 @@ public class CustomApplcation extends Application {
     public static CustomApplcation mInstance;
 
     public static BmobGeoPoint lastPoint = null;// 上一次定位到的经纬度
+    
+    public static LocationClient mLocationClient;
+    public GeofenceClient mGeofenceClient;
+    public static MyLocationListener mMyLocationListener;
+    private static BmobGeoPoint mBp = null;
+    private static String mAddress = null;
+    private final int UP_TIME = 60000*10;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mInstance = this;
         init();
+        InitLocation();
     }
 
     private void init() {
         mMediaPlayer = MediaPlayer.create(this, R.raw.notify);
         mNotificationManager = (NotificationManager) getSystemService(android.content.Context.NOTIFICATION_SERVICE);
         initImageLoader(getApplicationContext());
+        mLocationClient = new LocationClient(this.getApplicationContext());
+        mMyLocationListener = new MyLocationListener();
+        mLocationClient.registerLocationListener(mMyLocationListener);
+        mAddress = getString(R.string.unknown_address);
     }
 
     /** 初始化ImageLoader */
@@ -155,4 +173,36 @@ public class CustomApplcation extends Application {
         }
     }
 
+    private void InitLocation() {
+        LocationClientOption option = new LocationClientOption();
+        option.setLocationMode(LocationMode.Battery_Saving);
+        option.setCoorType("gcj02");
+        option.setIsNeedAddress(true);
+        option.setScanSpan(UP_TIME);
+        mLocationClient.setLocOption(option);
+        mLocationClient.start();
+    }
+    
+    public class MyLocationListener implements BDLocationListener {
+
+        @Override
+        public void onReceiveLocation(BDLocation location) {
+            if (location != null) {
+                mBp = new BmobGeoPoint();
+                mBp.setLatitude(location.getLatitude());
+                mBp.setLongitude(location.getLongitude());
+                mAddress = location.getCity();
+            } else {
+                mLocationClient.requestLocation();
+            }
+        }
+    }
+
+    public static BmobGeoPoint getLocation() {
+        return mBp;
+    }
+
+    public static String getAddress() {
+        return mAddress;
+    }
 }
