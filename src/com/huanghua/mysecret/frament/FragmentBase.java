@@ -88,4 +88,9 @@ public abstract class FragmentBase extends Fragment {
         }
     }
 
+    public void showLog(String tag, String msg) {
+        if (CustomApplcation.DEBUG) {
+            Log.i(tag, msg);
+        }
+    }
 }

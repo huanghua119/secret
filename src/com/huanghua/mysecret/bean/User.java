@@ -1,7 +1,6 @@
 package com.huanghua.mysecret.bean;
 
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobGeoPoint;
 
 public class User extends BmobUser {
 
@@ -9,9 +8,9 @@ public class User extends BmobUser {
 
     private boolean sex;
 
-    private String avatar; 
+    private String avatar;
 
-	public User() {
+    public User() {
 
     }
 
@@ -26,7 +25,8 @@ public class User extends BmobUser {
     @Override
     public boolean equals(Object o) {
         User u = (User) o;
-        if (u != null && u.getObjectId() != null && getObjectId() != null && u.getObjectId().equals(this.getObjectId())) {
+        if (u != null && u.getObjectId() != null && getObjectId() != null
+                && u.getObjectId().equals(this.getObjectId())) {
             return true;
         } else {
             return false;

@@ -4,7 +4,6 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -14,7 +13,6 @@ import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.util.ImageLoadOptions;
-import com.huanghua.mysecret.util.LocationUtil;
 import com.huanghua.mysecret.view.DateTextView;
 import com.huanghua.mysecret.view.SupportView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -43,17 +41,16 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
 
         String avatar = user.getAvatar();
         if (avatar != null && !avatar.equals("")) {
-            ImageLoader.getInstance()
-                    .displayImage(avatar, mPhoto, ImageLoadOptions.getOptions());
+            ImageLoader.getInstance().displayImage(avatar, mPhoto,
+                    ImageLoadOptions.getOptions());
         } else {
             mPhoto.setImageResource(R.drawable.user_photo_default);
         }
 
         mContents.setText(secret.getContents());
         mName.setText(user.getUsername());
-        Log.e("hewei", "msg =================" + secret.getLocation());
-        
-        	mLocation.setText(secret.getAddress());
+
+        mLocation.setText(secret.getAddress());
 
         Drawable drawable = mContext.getResources().getDrawable(
                 user.isSex() ? R.drawable.man : R.drawable.women);

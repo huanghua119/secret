@@ -14,22 +14,22 @@ public class Secret extends BmobObject {
     private String address;
 
     public String getAddress() {
-		return address;
-	}
+        return address;
+    }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-	public BmobGeoPoint getLocation() {
-		return location;
-	}
+    public BmobGeoPoint getLocation() {
+        return location;
+    }
 
-	public void setLocation(BmobGeoPoint location) {
-		this.location = location;
-	}
+    public void setLocation(BmobGeoPoint location) {
+        this.location = location;
+    }
 
-	public Secret() {
+    public Secret() {
         // setTableName("Secret");
     }
 

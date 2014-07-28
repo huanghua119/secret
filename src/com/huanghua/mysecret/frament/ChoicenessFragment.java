@@ -141,6 +141,7 @@ public class ChoicenessFragment extends FragmentBase implements
             mQuerySecret = new BmobQuery<Secret>();
             mQuerySecret.order("-createdAt");
             mQuerySecret.include("user");
+            mQuerySecret.setLimit(20);
         }
         mQuerySecret.findObjects(getActivity(), mFindSecretListener);
     }

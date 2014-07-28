@@ -148,4 +148,10 @@ public abstract class BaseListAdapter<E> extends BaseAdapter {
             Log.i(CustomApplcation.TAG, msg);
         }
     }
+
+    public void showLog(String tag, String msg) {
+        if (CustomApplcation.DEBUG) {
+            Log.i(tag, msg);
+        }
+    }
 }

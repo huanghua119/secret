@@ -113,7 +113,15 @@ public class BaseActivity extends FragmentActivity {
     }
 
     public void showLog(String msg) {
-        Log.i(CustomApplcation.TAG, msg);
+        if (CustomApplcation.DEBUG) {
+            Log.i(CustomApplcation.TAG, msg);
+        }
+    }
+
+    public void showLog(String tag, String msg) {
+        if (CustomApplcation.DEBUG) {
+            Log.i(tag, msg);
+        }
     }
 
     @Override

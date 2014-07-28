@@ -103,6 +103,8 @@ public class WriteCommentActivity extends BaseActivity implements
         mSupportView = (SupportView) mSecretView.findViewById(R.id.item_bottom);
         mSupportView.setSecret(mCurrentSecret);
         mSupportView.setInComment(true);
+        TextView mLocation = (TextView) mSecretView.findViewById(R.id.item_location);
+        mLocation.setText(mCurrentSecret.getAddress());
     }
 
     @Override

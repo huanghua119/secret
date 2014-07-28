@@ -2,7 +2,6 @@ package com.huanghua.mysecret.adapter.base;
 
 import java.util.List;
 
-import android.app.DownloadManager.Query;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.View;
