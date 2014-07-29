@@ -7,9 +7,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -22,6 +25,7 @@ public abstract class FragmentBase extends Fragment {
     public LayoutInflater mInflater;
 
     Toast mToast;
+    Toast mToast2;
 
     private Handler handler = new Handler();
 
@@ -45,20 +49,64 @@ public abstract class FragmentBase extends Fragment {
 
     }
 
-    public void ShowToast(String text) {
-        if (mToast == null) {
-            mToast = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
+    public void ShowToast(final String text) {
+        if (!TextUtils.isEmpty(text)) {
+            runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    if (mToast == null) {
+                        mToast = new Toast(getActivity());
+                        mToast.setDuration(Toast.LENGTH_SHORT);
+                        mToast.setView(mInflater.inflate(R.layout.toast_view,
+                                null));
+                        mToast.setGravity(Gravity.CENTER, 0, 0);
+                    }
+                    View toast = mToast.getView();
+                    TextView m = (TextView) toast.findViewById(R.id.toast_msg);
+                    m.setText(text);
+                    mToast.show();
+                }
+            });
+
         }
-        mToast.setText(text);
-        mToast.show();
     }
 
-    public void ShowToast(int text) {
-        if (mToast == null) {
-            mToast = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
+    public void ShowToast(final int resId) {
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                if (mToast == null) {
+                    mToast = new Toast(getActivity());
+                    mToast.setDuration(Toast.LENGTH_SHORT);
+                    mToast.setView(mInflater.inflate(R.layout.toast_view, null));
+                    mToast.setGravity(Gravity.CENTER, 0, 0);
+                }
+                View toast = mToast.getView();
+                TextView m = (TextView) toast.findViewById(R.id.toast_msg);
+                m.setText(resId);
+                mToast.show();
+            }
+        });
+    }
+
+    public void ShowToastOld(String text) {
+        if (mToast2 == null) {
+            mToast2 = Toast.makeText(getActivity(), text,
+                    Toast.LENGTH_SHORT);
         }
-        mToast.setText(text);
-        mToast.show();
+        mToast2.setText(text);
+        mToast2.show();
+    }
+
+    public void ShowToastOld(int text) {
+        if (mToast2 == null) {
+            mToast2 = Toast.makeText(getActivity(), text,
+                    Toast.LENGTH_SHORT);
+        }
+        mToast2.setText(text);
+        mToast2.show();
     }
 
     public View findViewById(int paramInt) {

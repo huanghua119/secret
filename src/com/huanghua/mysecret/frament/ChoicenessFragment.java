@@ -37,6 +37,7 @@ public class ChoicenessFragment extends FragmentBase implements
     private List<Secret> mSecretList = new ArrayList<Secret>();
     private BmobQuery<Secret> mQuerySecret = null;
     private ImageButton mWriteSecret = null;
+    private boolean mQueryIng = false;
     /*
     private View mLoadView = null;
     private ImageView mLoadImage = null;
@@ -48,17 +49,7 @@ public class ChoicenessFragment extends FragmentBase implements
         @Override
         public void onSuccess(List<Secret> list) {
             showLog("query secret success:" + list.size());
-            if (mChoicenessAdapter.getList() != null) {
-                if (mChoicenessAdapter.getList().size() != list.size()) {
-                    mChoicenessAdapter.setList(list);
-                } else {
-                    if (mListPage > 1) {
-                        mListPage--;
-                    }
-                }
-            } else {
-                mChoicenessAdapter.setList(list);
-            }
+            mChoicenessAdapter.setList(list);
             refreshPull();
             /*
             if (mLoadView.getVisibility() == View.VISIBLE) {
@@ -72,9 +63,12 @@ public class ChoicenessFragment extends FragmentBase implements
 
         @Override
         public void onError(int arg0, String arg1) {
-            showLog("query secret error:" + arg1);
+            showLog("query secret error:" + arg1 + " arg0:" + arg0);
             if (mListPage > 1) {
                 mListPage--;
+            }
+            if (arg0 == 9010) {
+                ShowToast(R.string.no_check_network);
             }
             refreshPull();
             mListChoiceness.setPullRefreshEnable(true);
@@ -134,17 +128,23 @@ public class ChoicenessFragment extends FragmentBase implements
     @Override
     public void onRefresh() {
         showLog("choiceness onRefresh");
-        mListPage = 1;
-        mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
-        mQuerySecret.findObjects(getActivity(), mFindSecretListener);
+        if (!mQueryIng) {
+            mListPage = 1;
+            mQueryIng = true;
+            mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
+            mQuerySecret.findObjects(getActivity(), mFindSecretListener);
+        }
     }
 
     @Override
     public void onLoadMore() {
         showLog("choiceness onLoadMore:" + mListChoiceness.getPullLoading());
-        mListPage++;
-        mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
-        mQuerySecret.findObjects(getActivity(), mFindSecretListener);
+        if (!mQueryIng) {
+            mListPage++;
+            mQueryIng = true;
+            mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
+            mQuerySecret.findObjects(getActivity(), mFindSecretListener);
+        }
     }
 
     private void refreshPull() {
@@ -155,6 +155,7 @@ public class ChoicenessFragment extends FragmentBase implements
         if (mListChoiceness.getPullLoading()) {
             mListChoiceness.stopLoadMore();
         }
+        mQueryIng = false;
     }
 
     @Override

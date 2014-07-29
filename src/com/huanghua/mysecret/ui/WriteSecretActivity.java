@@ -1,5 +1,8 @@
 package com.huanghua.mysecret.ui;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +17,7 @@ import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.bean.Comment;
 import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.bean.User;
+import com.huanghua.mysecret.util.CommonUtils;
 import com.huanghua.mysecret.util.LocationUtil;
 import com.huanghua.mysecret.view.SupportView;
 
@@ -32,7 +36,7 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
     private TextView mContentsCountView = null;
     private TextView mTitle = null;
     private EditText mContents;
-    private int mContentsCount = 140;
+    private int mContentsCount = 300;
     private Handler mHandler = new Handler();
 
     @Override
@@ -62,6 +66,8 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
         String content = mContents.getText().toString();
         LocationUtil lu = new LocationUtil(this);
         if (content != null && !"".endsWith(content)) {
+            final Dialog dialog = CommonUtils.createLoadingDialog(this, getString(R.string.cominting));
+            dialog.show();
             if (mWriteType == WRITE_TYPE_SECRET) {
                 Secret s = new Secret();
                 s.setContents(content);
@@ -75,6 +81,7 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
                     @Override
                     public void onSuccess() {
                         showLog("save secret success ");
+                        dialog.dismiss();
                         ShowToastOld(R.string.publication_success);
                         mHandler.postDelayed(new Runnable() {
                             @Override
@@ -87,6 +94,7 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
                     @Override
                     public void onFailure(int arg0, String arg1) {
                         showLog("save secret failure " + arg1);
+                        dialog.dismiss();
                         ShowToast(R.string.publication_faile);
                         v.setClickable(true);
                     }
@@ -104,6 +112,7 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
                     @Override
                     public void onSuccess() {
                         showLog("save comment success ");
+                        dialog.dismiss();
                         ShowToastOld(R.string.publication_success);
                         sendBroadcast(new Intent(SupportView.DATE_COMMENT_CHANGER));
                         mHandler.postDelayed(new Runnable() {
@@ -117,6 +126,7 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
                     @Override
                     public void onFailure(int arg0, String arg1) {
                         showLog("save comment failure " + arg1);
+                        dialog.dismiss();
                         ShowToast(R.string.publication_faile);
                         v.setClickable(true);
                     }
@@ -128,6 +138,30 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
 
     public void onCancel(View v) {
         onBackPressed();
+    }
+
+    public void onBackPressed(){
+        String content = mContents.getText().toString();
+        if (content != null && content.length() > 0) {
+            showExitConfirmDialog();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private void showExitConfirmDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle(mTitle.getText().toString())
+                .setMessage(R.string.exit_confirm)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(android.R.string.ok,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                    int which) {
+                                WriteSecretActivity.super.onBackPressed();
+                            }
+                        }).setCancelable(false).show();
     }
 
     @Override

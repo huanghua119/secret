@@ -15,7 +15,7 @@
     <string name="xlistview_footer_hint_ready">松开载入更多</string>
     <string name="publication_secret">秘密投稿</string>
     <string name="publication">发表</string>
-    <string name="secret_countm_max">140</string>
+    <string name="secret_countm_max">300</string>
     <string name="publication_faile">提交失败！请重试 ！</string>
     <string name="publication_success">提交成功，待审核通过后发表！</string>
     <string name="write_secret_hint">您的投稿公在审核后发表，审核通过的标准：真实事件的吐槽、内容新鲜的事件、心中隐藏的秘密，请不要使用您或其他人的其实信息（电话 地址等，）以免给您或其他人带来麻烦。</string>
@@ -61,5 +61,8 @@
     <string name="register_fail_username">注册失败，帐户已存在！</string>
     <string name="unknown_address">火星</string>
     <string name="pass_exit">再按一次退出应用！</string>
+    <string name="no_check_network">检测不到网络连接！</string>
+    <string name="cominting">正在提交....</string>
+    <string name="exit_confirm">确认要退出吗？文本内容将不会被保存！</string>
 
 </resources>

@@ -146,6 +146,9 @@ public class BaseActivity extends FragmentActivity {
     }
 
     public boolean checkUserLogin() {
+        if (!checkNetwork()) {
+            return true;
+        }
         if (userManager == null || userManager.getCurrentUser() == null) {
             Intent intent = new Intent();
             intent.setClass(this, UserLoginActivity.class);
@@ -154,4 +157,5 @@ public class BaseActivity extends FragmentActivity {
         }
         return false;
     }
+
 }
