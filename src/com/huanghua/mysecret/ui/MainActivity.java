@@ -52,8 +52,7 @@ public class MainActivity extends BaseActivity {
         // 添加显示第一个fragment
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, mChoicenessFrament)
-                .add(R.id.fragment_container, mChoicenessFrament2)
-                .hide(mChoicenessFrament2).show(mChoicenessFrament).commit();
+                .show(mChoicenessFrament).commit();
     }
 
     /**

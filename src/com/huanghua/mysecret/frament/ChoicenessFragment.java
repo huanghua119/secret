@@ -8,10 +8,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobQuery.CachePolicy;
 import cn.bmob.v3.listener.FindListener;
 
 import com.huanghua.mysecret.R;
@@ -38,10 +42,8 @@ public class ChoicenessFragment extends FragmentBase implements
     private BmobQuery<Secret> mQuerySecret = null;
     private ImageButton mWriteSecret = null;
     private boolean mQueryIng = false;
-    /*
     private View mLoadView = null;
     private ImageView mLoadImage = null;
-    */
     private static final int LIST_DEFALUT_LIMIT = 20;
     private int mListPage = 1;
 
@@ -51,12 +53,10 @@ public class ChoicenessFragment extends FragmentBase implements
             showLog("query secret success:" + list.size());
             mChoicenessAdapter.setList(list);
             refreshPull();
-            /*
             if (mLoadView.getVisibility() == View.VISIBLE) {
                 mLoadView.setVisibility(View.GONE);
                 mLoadImage.clearAnimation();
             }
-            */
             mListChoiceness.setPullRefreshEnable(true);
             mListChoiceness.setPullLoadEnable(true);
         }
@@ -92,13 +92,11 @@ public class ChoicenessFragment extends FragmentBase implements
         mWriteSecret = (ImageButton) findViewById(R.id.write_secret);
         mWriteSecret.setOnClickListener(this);
 
-        /*
         mLoadView = findViewById(R.id.load_view);
         mLoadImage = (ImageView) findViewById(R.id.load_img);
         Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(
                 getActivity(), R.anim.loading_animation);
         mLoadImage.startAnimation(hyperspaceJumpAnimation);
-        */
 
         mListChoiceness = (XListView) findViewById(R.id.list_choiceness);
         mListChoiceness.setPullLoadEnable(false);
@@ -120,8 +118,9 @@ public class ChoicenessFragment extends FragmentBase implements
             mQuerySecret.include("user");
             mListPage = 1;
             mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
-            //mQuerySecret.findObjects(getActivity(), mFindSecretListener);
-            toTopSelect();
+            mQuerySecret.setCachePolicy(CachePolicy.CACHE_ELSE_NETWORK);
+            mQuerySecret.findObjects(getActivity(), mFindSecretListener);
+            //toTopSelect();
         }
     }
 
@@ -132,6 +131,7 @@ public class ChoicenessFragment extends FragmentBase implements
             mListPage = 1;
             mQueryIng = true;
             mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
+            mQuerySecret.setCachePolicy(CachePolicy.NETWORK_ONLY);
             mQuerySecret.findObjects(getActivity(), mFindSecretListener);
         }
     }
@@ -143,6 +143,7 @@ public class ChoicenessFragment extends FragmentBase implements
             mListPage++;
             mQueryIng = true;
             mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
+            mQuerySecret.setCachePolicy(CachePolicy.NETWORK_ONLY);
             mQuerySecret.findObjects(getActivity(), mFindSecretListener);
         }
     }
@@ -185,6 +186,7 @@ public class ChoicenessFragment extends FragmentBase implements
     public void toTopSelect() {
         if (mListChoiceness != null && mListChoiceness.getCount() > 0) {
             mListChoiceness.setSelection(0);
+            mListChoiceness.pullRefreshing();
             mListChoiceness.startRefresh();
         }
     }
