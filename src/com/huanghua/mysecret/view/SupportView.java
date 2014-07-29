@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -21,6 +22,7 @@ import com.huanghua.mysecret.bean.Comment;
 import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.bean.SecretSupport;
 import com.huanghua.mysecret.bean.User;
+import com.huanghua.mysecret.load.DateLoad;
 import com.huanghua.mysecret.manager.UserManager;
 import com.huanghua.mysecret.ui.BaseActivity;
 import com.huanghua.mysecret.ui.WriteCommentActivity;
@@ -201,6 +203,12 @@ public class SupportView extends LinearLayout implements View.OnClickListener {
             }
             mClickEable = false;
         }
+    }
+
+    public void setSecret(Secret secret, Handler handler, int position) {
+        mCurrentSecret = secret;
+        //DateLoad.loadDate(getContext(), null, handler, secret, position);
+        startQuery();
     }
 
     public void setSecret(Secret secret) {

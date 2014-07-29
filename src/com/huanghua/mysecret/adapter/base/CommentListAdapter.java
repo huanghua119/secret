@@ -17,6 +17,7 @@ import com.huanghua.mysecret.bean.Comment;
 import com.huanghua.mysecret.bean.CommentSupport;
 import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.manager.UserManager;
+import com.huanghua.mysecret.ui.BaseActivity;
 import com.huanghua.mysecret.util.ImageLoadOptions;
 import com.huanghua.mysecret.util.ViewHolder;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -63,6 +64,9 @@ public class CommentListAdapter extends BaseListAdapter<Comment> {
                     @Override
                     public void OnClickListener(View parentV, View v,
                             Integer position, Object values) {
+                        if (((BaseActivity) mContext).checkUserLogin()) {
+                            return;
+                        }
                         final TextView vv = (TextView) v;
                         final Comment c = (Comment) values;
                         CommentSupport cs = new CommentSupport();

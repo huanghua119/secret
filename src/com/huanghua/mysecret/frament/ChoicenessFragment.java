@@ -21,6 +21,7 @@ import cn.bmob.v3.listener.FindListener;
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.adapter.base.ChoicenessListAdapter;
 import com.huanghua.mysecret.bean.Secret;
+import com.huanghua.mysecret.load.DateLoadThreadManager;
 import com.huanghua.mysecret.ui.BaseActivity;
 import com.huanghua.mysecret.ui.WriteCommentActivity;
 import com.huanghua.mysecret.ui.WriteSecretActivity;
@@ -130,6 +131,7 @@ public class ChoicenessFragment extends FragmentBase implements
         if (!mQueryIng) {
             mListPage = 1;
             mQueryIng = true;
+            DateLoadThreadManager.removeAllTask();
             mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
             mQuerySecret.setCachePolicy(CachePolicy.NETWORK_ONLY);
             mQuerySecret.findObjects(getActivity(), mFindSecretListener);

@@ -9,6 +9,7 @@ import cn.bmob.v3.Bmob;
 
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.config.Config;
+import com.huanghua.mysecret.service.DateQueryService;
 
 /**
  * 引导页
@@ -25,6 +26,7 @@ public class SplashActivity extends BaseActivity {
         // BmobIM SDK初始化--只需要这一段代码即可完成初始化
         Bmob.initialize(this, Config.applicationId);
         userManager.initCurrentUser();
+        startService(new Intent(this, DateQueryService.class));
 
         mHandler.sendEmptyMessageDelayed(GO_HOME, 2000);
         mRunFinishAnim = false;

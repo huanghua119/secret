@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,8 +21,12 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
 
+    protected Handler mMainThreadHandler;
+
     public ChoicenessListAdapter(Context context, List<Secret> list) {
         super(context, list);
+        mMainThreadHandler = new Handler(context.getApplicationContext()
+                .getMainLooper());
     }
 
     @Override
@@ -60,7 +65,7 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
         mName.setCompoundDrawables(drawable, null, null, null);
 
         final SupportView sv = ViewHolder.get(view, R.id.item_bottom);
-        sv.setSecret(secret);
+        sv.setSecret(secret, mMainThreadHandler, position);
         setOnInViewClickListener(R.id.item_commit,
                 new onInternalClickListener() {
                     @Override
