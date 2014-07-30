@@ -186,7 +186,7 @@ public class ChoicenessFragment extends FragmentBase implements
     }
 
     public void toTopSelect() {
-        if (mListChoiceness != null && mListChoiceness.getCount() > 0) {
+        if (mListChoiceness != null && mListChoiceness.getCount() > 0 && !mListChoiceness.getPullRefreshing()) {
             mListChoiceness.setSelection(0);
             mListChoiceness.pullRefreshing();
             mListChoiceness.startRefresh();

@@ -48,7 +48,7 @@
             android:divider="@null"
             android:dividerHeight="0dip"
             android:fadingEdgeLength="0dp"
-            android:fastScrollEnabled="true"
+            android:fastScrollEnabled="false"
             android:paddingBottom="8dip"
             android:paddingTop="8dip" />
     </FrameLayout>

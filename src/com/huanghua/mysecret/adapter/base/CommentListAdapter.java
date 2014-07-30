@@ -16,6 +16,7 @@ import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.bean.Comment;
 import com.huanghua.mysecret.bean.CommentSupport;
 import com.huanghua.mysecret.bean.User;
+import com.huanghua.mysecret.load.DateLoad;
 import com.huanghua.mysecret.manager.UserManager;
 import com.huanghua.mysecret.ui.BaseActivity;
 import com.huanghua.mysecret.util.ImageLoadOptions;
@@ -58,7 +59,26 @@ public class CommentListAdapter extends BaseListAdapter<Comment> {
         mName.setText(user.getUsername() + mContext.getString(R.string.say));
 
         TextView csView = ViewHolder.get(view, R.id.item_comment_support);
-        setDingTextView(coment, csView);
+        List<CommentSupport> csList = DateLoad.getCommentSupport(coment.getObjectId());
+        if (csList == null) {
+            setDingTextView(coment, csView);
+        } else {
+            int count = csList.size();
+            csView.setSelected(false);
+            for (CommentSupport cs : csList) {
+                if (cs.getFromUser().equals(
+                        UserManager.getInstance(mContext).getCurrentUser())) {
+                    csView.setSelected(true);
+                    csView.setClickable(false);
+                    break;
+                }
+            }
+            if (count == 0) {
+                csView.setText(R.string.add_one);
+            } else {
+                csView.setText("" + count);
+            }
+        }
         setOnInViewClickListener(R.id.item_comment_support,
                 new onInternalClickListener() {
                     @Override
@@ -95,12 +115,14 @@ public class CommentListAdapter extends BaseListAdapter<Comment> {
         return view;
     }
 
-    private void setDingTextView(Comment comment, final TextView csView) {
+    private void setDingTextView(final Comment comment, final TextView csView) {
+        csView.setSelected(false);
         BmobQuery<CommentSupport> queryCs = new BmobQuery<CommentSupport>();
         queryCs.addWhereEqualTo("comment", comment);
         queryCs.findObjects(mContext, new FindListener<CommentSupport>() {
             @Override
             public void onSuccess(List<CommentSupport> arg0) {
+                DateLoad.updateCommentSupport(comment.getObjectId(), arg0);
                 int count = arg0.size();
                 for (CommentSupport cs : arg0) {
                     if (cs.getFromUser().equals(

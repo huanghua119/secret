@@ -73,6 +73,7 @@ public class SupportView extends LinearLayout implements View.OnClickListener {
     public void startQuery() {
         BmobQuery<SecretSupport> ssQuery = new BmobQuery<SecretSupport>();
         ssQuery.addWhereEqualTo("secret", mCurrentSecret);
+        ssQuery.setLimit(1000);
         ssQuery.findObjects(getContext(), new FindListener<SecretSupport>() {
             @Override
             public void onSuccess(List<SecretSupport> arg0) {

@@ -4,6 +4,7 @@ import com.huanghua.mysecret.CustomApplcation;
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.frament.ChoicenessFragment;
 import com.huanghua.mysecret.frament.MoreFragment;
+import com.huanghua.mysecret.load.DateLoad;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -120,5 +121,12 @@ public class MainActivity extends BaseActivity {
             ShowToastOld(R.string.pass_exit);
         }
         firstTime = System.currentTimeMillis();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        DateLoad.clearAll();
+        super.onDestroy();
     }
 }

@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import android.content.Context;
 import android.os.Handler;
 
+import com.huanghua.mysecret.bean.CommentSupport;
 import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.bean.SecretSupport;
 import com.huanghua.mysecret.util.CommonUtils;
@@ -183,5 +184,74 @@ public class DateLoad {
 
     public static String makeSafe(String s) {
         return (s == null) ? "" : s;
+    }
+
+    private static final LinkedHashMap<String, List<CommentSupport>> sCommentSupportMap = new LinkedHashMap<String, List<CommentSupport>>(
+            INITIAL_CAPACITY / 2, 0.75f, true) {
+
+        private static final long serialVersionUID = 1L;
+
+        protected boolean removeEldestEntry(
+                java.util.Map.Entry<String, List<CommentSupport>> eldest) {
+            if (size() > INITIAL_CAPACITY) {
+                sSoftCommentSupportMap.put(
+                        eldest.getKey(),
+                        new SoftReference<List<CommentSupport>>(eldest
+                                .getValue()));
+                return true;
+            }
+            return false;
+        };
+    };
+    private static final ConcurrentHashMap<String, SoftReference<List<CommentSupport>>> sSoftCommentSupportMap = new ConcurrentHashMap<String, SoftReference<List<CommentSupport>>>();
+
+    public static void putCommentSupport(String objectId, List<CommentSupport> list) {
+        if (isEmptyOrWhitespace(objectId) || list == null) {
+            return;
+        }
+        synchronized (sCommentSupportMap) {
+            if (sCommentSupportMap.get(objectId) == null) {
+                sCommentSupportMap.put(objectId, list);
+            }
+        }
+    }
+
+    public static List<CommentSupport> getCommentSupport(String objectId) {
+        synchronized (sCommentSupportMap) {
+            List<CommentSupport> secretSupport = (List<CommentSupport>) sCommentSupportMap
+                    .get(objectId);
+            if (secretSupport != null) {
+                return secretSupport;
+            }
+            SoftReference<List<CommentSupport>> sSecretSupport = sSoftCommentSupportMap
+                    .get(objectId);
+            if (sSecretSupport != null) {
+                secretSupport = sSecretSupport.get();
+                if (secretSupport == null) {
+                    sSoftCommentSupportMap.remove(objectId);
+                } else {
+                    return secretSupport;
+                }
+            }
+            return null;
+        }
+    }
+
+    public static void updateCommentSupport(String objectId, List<CommentSupport> list) {
+        if (isEmptyOrWhitespace(objectId) || list == null) {
+            return;
+        }
+        synchronized (sCommentSupportMap) {
+            if (sCommentSupportMap.get(objectId) == null) {
+                sCommentSupportMap.put(objectId, list);
+            } else {
+                sCommentSupportMap.remove(objectId);
+                sCommentSupportMap.put(objectId, list);
+            }
+        }
+    }
+
+    public static void clearCommentSupport() {
+        sCommentSupportMap.clear();
     }
 }

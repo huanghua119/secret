@@ -44,6 +44,7 @@ public class DateLoadTask implements Runnable {
         } else {
             ssQuery.setCachePolicy(CachePolicy.CACHE_ELSE_NETWORK);
         }
+        ssQuery.setLimit(1000);
         ssQuery.findObjects(mContext, new FindListener<SecretSupport>() {
             @Override
             public void onSuccess(final List<SecretSupport> arg0) {

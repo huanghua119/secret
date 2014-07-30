@@ -42,11 +42,20 @@ public class WriteCommentActivity extends BaseActivity implements
     private List<Comment> mCommentList = new ArrayList<Comment>();
     private SupportView mSupportView = null;
     private BmobQuery<Comment> mQueryComent = null;
+    private int mListPage = 1;
+    private static final int LIST_DEFALUT_LIMIT = 20;
     private FindListener<Comment> mFindCommentListener = new FindListener<Comment>() {
         @Override
         public void onSuccess(List<Comment> arg0) {
             showLog("query comment success:" + arg0.size());
             mListAdapter.setList(arg0);
+            int commentCount = DateLoad.getComment(mCurrentSecret.getObjectId());
+            if (commentCount > arg0.size()) {
+                mCommentListView.setPullLoadEnable(true);
+            } else {
+                mCommentListView.setPullLoadEnable(false);
+            }
+            refreshPull();
         }
 
         @Override
@@ -138,7 +147,16 @@ public class WriteCommentActivity extends BaseActivity implements
 
     @Override
     public void onLoadMore() {
+        mListPage++;
+        mQueryComent.setLimit(mListPage * LIST_DEFALUT_LIMIT);
+        mQueryComent.setCachePolicy(CachePolicy.NETWORK_ONLY);
+        mQueryComent.findObjects(this, mFindCommentListener);
+    }
 
+    private void refreshPull() {
+        if (mCommentListView.getPullLoading()) {
+            mCommentListView.stopLoadMore();
+        }
     }
 
     @Override
@@ -155,6 +173,8 @@ public class WriteCommentActivity extends BaseActivity implements
                 mQueryComent.setCachePolicy(CachePolicy.CACHE_ELSE_NETWORK);
             }
             mQueryComent.include("fromUser");
+            mListPage = 1;
+            mQueryComent.setLimit(mListPage * LIST_DEFALUT_LIMIT);
         }
         mQueryComent.findObjects(this, mFindCommentListener);
         List<SecretSupport> allss = DateLoad.get(mCurrentSecret.getObjectId());
@@ -164,6 +184,13 @@ public class WriteCommentActivity extends BaseActivity implements
             mSupportView.setCommentCount(commentlist);
         }
         mSupportView.startQuery();
+    }
+
+    @Override
+    protected void onDestroy() {
+        showLog("write_comment onDestroy");
+        DateLoad.clearCommentSupport();
+        super.onDestroy();
     }
 
 }

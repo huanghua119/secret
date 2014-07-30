@@ -89,8 +89,8 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
             sv.setSecret(secret, mDateLoadListener, mMainThreadHandler, position);
         } else {
             sv.refreshInCache(secret, allss);
-            int commentlist = DateLoad.getComment(secret.getObjectId());
-            sv.setCommentCount(commentlist);
+            Integer commentlist = DateLoad.getComment(secret.getObjectId());
+            sv.setCommentCount(commentlist == null ? 0 : commentlist);
         }
         setOnInViewClickListener(R.id.item_commit,
                 new onInternalClickListener() {
