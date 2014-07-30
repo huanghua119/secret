@@ -43,6 +43,7 @@ public class DateLoadThreadManager {
         if (mHashMap.size() > 0) {
             mHashMap.clear();
             mWorkQueue.clear();
+            DateLoad.clearAll();
         }
     }
 
@@ -56,10 +57,6 @@ public class DateLoadThreadManager {
     }
 
     public static void submitTask(String objectId, DateLoadTask task) {
-        CommonUtils.showLog(
-                TAG,
-                "execute a ImageLoadTask ! sWorkQueue.size() = "
-                        + mWorkQueue.size());
         if (mHashMap.get(objectId) == null) {
             mHashMap.put(objectId, task);
             mExecutor.execute(task);

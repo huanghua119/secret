@@ -4,13 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobQuery.CachePolicy;
 import cn.bmob.v3.listener.FindListener;
 
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.adapter.base.CommentListAdapter;
 import com.huanghua.mysecret.bean.Comment;
 import com.huanghua.mysecret.bean.Secret;
+import com.huanghua.mysecret.bean.SecretSupport;
 import com.huanghua.mysecret.bean.User;
+import com.huanghua.mysecret.load.DateLoad;
+import com.huanghua.mysecret.util.CommonUtils;
 import com.huanghua.mysecret.util.ImageLoadOptions;
 import com.huanghua.mysecret.view.DateTextView;
 import com.huanghua.mysecret.view.SupportView;
@@ -144,9 +148,21 @@ public class WriteCommentActivity extends BaseActivity implements
             mQueryComent = new BmobQuery<Comment>();
             mQueryComent.addWhereEqualTo("secret", mCurrentSecret);
             mQueryComent.order("-createdAt");
+            boolean hasNetWork = CommonUtils.isNetworkAvailable(this);
+            if (hasNetWork) {
+                mQueryComent.setCachePolicy(CachePolicy.NETWORK_ONLY);
+            } else {
+                mQueryComent.setCachePolicy(CachePolicy.CACHE_ELSE_NETWORK);
+            }
             mQueryComent.include("fromUser");
         }
         mQueryComent.findObjects(this, mFindCommentListener);
+        List<SecretSupport> allss = DateLoad.get(mCurrentSecret.getObjectId());
+        if (allss != null) {
+            mSupportView.refreshInCache(mCurrentSecret, allss);
+            int commentlist = DateLoad.getComment(mCurrentSecret.getObjectId());
+            mSupportView.setCommentCount(commentlist);
+        }
         mSupportView.startQuery();
     }
 

@@ -3,6 +3,8 @@ package com.huanghua.mysecret.load;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobQuery.CachePolicy;
+import cn.bmob.v3.listener.CountListener;
 import cn.bmob.v3.listener.FindListener;
 
 import com.huanghua.mysecret.bean.Comment;
@@ -20,13 +22,10 @@ public class DateLoadTask implements Runnable {
     Handler mHanler = null;
     Secret mSecret = null;
     OnDateLoadCompleteListener mListener = null;
-    long mPriority = -1;
-
-    private DateLoadTask() {
-    }
+    int mPriority = -1;
 
     public DateLoadTask(Context context, OnDateLoadCompleteListener listener,
-            Handler handler, Secret secret, long priority) {
+            Handler handler, Secret secret, int priority) {
         this.mContext = context;
         this.mHanler = handler;
         this.mListener = listener;
@@ -36,22 +35,27 @@ public class DateLoadTask implements Runnable {
 
     @Override
     public void run() {
+        DateLoadThreadManager.removeTask(mSecret.getObjectId());
         BmobQuery<SecretSupport> ssQuery = new BmobQuery<SecretSupport>();
         ssQuery.addWhereEqualTo("secret", mSecret);
+        boolean hasNetWork = CommonUtils.isNetworkAvailable(mContext);
+        if (hasNetWork) {
+            ssQuery.setCachePolicy(CachePolicy.NETWORK_ONLY);
+        } else {
+            ssQuery.setCachePolicy(CachePolicy.CACHE_ELSE_NETWORK);
+        }
         ssQuery.findObjects(mContext, new FindListener<SecretSupport>() {
             @Override
-            public void onSuccess(List<SecretSupport> arg0) {
+            public void onSuccess(final List<SecretSupport> arg0) {
                 CommonUtils.showLog(TAG, "query SecretSupport success: " + arg0
                         + " mPriority:" + mPriority);
-                int happy = 0;
-                int cry = 0;
-                for (SecretSupport ss : arg0) {
-                    if (ss.isSupport()) {
-                        happy++;
-                    } else {
-                        cry++;
+                DateLoad.put(mSecret.getObjectId(), arg0);
+                mHanler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mListener.OnLoadSecretSupportComplete(mPriority, arg0);
                     }
-                }
+                });
             }
 
             @Override
@@ -62,13 +66,28 @@ public class DateLoadTask implements Runnable {
 
         BmobQuery<Comment> mQueryComent = new BmobQuery<Comment>();
         mQueryComent.addWhereEqualTo("secret", mSecret);
-        mQueryComent.findObjects(mContext, new FindListener<Comment>() {
+        if (hasNetWork) {
+            mQueryComent.setCachePolicy(CachePolicy.NETWORK_ONLY);
+        } else {
+            mQueryComent.setCachePolicy(CachePolicy.CACHE_ELSE_NETWORK);
+        }
+        mQueryComent.count(mContext, Comment.class, new CountListener() {
             @Override
-            public void onError(int arg0, String arg1) {
+            public void onSuccess(final int arg0) {
+                CommonUtils.showLog(TAG, "query Comment success: " + arg0
+                        + " mPriority:" + mPriority);
+                DateLoad.putComment(mSecret.getObjectId(), arg0);
+                mHanler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mListener.OnLoadSecretCommentComplete(mPriority, arg0);
+                    }
+                });
             }
-
+            
             @Override
-            public void onSuccess(List<Comment> arg0) {
+            public void onFailure(int arg0, String arg1) {
+                
             }
         });
     }
