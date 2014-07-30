@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="6dip"
         android:layout_marginRight="6dip"
-        android:background="@color/list_item_black_color"
+        android:background="@drawable/comment_bg"
         android:padding="6dip" >
 
         <ImageView
@@ -60,12 +60,12 @@
             android:textSize="14sp" />
     </RelativeLayout>
 
-    <View
+    <!--  <View
         android:id="@+id/driver"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="6dip"
         android:layout_marginRight="6dip"
-        android:background="@drawable/list_divider" />
+        android:background="@drawable/list_divider" /> -->
 
 </LinearLayout>
