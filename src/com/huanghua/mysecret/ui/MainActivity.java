@@ -1,5 +1,6 @@
 package com.huanghua.mysecret.ui;
 
+import com.huanghua.mysecret.CustomApplcation;
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.frament.ChoicenessFragment;
 import com.huanghua.mysecret.frament.MoreFragment;
@@ -111,6 +112,9 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         if (firstTime + 2000 > System.currentTimeMillis()) {
+            if (CustomApplcation.mLocationClient.isStarted()) {
+                CustomApplcation.mLocationClient.stop();
+            }
             super.onBackPressed();
         } else {
             ShowToastOld(R.string.pass_exit);

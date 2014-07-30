@@ -191,7 +191,13 @@ public class CustomApplcation extends Application {
                 mBp = new BmobGeoPoint();
                 mBp.setLatitude(location.getLatitude());
                 mBp.setLongitude(location.getLongitude());
-                mAddress = location.getCity();
+                if (location.getCity() != null && location.getDistrict() != null) {
+                    mAddress = location.getCity() + " " +location.getDistrict();
+                } else if (location.getCity() != null && location.getDistrict() == null) {
+                    mAddress = location.getCity();
+                } else {
+                    mAddress = getString(R.string.unknown_address);
+                }
             } else {
                 mLocationClient.requestLocation();
             }
