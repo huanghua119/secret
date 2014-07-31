@@ -180,8 +180,10 @@ public class WriteCommentActivity extends BaseActivity implements
         List<SecretSupport> allss = DateLoad.get(mCurrentSecret.getObjectId());
         if (allss != null) {
             mSupportView.refreshInCache(mCurrentSecret, allss);
-            int commentlist = DateLoad.getComment(mCurrentSecret.getObjectId());
-            mSupportView.setCommentCount(commentlist);
+            Integer count = DateLoad.getComment(mCurrentSecret.getObjectId());
+            if (count != null) {
+                mSupportView.setCommentCount(count);
+            }
         }
         mSupportView.startQuery();
     }
