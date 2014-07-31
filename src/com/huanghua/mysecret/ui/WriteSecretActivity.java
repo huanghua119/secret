@@ -38,6 +38,10 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
     private EditText mContents;
     private int mContentsCount = 300;
     private Handler mHandler = new Handler();
+    private TextView mAddLocation = null;
+    private boolean mShowLocation = true;
+    private LocationUtil mLutil = null;
+    private String mLocation = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +54,35 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
         mContents = (EditText) findViewById(R.id.contents);
         mContents.addTextChangedListener(this);
         mContentsCountView = (TextView) findViewById(R.id.contents_count);
+        mAddLocation = (TextView) findViewById(R.id.add_location);
+        mLutil = new LocationUtil(this);
         if (mWriteType == WRITE_TYPE_SECRET) {
             mTitle.setText(R.string.publication_secret);
             mContents.setHint(R.string.write_secret_hint);
+            mAddLocation.setVisibility(View.VISIBLE);
         } else if (mWriteType == WRITE_TYPE_COMMENT) {
             mTitle.setText(R.string.publication_comment);
             mContents.setHint(R.string.write_comment_hint);
+            mAddLocation.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mLutil.findLocation() == null) {
+            mAddLocation.setClickable(false);
+            mShowLocation = false;
+        }
+        mLocation = mLutil.getAddress(mLutil.findLocation());
+        mAddLocation.setText(mLocation);
+    }
+
+    public void onHideLocation(View v) {
+        mShowLocation = !mShowLocation;
+        mLocation = mShowLocation ? mLutil.getAddress(mLutil.findLocation())
+                : getString(R.string.unknown_address);
+        mAddLocation.setText(mLocation);
     }
 
     public void onPublication(final View v) {
@@ -64,7 +90,6 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
             return;
         }
         String content = mContents.getText().toString();
-        LocationUtil lu = new LocationUtil(this);
         if (content != null && !"".endsWith(content)) {
             final Dialog dialog = CommonUtils.createLoadingDialog(this, getString(R.string.cominting));
             dialog.show();
@@ -73,10 +98,8 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
                 s.setContents(content);
                 s.setUser(userManager.getCurrentUser());
                 s.setStatus(0);
-                s.setLocation(lu.findLocation());
-                showLog("lu.findLocation ===" + lu.findLocation());
-                s.setAddress(lu.getAddress(lu.findLocation()));
-                showLog("lu.getAddress ===" + lu.getAddress(lu.findLocation()));
+                s.setLocation(mShowLocation ? mLutil.findLocation() : null);
+                s.setAddress(mLocation);
                 s.save(this, new SaveListener() {
                     @Override
                     public void onSuccess() {

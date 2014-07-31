@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,6 +73,54 @@ public abstract class FragmentBase extends Fragment {
         }
     }
 
+    public void ShowToast(final String text, final int drawableId) {
+        if (!TextUtils.isEmpty(text)) {
+            runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    if (mToast == null) {
+                        mToast = new Toast(getActivity());
+                        mToast.setDuration(Toast.LENGTH_SHORT);
+                        mToast.setView(mInflater.inflate(R.layout.toast_view,
+                                null));
+                        mToast.setGravity(Gravity.CENTER, 0, 0);
+                    }
+                    View toast = mToast.getView();
+                    TextView m = (TextView) toast.findViewById(R.id.toast_msg);
+                    m.setText(text);
+                    ImageView image = (ImageView) toast
+                            .findViewById(R.id.toast_image);
+                    image.setBackgroundResource(drawableId);
+                    mToast.show();
+                }
+            });
+
+        }
+    }
+
+    public void ShowToast(final int resId, final int drawableId) {
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                if (mToast == null) {
+                    mToast = new Toast(getActivity());
+                    mToast.setDuration(Toast.LENGTH_SHORT);
+                    mToast.setView(mInflater.inflate(R.layout.toast_view, null));
+                    mToast.setGravity(Gravity.CENTER, 0, 0);
+                }
+                View toast = mToast.getView();
+                TextView m = (TextView) toast.findViewById(R.id.toast_msg);
+                m.setText(resId);
+                ImageView image = (ImageView) toast
+                        .findViewById(R.id.toast_image);
+                image.setBackgroundResource(drawableId);
+                mToast.show();
+            }
+        });
+    }
+
     public void ShowToast(final int resId) {
         runOnUiThread(new Runnable() {
 
@@ -93,8 +142,7 @@ public abstract class FragmentBase extends Fragment {
 
     public void ShowToastOld(String text) {
         if (mToast2 == null) {
-            mToast2 = Toast.makeText(getActivity(), text,
-                    Toast.LENGTH_SHORT);
+            mToast2 = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
         }
         mToast2.setText(text);
         mToast2.show();
@@ -102,8 +150,7 @@ public abstract class FragmentBase extends Fragment {
 
     public void ShowToastOld(int text) {
         if (mToast2 == null) {
-            mToast2 = Toast.makeText(getActivity(), text,
-                    Toast.LENGTH_SHORT);
+            mToast2 = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
         }
         mToast2.setText(text);
         mToast2.show();
@@ -122,12 +169,14 @@ public abstract class FragmentBase extends Fragment {
      */
     public void startAnimActivity(Intent intent) {
         this.startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        getActivity().overridePendingTransition(R.anim.right_in,
+                R.anim.right_out);
     }
 
     public void startAnimActivity(Class<?> cla) {
         getActivity().startActivity(new Intent(getActivity(), cla));
-        getActivity().overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        getActivity().overridePendingTransition(R.anim.right_in,
+                R.anim.right_out);
     }
 
     public void showLog(String msg) {

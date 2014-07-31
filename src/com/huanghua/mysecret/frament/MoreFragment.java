@@ -1,7 +1,12 @@
 package com.huanghua.mysecret.frament;
 
+import java.util.Map;
+
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,9 +16,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.huanghua.mysecret.R;
+import com.huanghua.mysecret.bean.ApkBean;
 import com.huanghua.mysecret.bean.User;
+import com.huanghua.mysecret.config.Config;
 import com.huanghua.mysecret.manager.UserManager;
+import com.huanghua.mysecret.ui.BaseActivity;
 import com.huanghua.mysecret.ui.UserLoginActivity;
+import com.huanghua.mysecret.ui.WriteSecretActivity;
+import com.huanghua.mysecret.util.CommonUtils;
 import com.huanghua.mysecret.util.ImageLoadOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -27,8 +37,45 @@ public class MoreFragment extends FragmentBase implements View.OnClickListener,
         View.OnTouchListener {
 
     private View mUserLogin = null;
+    private View mToWriteSecret = null;
+    private View mToMySecret = null;
+    private View mToMyComment = null;
+
+    private View mAboutOur = null;
+    private View mCheckUpdate = null;
+    private TextView mVersion = null;
     private TextView mUserName = null;
     private ImageView mUserPhoto = null;
+    private Dialog mDialog = null;
+    private String mCurrentVersion = "";
+    private ApkBean mNewVersion = null;
+
+    private static final int MESSAGE_GET_UPDATE_XML = 1;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+            case MESSAGE_GET_UPDATE_XML:
+                boolean success = msg.getData().getBoolean("success");
+                if (success) {
+                    ApkBean apkBean = (ApkBean) msg.getData().getSerializable("apk");
+                    if (mCurrentVersion.equals(apkBean.getVersionName())) {
+                        ShowToast(R.string.is_new_version, R.drawable.popup_warning);
+                    } else {
+                        ShowToastOld(apkBean.getVersionName());
+                    }
+                    mNewVersion = apkBean;
+                } else {
+                    ShowToast(R.string.check_fail);
+                }
+                mDialog.dismiss();
+                break;
+            default:
+                break;
+            }
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,6 +96,22 @@ public class MoreFragment extends FragmentBase implements View.OnClickListener,
         mUserLogin.setOnClickListener(this);
         mUserName = (TextView) findViewById(R.id.user_name);
         mUserPhoto = (ImageView) findViewById(R.id.user_photo);
+        mToWriteSecret = findViewById(R.id.to_write_secret);
+        mToMySecret = findViewById(R.id.to_my_secret);
+        mToMyComment = findViewById(R.id.to_my_comment);
+        mCheckUpdate = findViewById(R.id.check_update);
+        mVersion = (TextView) findViewById(R.id.current_version);
+        mAboutOur = findViewById(R.id.about_out);
+        mToWriteSecret.setOnTouchListener(this);
+        mToWriteSecret.setOnClickListener(this);
+        mToMySecret.setOnTouchListener(this);
+        mToMySecret.setOnClickListener(this);
+        mToMyComment.setOnTouchListener(this);
+        mToMyComment.setOnClickListener(this);
+        mCheckUpdate.setOnTouchListener(this);
+        mCheckUpdate.setOnClickListener(this);
+        mAboutOur.setOnClickListener(this);
+        mAboutOur.setOnTouchListener(this);
     }
 
     @Override
@@ -68,14 +131,68 @@ public class MoreFragment extends FragmentBase implements View.OnClickListener,
             mUserName.setText(R.string.user_nologin);
             mUserPhoto.setImageResource(R.drawable.default_icon);
         }
+        showCurrentVersion();
+    }
+
+    private void showCurrentVersion() {
+        mCurrentVersion = CommonUtils.getCurrentVersionName(getActivity());
+        mVersion.setText(getString(R.string.current_version) + mCurrentVersion);
     }
 
     public void onClick(View v) {
+        if (v == mCheckUpdate) {
+            if (mNewVersion == null) {
+                mDialog = CommonUtils.createLoadingDialog(getActivity(),
+                        getString(R.string.check_update_now));
+                mDialog.show();
+                startCheckVersion();
+            } else {
+                if (mCurrentVersion.equals(mNewVersion.getVersionName())) {
+                    ShowToast(R.string.is_new_version, R.drawable.popup_warning);
+                } else {
+                    ShowToastOld(mNewVersion.getVersionName());
+                }
+            }
+        } else if (v == mAboutOur) {
+        } else if (((BaseActivity) getActivity()).checkUserLogin()) {
+            return;
+        }
         if (v == mUserLogin) {
             Intent intent = new Intent();
             intent.setClass(getActivity(), UserLoginActivity.class);
             startAnimActivity(intent);
+        } else if (v == mToWriteSecret) {
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), WriteSecretActivity.class);
+            startAnimActivity(intent);
         }
+    }
+
+    private void startCheckVersion() {
+        new Thread() {
+            @Override
+            public void run() {
+                String xml = CommonUtils.getXmlFromUrl(Config.UPDATE_XML_PATH);
+                boolean success = false;
+                ApkBean apk = null;
+                if (xml != null && !xml.equals("") && !xml.equals("error")) {
+                    Map<String, ApkBean> result = CommonUtils.parseXml(xml);
+                    if (result != null) {
+                        success = true;
+                        apk = result.get("secret");
+                    }
+                }
+                Message m = new Message();
+                m.what = MESSAGE_GET_UPDATE_XML;
+                Bundle b = new Bundle();
+                if (success) {
+                    b.putSerializable("apk", apk);
+                }
+                b.putBoolean("success", success);
+                m.setData(b);
+                mHandler.sendMessage(m);
+            }
+        }.start();
     }
 
     @Override

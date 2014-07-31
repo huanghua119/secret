@@ -65,5 +65,14 @@
     <string name="cominting">正在提交....</string>
     <string name="exit_confirm">确认要退出吗？文本内容将不会被保存！</string>
     <string name="no_more">没有更多了</string>
+    <string name="to_write_secret">发表秘密</string>
+    <string name="my_secret">我的秘密</string>
+    <string name="my_comment">我的评论</string>
+    <string name="check_update">检查新版本</string>
+    <string name="current_version">当前版本</string>
+    <string name="about_our">关于我们</string>
+    <string name="check_update_now">检测中....</string>
+    <string name="check_fail">检查失败</string>
+    <string name="is_new_version">已是最新版本!</string>
 
 </resources>
