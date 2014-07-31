@@ -2,10 +2,12 @@ package com.huanghua.mysecret.ui;
 
 import com.huanghua.mysecret.CustomApplcation;
 import com.huanghua.mysecret.R;
+import com.huanghua.mysecret.bean.ApkBean;
 import com.huanghua.mysecret.frament.ChoicenessFragment;
 import com.huanghua.mysecret.frament.MoreFragment;
 import com.huanghua.mysecret.load.DateLoad;
 import com.huanghua.mysecret.service.DateQueryService;
+import com.huanghua.mysecret.util.CommonUtils;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -41,6 +43,12 @@ public class MainActivity extends BaseActivity {
                 } else {
                     mChoiceness_tips.setVisibility(View.GONE);
                 }
+            } else if (action != null && DateQueryService.CHECK_NEW_VERSION_UPDATE.equals(action)) {
+                ApkBean apkBean = (ApkBean) intent.getSerializableExtra("apk");
+                if (apkBean != null ){
+                    CommonUtils.createUpdateVersionDialog(context, apkBean)
+                            .show();
+                }
             }
         }
     };
@@ -50,6 +58,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(DateQueryService.QUERY_NEW_SECRTE_ACTION);
+        intentFilter.addAction(DateQueryService.CHECK_NEW_VERSION_UPDATE);
         registerReceiver(mBroadcastReceiver, intentFilter);
         initView();
         initTab();

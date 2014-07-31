@@ -1,20 +1,22 @@
 package com.huanghua.mysecret.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.app.Service;
+import android.content.Intent;
+import android.os.IBinder;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobQuery.CachePolicy;
 import cn.bmob.v3.listener.CountListener;
 import cn.bmob.v3.listener.FindListener;
 
+import com.huanghua.mysecret.bean.ApkBean;
 import com.huanghua.mysecret.bean.Secret;
+import com.huanghua.mysecret.config.Config;
 import com.huanghua.mysecret.util.CommonUtils;
-
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
 
 public class DateQueryService extends Service {
 
@@ -51,6 +53,7 @@ public class DateQueryService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         CommonUtils.showLog(TAG, "onStartCommand");
+        startCheckNewVersion();
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -60,6 +63,7 @@ public class DateQueryService extends Service {
     public static boolean sHasNewSecret = false;
     public static int sSecretCount = 0;
     public static final String QUERY_NEW_SECRTE_ACTION = "query_new_secret_action";
+    public static final String CHECK_NEW_VERSION_UPDATE = "check_new_version_update";
     private static final int QUERY_PERIOD_TIME = 10 * 1000 * 60;
     private FindListener<Secret> mQuerySecretListener = new FindListener<Secret>() {
         @Override
@@ -110,5 +114,28 @@ public class DateQueryService extends Service {
         }
         mQuerySecret.findObjects(this, mQuerySecretListener);
         mQuerySecret.count(this, Secret.class, mQuerySecretCountListener);
+    }
+
+    private void startCheckNewVersion() {
+        mTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                String xml = CommonUtils.getXmlFromUrl(Config.UPDATE_XML_PATH);
+                boolean success = false;
+                ApkBean apk = null;
+                if (xml != null && !xml.equals("") && !xml.equals("error")) {
+                    Map<String, ApkBean> result = CommonUtils.parseXml(xml);
+                    if (result != null) {
+                        success = true;
+                        apk = result.get("secret");
+                    }
+                }
+                if (success) {
+                    Intent intent = new Intent(CHECK_NEW_VERSION_UPDATE);
+                    intent.putExtra("apk", apk);
+                    sendBroadcast(intent);
+                }
+            }
+        }, 3000);
     }
 }

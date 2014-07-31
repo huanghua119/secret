@@ -9,6 +9,7 @@ public class ApkBean implements Serializable {
     private String path = null;
     private int versionCode = 0;
     private String versionName = null;
+    private String detail = null;
 
     public String getName() {
         return name;
@@ -40,6 +41,14 @@ public class ApkBean implements Serializable {
 
     public void setVersionName(String versionName) {
         this.versionName = versionName;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
 }

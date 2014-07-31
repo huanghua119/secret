@@ -11,13 +11,18 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.xmlpull.v1.XmlPullParser;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.text.Html;
 import android.util.Log;
 import android.util.Xml;
 import android.view.LayoutInflater;
@@ -97,6 +102,31 @@ public class CommonUtils {
         return loadingDialog;
     }
 
+    public static Dialog createUpdateVersionDialog(final Context context,
+            final ApkBean apkBean) {
+        Dialog dialog = new AlertDialog.Builder(context)
+                .setTitle(
+                        context.getString(R.string.has_new_version)
+                                + apkBean.getVersionName())
+                .setMessage(Html.fromHtml(apkBean.getDetail()))
+                .setPositiveButton(R.string.download_update,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                    int which) {
+                                Uri uri = Uri.parse(apkBean.getPath());
+                                Intent intent = new Intent(Intent.ACTION_VIEW,
+                                        uri);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
+                                        | Intent.FLAG_ACTIVITY_NO_HISTORY
+                                        | Intent.FLAG_FROM_BACKGROUND);
+                                context.startActivity(intent);
+                            }
+                        }).setNegativeButton(android.R.string.cancel, null)
+                .create();
+        return dialog;
+    }
+
     public static int getCurrentVersion(Context mContext) {
         try {
             PackageManager pm = mContext.getPackageManager();
@@ -126,10 +156,11 @@ public class CommonUtils {
             HttpGet httpGet = new HttpGet(url);
             HttpResponse httpResponse = httpClient.execute(httpGet);
             HttpEntity httpEntity = httpResponse.getEntity();
-            xml = EntityUtils.toString(httpEntity, "utf-8");
+            xml = EntityUtils.toString(httpEntity, "gbk");
         } catch (Exception e) {
-            return "error";
+            xml = "error";
         }
+        showLog("update_xml:" + xml);
         return xml;
     }
 
@@ -162,6 +193,9 @@ public class CommonUtils {
                             && tag_name.equals("versionName")) {
                         String tag_text = parser.nextText();
                         apkBean.setVersionName(tag_text);
+                    } else if (tag_name != null && tag_name.equals("detail")) {
+                        String tag_text = parser.nextText();
+                        apkBean.setDetail(tag_text);
                     }
                     break;
                 case XmlPullParser.END_TAG:

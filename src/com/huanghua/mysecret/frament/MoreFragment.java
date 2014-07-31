@@ -48,7 +48,6 @@ public class MoreFragment extends FragmentBase implements View.OnClickListener,
     private ImageView mUserPhoto = null;
     private Dialog mDialog = null;
     private String mCurrentVersion = "";
-    private ApkBean mNewVersion = null;
 
     private static final int MESSAGE_GET_UPDATE_XML = 1;
     private Handler mHandler = new Handler() {
@@ -59,13 +58,15 @@ public class MoreFragment extends FragmentBase implements View.OnClickListener,
             case MESSAGE_GET_UPDATE_XML:
                 boolean success = msg.getData().getBoolean("success");
                 if (success) {
-                    ApkBean apkBean = (ApkBean) msg.getData().getSerializable("apk");
+                    ApkBean apkBean = (ApkBean) msg.getData().getSerializable(
+                            "apk");
                     if (mCurrentVersion.equals(apkBean.getVersionName())) {
-                        ShowToast(R.string.is_new_version, R.drawable.popup_warning);
+                        ShowToast(R.string.is_new_version,
+                                R.drawable.popup_warning);
                     } else {
-                        ShowToastOld(apkBean.getVersionName());
+                        CommonUtils.createUpdateVersionDialog(getActivity(),
+                                apkBean).show();
                     }
-                    mNewVersion = apkBean;
                 } else {
                     ShowToast(R.string.check_fail);
                 }
@@ -141,18 +142,10 @@ public class MoreFragment extends FragmentBase implements View.OnClickListener,
 
     public void onClick(View v) {
         if (v == mCheckUpdate) {
-            if (mNewVersion == null) {
-                mDialog = CommonUtils.createLoadingDialog(getActivity(),
-                        getString(R.string.check_update_now));
-                mDialog.show();
-                startCheckVersion();
-            } else {
-                if (mCurrentVersion.equals(mNewVersion.getVersionName())) {
-                    ShowToast(R.string.is_new_version, R.drawable.popup_warning);
-                } else {
-                    ShowToastOld(mNewVersion.getVersionName());
-                }
-            }
+            mDialog = CommonUtils.createLoadingDialog(getActivity(),
+                    getString(R.string.check_update_now));
+            mDialog.show();
+            startCheckVersion();
         } else if (v == mAboutOur) {
         } else if (((BaseActivity) getActivity()).checkUserLogin()) {
             return;
