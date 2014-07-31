@@ -5,7 +5,12 @@ import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.frament.ChoicenessFragment;
 import com.huanghua.mysecret.frament.MoreFragment;
 import com.huanghua.mysecret.load.DateLoad;
+import com.huanghua.mysecret.service.DateQueryService;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -26,10 +31,26 @@ public class MainActivity extends BaseActivity {
     private ChoicenessFragment mChoicenessFrament2;
     private MoreFragment mMoreFragment;
 
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action != null && DateQueryService.QUERY_NEW_SECRTE_ACTION.equals(action)) {
+                if (DateQueryService.sHasNewSecret) {
+                    mChoiceness_tips.setVisibility(View.VISIBLE);
+                } else {
+                    mChoiceness_tips.setVisibility(View.GONE);
+                }
+            }
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(DateQueryService.QUERY_NEW_SECRTE_ACTION);
+        registerReceiver(mBroadcastReceiver, intentFilter);
         initView();
         initTab();
     }
@@ -95,8 +116,11 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mChoiceness_tips.setVisibility(View.GONE);
         mNearby_tips.setVisibility(View.GONE);
+        mChoiceness_tips.setVisibility(View.GONE);
+        if (DateQueryService.sHasNewSecret) {
+            mChoiceness_tips.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -127,6 +151,9 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         DateLoad.clearAll();
+        if (mBroadcastReceiver != null) {
+            unregisterReceiver(mBroadcastReceiver);
+        }
         super.onDestroy();
     }
 }

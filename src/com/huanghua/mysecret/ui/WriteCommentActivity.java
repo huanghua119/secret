@@ -82,7 +82,7 @@ public class WriteCommentActivity extends BaseActivity implements
         mCommentListView.setPullRefreshEnable(false);
         mCommentListView.setXListViewListener(this);
         mCommentListView.pullRefreshing();
-        mListAdapter = new CommentListAdapter(this, mCommentList);
+        mListAdapter = new CommentListAdapter(this, mCommentList, mCommentListView);
         mSecretView = mInFlater.inflate(R.layout.secret_item_view, null);
         initSecretView();
         mCommentListView.addHeaderView(mSecretView);

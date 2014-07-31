@@ -21,12 +21,16 @@ import com.huanghua.mysecret.manager.UserManager;
 import com.huanghua.mysecret.ui.BaseActivity;
 import com.huanghua.mysecret.util.ImageLoadOptions;
 import com.huanghua.mysecret.util.ViewHolder;
+import com.huanghua.mysecret.view.xlist.XListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class CommentListAdapter extends BaseListAdapter<Comment> {
 
-    public CommentListAdapter(Context context, List<Comment> list) {
+    private XListView mListView;
+
+    public CommentListAdapter(Context context, List<Comment> list, XListView listView) {
         super(context, list);
+        mListView = listView;
     }
 
     @Override
@@ -112,6 +116,12 @@ public class CommentListAdapter extends BaseListAdapter<Comment> {
                         vv.setClickable(false);
                     }
                 });
+        View noMoreView = ViewHolder.get(view, R.id.item_no_more);
+        if (!mListView.getPullLoadEnable() && position == (getCount() - 1)) {
+            noMoreView.setVisibility(View.VISIBLE);
+        } else {
+            noMoreView.setVisibility(View.GONE);
+        }
         return view;
     }
 

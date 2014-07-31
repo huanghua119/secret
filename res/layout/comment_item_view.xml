@@ -59,7 +59,25 @@
             android:textColor="@android:color/white"
             android:textSize="14sp" />
     </RelativeLayout>
-
+    <LinearLayout
+        android:id="@+id/item_no_more"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dip"
+        android:layout_marginRight="6dip"
+        android:background="@drawable/comment_bg"
+        android:visibility="gone"
+        android:padding="6dip" >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:padding="6dip"
+            android:text="@string/no_more"
+            android:textSize="16sp" />
+    </LinearLayout>
     <!--  <View
         android:id="@+id/driver"
         android:layout_width="match_parent"

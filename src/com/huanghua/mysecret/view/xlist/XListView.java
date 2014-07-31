@@ -383,4 +383,8 @@ public class XListView extends ListView implements OnScrollListener {
             }
         }
     }
+
+    public boolean getPullLoadEnable() {
+        return mEnablePullLoad;
+    }
 }

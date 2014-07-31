@@ -22,6 +22,7 @@ import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.adapter.base.ChoicenessListAdapter;
 import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.load.DateLoadThreadManager;
+import com.huanghua.mysecret.service.DateQueryService;
 import com.huanghua.mysecret.ui.BaseActivity;
 import com.huanghua.mysecret.ui.WriteCommentActivity;
 import com.huanghua.mysecret.ui.WriteSecretActivity;
@@ -58,8 +59,15 @@ public class ChoicenessFragment extends FragmentBase implements
                 mLoadView.setVisibility(View.GONE);
                 mLoadImage.clearAnimation();
             }
+            if (list.size() > 0) {
+                DateQueryService.mLastSecretId = list.get(0).getObjectId();
+            }
+            if (list.size() < DateQueryService.sSecretCount) {
+                mListChoiceness.setPullLoadEnable(true);
+            } else {
+                mListChoiceness.setPullLoadEnable(false);
+            }
             mListChoiceness.setPullRefreshEnable(true);
-            mListChoiceness.setPullLoadEnable(true);
         }
 
         @Override
@@ -154,6 +162,10 @@ public class ChoicenessFragment extends FragmentBase implements
         showLog("refreshPull :" + mListChoiceness.getPullRefreshing());
         if (mListChoiceness.getPullRefreshing()) {
             mListChoiceness.stopRefresh();
+            if (DateQueryService.sHasNewSecret && mQueryIng) {
+                DateQueryService.sHasNewSecret = false;
+                getActivity().sendBroadcast(new Intent(DateQueryService.QUERY_NEW_SECRTE_ACTION));
+            }
         }
         if (mListChoiceness.getPullLoading()) {
             mListChoiceness.stopLoadMore();
