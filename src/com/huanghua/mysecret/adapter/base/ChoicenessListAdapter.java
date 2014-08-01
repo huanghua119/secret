@@ -1,5 +1,6 @@
 package com.huanghua.mysecret.adapter.base;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import android.content.Context;
@@ -11,12 +12,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.huanghua.mysecret.CustomApplcation;
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.bean.SecretSupport;
 import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.load.DateLoad;
 import com.huanghua.mysecret.util.ImageLoadOptions;
+import com.huanghua.mysecret.util.LocationUtil;
 import com.huanghua.mysecret.util.ViewHolder;
 import com.huanghua.mysecret.view.DateTextView;
 import com.huanghua.mysecret.view.SupportView;
@@ -24,6 +27,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
 
+    private boolean mNearSecret = false;
     protected Handler mMainThreadHandler;
     private SparseArray<SupportView> mAllSupportView = new SparseArray<SupportView>();
     private DateLoad.OnDateLoadCompleteListener mDateLoadListener = new DateLoad.OnDateLoadCompleteListener() {
@@ -74,6 +78,23 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
         mContents.setText(secret.getContents());
         mName.setText(user.getUsername());
 
+        TextView mDistance = ViewHolder.get(view, R.id.item_distance);
+        if (mNearSecret && secret.getLocation() != null) {
+            double m = LocationUtil.gps2m(secret.getLocation().getLatitude(),
+                    secret.getLocation().getLongitude(), CustomApplcation
+                            .getLocation().getLatitude(), CustomApplcation
+                            .getLocation().getLongitude());
+            if (m > 1000) {
+                DecimalFormat fnum = new DecimalFormat("##0.0");
+                String dd = fnum.format(m / 1000);
+                mDistance.setText(dd + mContext.getString(R.string.kilometer));
+            } else {
+                mDistance.setText((int)m + mContext.getString(R.string.meter));
+            }
+            mDistance.setVisibility(View.VISIBLE);
+        } else {
+            mDistance.setVisibility(View.GONE);
+        }
         mLocation.setText(secret.getAddress());
 
         Drawable drawable = mContext.getResources().getDrawable(
@@ -117,6 +138,10 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
                     }
                 });
         return view;
+    }
+
+    public void setNearSecret(boolean nearSecret) {
+        mNearSecret = nearSecret;
     }
 
 }

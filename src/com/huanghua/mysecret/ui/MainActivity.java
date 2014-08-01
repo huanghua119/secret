@@ -5,6 +5,7 @@ import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.bean.ApkBean;
 import com.huanghua.mysecret.frament.ChoicenessFragment;
 import com.huanghua.mysecret.frament.MoreFragment;
+import com.huanghua.mysecret.frament.NearSecretFragment;
 import com.huanghua.mysecret.load.DateLoad;
 import com.huanghua.mysecret.service.DateQueryService;
 import com.huanghua.mysecret.util.CommonUtils;
@@ -30,7 +31,7 @@ public class MainActivity extends BaseActivity {
     private ImageView mNearby_tips;
 
     private ChoicenessFragment mChoicenessFrament;
-    private ChoicenessFragment mChoicenessFrament2;
+    private NearSecretFragment mNearSecretFrament;
     private MoreFragment mMoreFragment;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
@@ -77,9 +78,9 @@ public class MainActivity extends BaseActivity {
 
     private void initTab() {
         mChoicenessFrament = new ChoicenessFragment();
-        mChoicenessFrament2 = new ChoicenessFragment();
+        mNearSecretFrament = new NearSecretFragment();
         mMoreFragment = new MoreFragment();
-        fragments = new Fragment[] { mChoicenessFrament, mChoicenessFrament2,
+        fragments = new Fragment[] { mChoicenessFrament, mNearSecretFrament,
                 mMoreFragment };
         // 添加显示第一个fragment
         getSupportFragmentManager().beginTransaction()
@@ -102,6 +103,9 @@ public class MainActivity extends BaseActivity {
             break;
         case R.id.btn_nearby:
             mIndex = 1;
+            if (mCurrentTabIndex == mIndex) {
+                mNearSecretFrament.toTopSelect();
+            }
             break;
         case R.id.btn_more:
             mIndex = 2;

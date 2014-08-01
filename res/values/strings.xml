@@ -78,5 +78,7 @@
     <string name="download_update">下载</string>
     <string name="mysecret_title">我的秘密</string>
     <string name="mysecret_count">秘文数</string>
+    <string name="kilometer">公里</string>
+    <string name="meter">米</string>
 
 </resources>

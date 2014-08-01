@@ -12,12 +12,20 @@
         android:layout_height="@dimen/title_height"
         android:background="@color/title_text_bg_color"
         android:gravity="center_vertical" >
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:visibility="gone" />
         <ImageButton
             android:id="@+id/write_secret"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_gravity="center"
+            android:layout_centerInParent="true"
             android:background="@android:color/transparent"
             android:paddingLeft="10dip"
             android:paddingRight="10dip"

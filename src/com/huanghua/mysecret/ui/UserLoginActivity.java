@@ -1,7 +1,9 @@
 package com.huanghua.mysecret.ui;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -61,6 +63,7 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
         } else {
             mLoginView.setVisibility(View.VISIBLE);
             mUserDetail.setVisibility(View.GONE);
+            mUserName.setText(getUserName());
         }
     }
 
@@ -94,6 +97,7 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
             ShowToast(R.string.notpass);
             return;
         }
+        setUserName(name);
         userManager.login(name, password, new UserManagerListener() {
             @Override
             public void onSuccess(User u) {
@@ -126,5 +130,20 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
             break;
         }
         return dialog;
+    }
+
+    private String getUserName() {
+        SharedPreferences mSharedPreferences = getSharedPreferences("mysecret",
+                Context.MODE_PRIVATE);
+        String name = mSharedPreferences.getString("user_name", "");
+        return name;
+    }
+
+    private void setUserName(String username) {
+        SharedPreferences mSharedPreferences = getSharedPreferences("mysecret",
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString("user_name", username);
+        editor.commit();
     }
 }
