@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobPointer;
+import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 
@@ -93,7 +95,7 @@ public class CommentListAdapter extends BaseListAdapter<Comment> {
                         }
                         final TextView vv = (TextView) v;
                         final Comment c = (Comment) values;
-                        CommentSupport cs = new CommentSupport();
+                        final CommentSupport cs = new CommentSupport();
                         cs.setComment(c);
                         cs.setToUser(c.getFromUser());
                         cs.setFromUser(UserManager.getInstance(mContext)
@@ -102,6 +104,10 @@ public class CommentListAdapter extends BaseListAdapter<Comment> {
                             @Override
                             public void onSuccess() {
                                 showLog("save commentSupport success");
+                                BmobRelation relation = new BmobRelation();
+                                relation.add(cs);
+                                c.setCommentSupport(relation);
+                                c.update(mContext);
                                 vv.setSelected(true);
                                 vv.setClickable(false);
                                 setDingTextView(c, vv);
@@ -128,7 +134,7 @@ public class CommentListAdapter extends BaseListAdapter<Comment> {
     private void setDingTextView(final Comment comment, final TextView csView) {
         csView.setSelected(false);
         BmobQuery<CommentSupport> queryCs = new BmobQuery<CommentSupport>();
-        queryCs.addWhereEqualTo("comment", comment);
+        queryCs.addWhereRelatedTo("commentSupport", new BmobPointer(comment));
         queryCs.findObjects(mContext, new FindListener<CommentSupport>() {
             @Override
             public void onSuccess(List<CommentSupport> arg0) {

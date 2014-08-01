@@ -1,6 +1,7 @@
 package com.huanghua.mysecret.bean;
 
 import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.datatype.BmobRelation;
 
 public class Comment extends BmobObject {
 
@@ -9,6 +10,7 @@ public class Comment extends BmobObject {
     private User toUser;
     private String contents;
     private Secret secret;
+    private BmobRelation commentSupport;
 
     public User getFromUser() {
         return fromUser;
@@ -40,5 +42,13 @@ public class Comment extends BmobObject {
 
     public void setSecret(Secret secret) {
         this.secret = secret;
+    }
+
+    public BmobRelation getCommentSupport() {
+        return commentSupport;
+    }
+
+    public void setCommentSupport(BmobRelation commentSupport) {
+        this.commentSupport = commentSupport;
     }
 }

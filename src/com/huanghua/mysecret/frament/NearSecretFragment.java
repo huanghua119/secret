@@ -82,6 +82,10 @@ public class NearSecretFragment extends FragmentBase implements
             if (arg0 == 9010) {
                 ShowToast(R.string.no_check_network);
             }
+            if (mLoadView.getVisibility() == View.VISIBLE) {
+                mLoadView.setVisibility(View.GONE);
+                mLoadImage.clearAnimation();
+            }
             refreshPull();
             mListChoiceness.setPullRefreshEnable(true);
         }
@@ -137,7 +141,7 @@ public class NearSecretFragment extends FragmentBase implements
                     .getLocation().getLongitude(), CustomApplcation
                     .getLocation().getLatitude());
             mQuerySecret.addWhereNear("location", mGeoPoint);
-            //mQuerySecret.addWhereWithinMiles("location", mGeoPoint, 10);
+            //mQuerySecret.addWhereWithinMiles("location", mGeoPoint, 1000.0);
             mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
             mQuerySecret.setCachePolicy(CachePolicy.CACHE_ELSE_NETWORK);
             mQuerySecret.findObjects(getActivity(), mFindSecretListener);
