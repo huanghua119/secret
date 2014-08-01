@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import cn.bmob.push.BmobPush;
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobInstallation;
 
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.config.Config;
@@ -25,6 +27,8 @@ public class SplashActivity extends BaseActivity {
         setContentView(R.layout.activity_splash);
         // BmobIM SDK初始化--只需要这一段代码即可完成初始化
         Bmob.initialize(this, Config.applicationId);
+        BmobInstallation.getCurrentInstallation(this).save();
+        BmobPush .startWork(this, Config.applicationId);
         userManager.initCurrentUser();
         startService(new Intent(this, DateQueryService.class));
 

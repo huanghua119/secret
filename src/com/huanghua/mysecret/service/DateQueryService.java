@@ -1,12 +1,16 @@
 package com.huanghua.mysecret.service;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobQuery.CachePolicy;
@@ -117,25 +121,56 @@ public class DateQueryService extends Service {
     }
 
     private void startCheckNewVersion() {
-        mTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                String xml = CommonUtils.getXmlFromUrl(Config.UPDATE_XML_PATH);
-                boolean success = false;
-                ApkBean apk = null;
-                if (xml != null && !xml.equals("") && !xml.equals("error")) {
-                    Map<String, ApkBean> result = CommonUtils.parseXml(xml);
-                    if (result != null) {
-                        success = true;
-                        apk = result.get("secret");
+        if (isCheckedVersion()) {
+            mTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    String xml = CommonUtils
+                            .getXmlFromUrl(Config.UPDATE_XML_PATH);
+                    boolean success = false;
+                    ApkBean apk = null;
+                    if (xml != null && !xml.equals("") && !xml.equals("error")) {
+                        Map<String, ApkBean> result = CommonUtils.parseXml(xml);
+                        if (result != null) {
+                            success = true;
+                            apk = result.get("secret");
+                        }
+                    }
+                    if (success) {
+                        Intent intent = new Intent(CHECK_NEW_VERSION_UPDATE);
+                        intent.putExtra("apk", apk);
+                        sendBroadcast(intent);
+                        setCheckVersionDate();
                     }
                 }
-                if (success) {
-                    Intent intent = new Intent(CHECK_NEW_VERSION_UPDATE);
-                    intent.putExtra("apk", apk);
-                    sendBroadcast(intent);
-                }
-            }
-        }, 3000);
+            }, 3000);
+        }
+    }
+
+    private boolean isCheckedVersion() {
+        SharedPreferences mSharedPreferences = getSharedPreferences("mysecret",
+                Context.MODE_PRIVATE);
+        String date = mSharedPreferences.getString("check_last_date", "");
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        String newDate = month + ":" + day;
+        if (date.equals("") || !newDate.equals(date)) {
+            return true;
+        }
+        return false;
+    }
+
+    private void setCheckVersionDate() {
+        SharedPreferences mSharedPreferences = getSharedPreferences("mysecret",
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        editor.putString("check_last_date", month + ":" + day);
+        editor.commit();
     }
 }

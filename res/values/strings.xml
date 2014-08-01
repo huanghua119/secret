@@ -76,5 +76,7 @@
     <string name="is_new_version">已是最新版本!</string>
     <string name="has_new_version">有新版本更新</string>
     <string name="download_update">下载</string>
+    <string name="mysecret_title">我的秘密</string>
+    <string name="mysecret_count">秘文数</string>
 
 </resources>
