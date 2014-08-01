@@ -70,11 +70,12 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
     @Override
     protected void onResume() {
         super.onResume();
-        if (mLutil.findLocation() == null) {
+        if (mLutil.findLocation() == null || mLutil.getAddress(mLutil.findLocation()).equals(getString(R.string.unknown_address))) {
             mAddLocation.setClickable(false);
             mShowLocation = false;
         }
-        mLocation = mLutil.getAddress(mLutil.findLocation());
+        mLocation = mShowLocation ? mLutil.getAddress(mLutil.findLocation())
+                : getString(R.string.unknown_address);
         mAddLocation.setText(mLocation);
     }
 

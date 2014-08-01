@@ -173,6 +173,9 @@ public class MySecretActivity extends BaseActivity implements OnClickListener,
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
             long id) {
+        if (position < 2) {
+            return;
+        }
         Secret s = mSecretAdapter.getList().get(position - 2);
         if (s != null) {
             Intent intent = new Intent();
