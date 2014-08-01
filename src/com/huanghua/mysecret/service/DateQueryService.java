@@ -137,10 +137,14 @@ public class DateQueryService extends Service {
                         }
                     }
                     if (success) {
-                        Intent intent = new Intent(CHECK_NEW_VERSION_UPDATE);
-                        intent.putExtra("apk", apk);
-                        sendBroadcast(intent);
-                        setCheckVersionDate();
+                        if (!CommonUtils.getCurrentVersionName(
+                                DateQueryService.this).equals(
+                                apk.getVersionName())) {
+                            Intent intent = new Intent(CHECK_NEW_VERSION_UPDATE);
+                            intent.putExtra("apk", apk);
+                            sendBroadcast(intent);
+                            setCheckVersionDate();
+                        }
                     }
                 }
             }, 3000);
