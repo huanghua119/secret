@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="MyTheme">
+        <attr name="tab_background_color" format="color" />
+        <attr name="home_bottom_bg" format="reference" />
+        <attr name="tab_choiceness" format="reference" />
+        <attr name="tab_textcolor" format="reference" />
+        <attr name="tab_nearby" format="reference" />
+        <attr name="tab_more" format="reference" />
+        <attr name="tab_notice" format="reference" />
+        <attr name="activity_bg_color" format="color" />
+        <attr name="comment_bg_no_bottom" format="reference" />
+        <attr name="comment_bg" format="reference" />
+        <attr name="user_photo_default" format="reference" />
+        <attr name="user_photo_frame" format="reference" />
+        <attr name="man" format="reference" />
+        <attr name="women" format="reference" />
+        <attr name="item_text_color" format="reference" />
+        <attr name="ic_ding_bg" format="reference" />
+        <attr name="xlistview_footer_textcolor" format="color" />
+        <attr name="arrow" format="reference" />
+    </declare-styleable>
+
+</resources>

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@color/activity_bg_color"
+    android:background="?attr/activity_bg_color"
     android:gravity="bottom" >
 
     <RelativeLayout
@@ -21,7 +21,7 @@
                 android:id="@+id/xlistview_header_hint_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/xlistview_footer_textcolor"
+                android:textColor="?attr/xlistview_footer_textcolor"
                 android:text="@string/xlistview_header_hint_normal" />
 
             <LinearLayout
@@ -35,14 +35,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/xlistview_header_last_time"
                     android:textSize="12sp"
-                    android:textColor="@color/xlistview_footer_textcolor"
+                    android:textColor="?attr/xlistview_footer_textcolor"
                     android:visibility="invisible" />
 
                 <TextView
                     android:id="@+id/xlistview_header_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/xlistview_footer_textcolor"
+                    android:textColor="?attr/xlistview_footer_textcolor"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
@@ -54,7 +54,7 @@
             android:layout_alignLeft="@id/xlistview_header_text"
             android:layout_centerVertical="true"
             android:layout_marginLeft="-35dp"
-            android:src="@drawable/arrow" />
+            android:src="?attr/arrow" />
 
         <ProgressBar
             android:id="@+id/xlistview_header_progressbar"

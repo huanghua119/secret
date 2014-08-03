@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:layout_alignParentBottom="true"
-        android:background="#2f1747"
+        android:background="?attr/tab_background_color"
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 
@@ -22,14 +22,14 @@
                 android:id="@+id/btn_choiceness"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/home_bottom_bg"
-                android:drawableTop="@drawable/tab_choiceness"
+                android:background="?attr/home_bottom_bg"
+                android:drawableTop="?attr/tab_choiceness"
                 android:onClick="onTabSelect"
                 android:paddingTop="8dip"
                 android:layout_centerInParent="true"
                 android:scaleType="matrix"
                 android:text="@string/tab_choice"
-                android:textColor="@drawable/tab_textcolor"
+                android:textColor="?attr/tab_textcolor"
                 android:textSize="12sp" />
 
             <ImageView
@@ -40,11 +40,9 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/notice"
+                android:background="?attr/tab_notice"
                 android:contentDescription="@string/action_settings"
                 android:gravity="center"
-                android:textColor="@android:color/white"
-                android:textSize="12sp"
                 android:visibility="visible" />
         </RelativeLayout>
 
@@ -57,14 +55,14 @@
                 android:id="@+id/btn_nearby"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/home_bottom_bg"
-                android:drawableTop="@drawable/tab_nearby"
+                android:background="?attr/home_bottom_bg"
+                android:drawableTop="?attr/tab_nearby"
                 android:onClick="onTabSelect"
                 android:paddingTop="8dip"
                 android:layout_centerInParent="true"
                 android:scaleType="matrix"
                 android:text="@string/tab_nearby"
-                android:textColor="@drawable/tab_textcolor"
+                android:textColor="?attr/tab_textcolor"
                 android:textSize="12sp" />
 
             <ImageView
@@ -75,11 +73,9 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/notice"
+                android:background="?attr/tab_notice"
                 android:contentDescription="@string/action_settings"
                 android:gravity="center"
-                android:textColor="@android:color/white"
-                android:textSize="12sp"
                 android:visibility="visible" />
         </RelativeLayout>
 
@@ -88,13 +84,13 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/home_bottom_bg"
-            android:drawableTop="@drawable/tab_more"
+            android:background="?attr/home_bottom_bg"
+            android:drawableTop="?attr/tab_more"
             android:onClick="onTabSelect"
             android:paddingTop="8dip"
             android:scaleType="matrix"
             android:text="@string/tab_more"
-            android:textColor="@drawable/tab_textcolor"
+            android:textColor="?attr/tab_textcolor"
             android:textSize="12sp" />
     </LinearLayout>
 
