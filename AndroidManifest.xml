@@ -76,6 +76,8 @@
         </activity>
         <activity android:name="com.huanghua.mysecret.ui.MySecretActivity" >
         </activity>
+        <activity android:name="com.huanghua.mysecret.ui.MyCommentActivity" >
+        </activity>
         <service android:name="com.huanghua.mysecret.service.DateQueryService" >
         </service>
 

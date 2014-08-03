@@ -24,6 +24,7 @@ import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.config.Config;
 import com.huanghua.mysecret.manager.UserManager;
 import com.huanghua.mysecret.ui.BaseActivity;
+import com.huanghua.mysecret.ui.MyCommentActivity;
 import com.huanghua.mysecret.ui.MySecretActivity;
 import com.huanghua.mysecret.ui.UserLoginActivity;
 import com.huanghua.mysecret.ui.WriteSecretActivity;
@@ -171,6 +172,10 @@ public class MoreFragment extends FragmentBase implements View.OnClickListener,
         } else if (v == mToMySecret) {
             Intent intent = new Intent();
             intent.setClass(getActivity(), MySecretActivity.class);
+            startAnimActivity(intent);
+        } else if (v == mToMyComment) {
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), MyCommentActivity.class);
             startAnimActivity(intent);
         }
     }
