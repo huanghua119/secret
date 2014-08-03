@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/activity_bg_color"
+    android:background="?attr/activity_bg_color"
     android:gravity="center_horizontal"
     android:orientation="vertical" >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_height"
-        android:background="@color/title_text_bg_color"
+        android:background="?attr/title_bg_color"
         android:gravity="center_vertical" >
 
         <TextView

@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/item_comment_name"
             android:layout_toRightOf="@+id/item_comment_photo"
-            android:textColor="@android:color/white"
+            android:textColor="?attr/item_comment_contents_color"
             android:textSize="14sp" />
     </RelativeLayout>
     <LinearLayout
@@ -71,7 +71,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
+            android:textColor="?attr/item_comment_contents_color"
             android:gravity="center"
             android:layout_gravity="center"
             android:padding="6dip"

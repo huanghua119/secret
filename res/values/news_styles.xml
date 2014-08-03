@@ -3,22 +3,65 @@
 
     <style name="Theme.Purple" parent="AppTheme">
         <item name="tab_background_color">@color/tab_background_color_purple</item>
+        <item name="activity_bg_color">@color/activity_bg_color</item>
+        <item name="title_bg_color">@color/title_bg_color</item>
+        <item name="item_text_color">@color/item_text_color</item>
+        <item name="list_item_content_color">@color/item_text_color</item>
+        <item name="list_item_bg_color">@color/list_item_bg_color</item>
+        <item name="item_comment_contents_color">@color/item_text_color</item>
+        <item name="item_btn_bg_normal">@drawable/item_btn_bg_normal</item>
+        <item name="item_btn_bg_press">@drawable/item_btn_bg_press</item>
+        <item name="item_bottom_btn_bg">@drawable/item_bottom_btn_bg</item>
+        <item name="cry_bg">@drawable/cry_bg</item>
+        <item name="happy_bg">@drawable/happy_bg</item>
+        <item name="post_item_vertical">@drawable/post_item_vertical</item>
+        <item name="xlistview_footer_textcolor">@color/xlistview_footer_textcolor</item>
+        <item name="input_box_gb">@drawable/input_box_gb</item>
         <item name="home_bottom_bg">@drawable/home_bottom_bg</item>
+        <item name="comment_bg">@drawable/comment_bg</item>
+        <item name="comment_bg_no_bottom">@drawable/comment_bg_no_bottom</item>
         <item name="tab_choiceness">@drawable/tab_choiceness</item>
         <item name="tab_textcolor">@drawable/tab_textcolor</item>
         <item name="tab_nearby">@drawable/tab_nearby</item>
         <item name="tab_more">@drawable/tab_more</item>
         <item name="tab_notice">@drawable/notice</item>
-        <item name="activity_bg_color">@color/activity_bg_color</item>
-        <item name="comment_bg_no_bottom">@drawable/comment_bg_no_bottom</item>
-        <item name="comment_bg">@drawable/comment_bg</item>
         <item name="user_photo_default">@drawable/user_photo_default</item>
         <item name="user_photo_frame">@drawable/user_photo_frame</item>
         <item name="man">@drawable/man</item>
         <item name="women">@drawable/women</item>
-        <item name="item_text_color">@color/item_text_color</item>
         <item name="ic_ding_bg">@drawable/ic_ding_bg</item>
+        <item name="arrow">@drawable/arrow</item>
+    </style>
+
+    <style name="Theme.Space" parent="AppTheme">
+        <item name="tab_background_color">@color/tab_background_color_purple</item>
+        <item name="activity_bg_color">@color/space_activity_bg_color</item>
+        <item name="title_bg_color">@color/space_title_bg_color</item>
+        <item name="item_text_color">@color/space_item_text_color</item>
+        <item name="list_item_content_color">@color/space_item_text_color</item>
+        <item name="list_item_bg_color">@color/space_list_item_bg_color</item>
+        <item name="item_comment_contents_color">@color/space_item_text_color</item>
+        <item name="item_btn_bg_normal">@drawable/space_item_btn_bg_normal</item>
+        <item name="item_btn_bg_press">@drawable/space_item_btn_bg_press</item>
+        <item name="item_bottom_btn_bg">@drawable/space_item_bottom_btn_bg</item>
+        <item name="cry_bg">@drawable/space_cry_bg</item>
+        <item name="happy_bg">@drawable/space_happy_bg</item>
+        <item name="post_item_vertical">@drawable/space_post_item_vertical</item>
         <item name="xlistview_footer_textcolor">@color/xlistview_footer_textcolor</item>
+        <item name="input_box_gb">@drawable/space_input_box_gb</item>
+        <item name="home_bottom_bg">@drawable/space_home_bottom_bg</item>
+        <item name="comment_bg">@drawable/space_comment_bg</item>
+        <item name="comment_bg_no_bottom">@drawable/space_comment_bg_no_bottom</item>
+        <item name="tab_choiceness">@drawable/tab_choiceness</item>
+        <item name="tab_textcolor">@drawable/tab_textcolor</item>
+        <item name="tab_nearby">@drawable/tab_nearby</item>
+        <item name="tab_more">@drawable/tab_more</item>
+        <item name="tab_notice">@drawable/notice</item>
+        <item name="user_photo_default">@drawable/user_photo_default</item>
+        <item name="user_photo_frame">@drawable/user_photo_frame</item>
+        <item name="man">@drawable/man</item>
+        <item name="women">@drawable/women</item>
+        <item name="ic_ding_bg">@drawable/ic_ding_bg</item>
         <item name="arrow">@drawable/arrow</item>
     </style>
 
