@@ -19,7 +19,6 @@
             android:layout_width="35dip"
             android:layout_height="35dip"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
             android:layout_marginRight="5dip"
             android:background="?attr/user_photo_frame"
             android:contentDescription="@string/app_name"
@@ -33,59 +32,89 @@
             android:layout_toRightOf="@+id/item_comment_photo"
             android:drawableLeft="?attr/man"
             android:drawablePadding="4dip"
-            android:singleLine="true"
-            android:lines="1"
             android:gravity="center_vertical"
             android:textColor="?attr/item_text_color"
             android:textSize="12sp" />
 
         <TextView
-            android:id="@+id/item_comment_support"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/item_comment_photo"
+            android:text="@string/commented"
+            android:textColor="#3d3d3d"
+            android:textSize="10sp" />
+
+        <ImageView
+            android:id="@+id/item_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/item_del_bg" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dip"
+        android:layout_marginRight="6dip"
+        android:background="?attr/list_item_bg_color"
+        android:orientation="horizontal"
+        android:padding="6dip"
+        android:paddingBottom="10dip" >
+
+        <TextView
+            android:id="@+id/item_comment_contents"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:textColor="?attr/list_item_content_color"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/item_comment_support"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:clickable="true"
             android:drawableLeft="?attr/ic_ding_bg"
             android:gravity="left|center_vertical"
             android:text="@string/add_one"
             android:textColor="?attr/item_text_color"
             android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/item_comment_contents"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/item_comment_name"
-            android:layout_toRightOf="@+id/item_comment_photo"
-            android:textColor="?attr/item_comment_contents_color"
-            android:textSize="14sp" />
-    </RelativeLayout>
-    <LinearLayout
-        android:id="@+id/item_no_more"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="6dip"
-        android:layout_marginRight="6dip"
-        android:background="?attr/comment_bg"
-        android:visibility="gone"
-        android:padding="6dip" >
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="?attr/item_comment_contents_color"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:padding="6dip"
-            android:text="@string/no_more"
-            android:textSize="16sp" />
     </LinearLayout>
-    <!--  <View
+
+    <View
         android:id="@+id/driver"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="6dip"
         android:layout_marginRight="6dip"
-        android:background="@drawable/list_divider" /> -->
+        android:background="@drawable/list_divider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dip"
+        android:layout_marginRight="6dip"
+        android:background="?attr/list_item_bg_color"
+        android:orientation="vertical"
+        android:padding="10dip"
+        android:paddingTop="6dip" >
+
+        <TextView
+            android:id="@+id/item_secret_contents"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#3d3d3d"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dip"
+        android:background="@android:color/transparent" />
 
 </LinearLayout>

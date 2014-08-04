@@ -3,6 +3,7 @@ package com.huanghua.mysecret.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,12 +36,7 @@ public class MyCommentActivity extends BaseActivity implements OnClickListener,
     private FindListener<Comment> mFindSecretListener = new FindListener<Comment>() {
         @Override
         public void onSuccess(List<Comment> list) {
-            showLog("comment_list", "list:" + list.size());
-            for (Comment c : list) {
-                showLog("comment_list", "conent:" + c.getContents() + " name: "
-                        + c.getFromUser().getUsername() + " secret:"
-                        + c.getSecret().getContents());
-            }
+            mListAdapter.setList(list);
             if (list.size() < mSecretCount) {
                 mSecretListView.setPullLoadEnable(true);
             } else {
@@ -80,6 +76,7 @@ public class MyCommentActivity extends BaseActivity implements OnClickListener,
         mSecretListView.pullRefreshing();
         mSecretListView.setOnItemClickListener(this);
         mListAdapter = new MyCommentListAdapter(this, mCommentList);
+        mSecretListView.setAdapter(mListAdapter);
 
     }
 
@@ -123,6 +120,22 @@ public class MyCommentActivity extends BaseActivity implements OnClickListener,
             mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
             mQuerySecret.setCachePolicy(CachePolicy.NETWORK_ONLY);
             mQuerySecret.findObjects(this, mFindSecretListener);
+            mQuerySecret.count(this, Comment.class, new CountListener() {
+                @Override
+                public void onSuccess(int arg0) {
+                    mSecretCount = arg0;
+                    if (mSecretCount > mListPage * LIST_DEFALUT_LIMIT) {
+                        mSecretListView.setPullLoadEnable(true);
+                    } else {
+                        mSecretListView.setPullLoadEnable(false);
+                    }
+                }
+
+                @Override
+                public void onFailure(int arg0, String arg1) {
+
+                }
+            });
         }
     }
 
@@ -134,8 +147,13 @@ public class MyCommentActivity extends BaseActivity implements OnClickListener,
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
             long id) {
-        if (position < 2) {
-            return;
+        Comment c = mListAdapter.getList().get(position - 1);
+        Secret s = c.getSecret();
+        if (s != null) {
+            Intent intent = new Intent();
+            intent.setClass(this, WriteCommentActivity.class);
+            intent.putExtra("secret", s);
+            startAnimActivity(intent);
         }
     }
 

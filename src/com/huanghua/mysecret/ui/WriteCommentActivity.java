@@ -49,7 +49,9 @@ public class WriteCommentActivity extends BaseActivity implements
         public void onSuccess(List<Comment> arg0) {
             showLog("query comment success:" + arg0.size());
             mListAdapter.setList(arg0);
-            int commentCount = DateLoad.getComment(mCurrentSecret.getObjectId());
+            Integer commentCount2 = DateLoad.getComment(mCurrentSecret
+                    .getObjectId());
+            int commentCount = commentCount2 == null ? 0 : commentCount2;
             if (commentCount > arg0.size()) {
                 mCommentListView.setPullLoadEnable(true);
             } else {

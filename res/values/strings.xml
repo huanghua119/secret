@@ -80,5 +80,6 @@
     <string name="mysecret_count">秘文数</string>
     <string name="kilometer">公里</string>
     <string name="meter">米</string>
+    <string name="commented">评论了</string>
 
 </resources>
