@@ -30,6 +30,7 @@ import com.huanghua.mysecret.ui.UserLoginActivity;
 import com.huanghua.mysecret.ui.WriteSecretActivity;
 import com.huanghua.mysecret.util.CommonUtils;
 import com.huanghua.mysecret.util.ImageLoadOptions;
+import com.huanghua.mysecret.util.ThemeUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /***
@@ -45,6 +46,8 @@ public class MoreFragment extends FragmentBase implements View.OnClickListener,
     private View mToWriteSecret = null;
     private View mToMySecret = null;
     private View mToMyComment = null;
+    private View mSwitchTheme = null;
+    private TextView mCurrentTheme = null;
 
     private View mAboutOur = null;
     private View mCheckUpdate = null;
@@ -108,6 +111,8 @@ public class MoreFragment extends FragmentBase implements View.OnClickListener,
         mCheckUpdate = findViewById(R.id.check_update);
         mVersion = (TextView) findViewById(R.id.current_version);
         mAboutOur = findViewById(R.id.about_out);
+        mSwitchTheme = findViewById(R.id.switch_theme);
+        mCurrentTheme = (TextView) findViewById(R.id.current_theme);
         mToWriteSecret.setOnTouchListener(this);
         mToWriteSecret.setOnClickListener(this);
         mToMySecret.setOnTouchListener(this);
@@ -118,6 +123,8 @@ public class MoreFragment extends FragmentBase implements View.OnClickListener,
         mCheckUpdate.setOnClickListener(this);
         mAboutOur.setOnClickListener(this);
         mAboutOur.setOnTouchListener(this);
+        mSwitchTheme.setOnClickListener(this);
+        mSwitchTheme.setOnTouchListener(this);
     }
 
     @Override
@@ -137,7 +144,23 @@ public class MoreFragment extends FragmentBase implements View.OnClickListener,
             mUserName.setText(R.string.user_nologin);
             mUserPhoto.setImageResource(R.drawable.default_icon);
         }
+        setShowThemeToUI();
         showCurrentVersion();
+    }
+
+    private void setShowThemeToUI() {
+        int theme = ThemeUtil.getCurrentTheme(getActivity());
+        String toTheme = getString(R.string.switch_theme_to);
+        switch (theme) {
+        case ThemeUtil.THEME_NIGHT:
+            mCurrentTheme.setText(toTheme
+                    + getString(R.string.switch_theme_to_during));
+            break;
+        case ThemeUtil.THEME_DURING:
+            mCurrentTheme.setText(toTheme
+                    + getString(R.string.switch_theme_to_night));
+            break;
+        }
     }
 
     private void showCurrentVersion() {
@@ -158,6 +181,8 @@ public class MoreFragment extends FragmentBase implements View.OnClickListener,
             query.addWhereEqualTo("installationId", installationId);
             bmobPush.setQuery(query);
             bmobPush.pushMessage("消息内容");
+        } else if (v == mSwitchTheme) {
+            ThemeUtil.switchTheme((BaseActivity) getActivity());
         } else if (((BaseActivity) getActivity()).checkUserLogin()) {
             return;
         }

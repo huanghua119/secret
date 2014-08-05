@@ -1,6 +1,7 @@
 package com.huanghua.mysecret.util;
 
 import com.huanghua.mysecret.CustomApplcation;
+import com.huanghua.mysecret.R;
 
 import android.content.Context;
 import cn.bmob.v3.datatype.BmobGeoPoint;
@@ -20,9 +21,19 @@ public class LocationUtil {
         return CustomApplcation.getAddress();
     }
 
+    public boolean isValidLocation() {
+        if (findLocation() == null
+                || getAddress(findLocation()).equals(
+                        mContext.getString(R.string.unknown_address))) {
+            return false;
+        }
+        return true;
+    }
+
     private static final double EARTH_RADIUS = 6378137.0;
 
-    public static double gps2m(double lat_a, double lng_a, double lat_b, double lng_b) {
+    public static double gps2m(double lat_a, double lng_a, double lat_b,
+            double lng_b) {
         double radLat1 = (lat_a * Math.PI / 180.0);
         double radLat2 = (lat_b * Math.PI / 180.0);
         double a = radLat1 - radLat2;

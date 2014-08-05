@@ -15,6 +15,7 @@ import android.widget.RadioButton;
 
 import com.huanghua.mysecret.manager.UserManager.UserManagerListener;
 import com.huanghua.mysecret.util.CommonUtils;
+import com.huanghua.mysecret.util.ThemeUtil;
 
 public class UserRegisterActivity extends BaseActivity implements
         OnClickListener {
@@ -28,8 +29,18 @@ public class UserRegisterActivity extends BaseActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.user_register_view);
-        setContentView(R.layout.user_register_view_purple);
+        int theme = ThemeUtil.getCurrentTheme(this);
+        switch (theme) {
+        case ThemeUtil.THEME_NIGHT:
+            setContentView(R.layout.user_register_view_purple);
+            break;
+        case ThemeUtil.THEME_DURING:
+            setContentView(R.layout.user_register_view);
+            break;
+        default:
+            setContentView(R.layout.user_register_view);
+            break;
+        }
         init();
     }
 

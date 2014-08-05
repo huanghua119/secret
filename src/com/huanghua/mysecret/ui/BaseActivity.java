@@ -17,6 +17,7 @@ import com.huanghua.mysecret.CustomApplcation;
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.manager.UserManager;
 import com.huanghua.mysecret.util.CommonUtils;
+import com.huanghua.mysecret.util.ThemeUtil;
 
 public class BaseActivity extends FragmentActivity {
 
@@ -27,11 +28,20 @@ public class BaseActivity extends FragmentActivity {
     public LayoutInflater mInFlater;
     public UserManager userManager;
     public boolean mRunFinishAnim = true;
+    public boolean mSwitchTheme = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.Theme_Space);
+        int theme = ThemeUtil.getCurrentTheme(this);
+        switch (theme) {
+        case ThemeUtil.THEME_NIGHT:
+            setTheme(R.style.Theme_Purple);
+            break;
+        case ThemeUtil.THEME_DURING:
+            setTheme(R.style.Theme_Space);
+            break;
+        }
         mApplication = CustomApplcation.getInstance();
         DisplayMetrics metric = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metric);
@@ -39,6 +49,7 @@ public class BaseActivity extends FragmentActivity {
         mScreenHeight = metric.heightPixels;
         mInFlater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         userManager = UserManager.getInstance(this);
+        mSwitchTheme = false;
     }
 
     Toast mToast;
@@ -157,6 +168,10 @@ public class BaseActivity extends FragmentActivity {
             return true;
         }
         return false;
+    }
+
+    public void setSwitchTheme(boolean switchTheme) {
+        mSwitchTheme = switchTheme;
     }
 
 }

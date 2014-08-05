@@ -175,9 +175,7 @@ public class NearSecretFragment extends FragmentBase implements
     public void onResume() {
         super.onResume();
         mHasLocation = true;
-        if (mLutil.findLocation() == null
-                || mLutil.getAddress(mLutil.findLocation()).equals(
-                        getString(R.string.unknown_address))) {
+        if (!mLutil.isValidLocation()) {
             mEmptyText.setText(R.string.empty_location_no);
             mEmptyText.setVisibility(View.VISIBLE);
             mHasLocation = false;
@@ -256,11 +254,13 @@ public class NearSecretFragment extends FragmentBase implements
             intent.setClass(getActivity(), WriteSecretActivity.class);
             startAnimActivity(intent);
         } else if (v == mEmptyText) {
-            mListPage = 1;
-            mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
-            mQuerySecret.findObjects(getActivity(), mFindSecretListener);
-            mQuerySecret.setCachePolicy(CachePolicy.NETWORK_ONLY);
-            mQuerySecret.count(getActivity(), Secret.class, mCountListener);
+            if (mLutil.isValidLocation()) {
+                mListPage = 1;
+                mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
+                mQuerySecret.findObjects(getActivity(), mFindSecretListener);
+                mQuerySecret.setCachePolicy(CachePolicy.NETWORK_ONLY);
+                mQuerySecret.count(getActivity(), Secret.class, mCountListener);
+            }
         } else if (v == mTopView) {
             if (mListChoiceness != null && mChoicenessAdapter.getCount() != 0) {
                 mListChoiceness.setSelection(0);

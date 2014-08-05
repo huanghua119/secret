@@ -9,6 +9,7 @@ import com.huanghua.mysecret.frament.NearSecretFragment;
 import com.huanghua.mysecret.load.DateLoad;
 import com.huanghua.mysecret.service.DateQueryService;
 import com.huanghua.mysecret.util.CommonUtils;
+import com.huanghua.mysecret.util.ThemeUtil;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -38,21 +39,24 @@ public class MainActivity extends BaseActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action != null && DateQueryService.QUERY_NEW_SECRTE_ACTION.equals(action)) {
+            if (action != null
+                    && DateQueryService.QUERY_NEW_SECRTE_ACTION.equals(action)) {
                 if (DateQueryService.sHasNewSecret) {
                     mChoiceness_tips.setVisibility(View.VISIBLE);
                 } else {
                     mChoiceness_tips.setVisibility(View.GONE);
                 }
-            } else if (action != null && DateQueryService.CHECK_NEW_VERSION_UPDATE.equals(action)) {
+            } else if (action != null
+                    && DateQueryService.CHECK_NEW_VERSION_UPDATE.equals(action)) {
                 ApkBean apkBean = (ApkBean) intent.getSerializableExtra("apk");
-                if (apkBean != null ){
+                if (apkBean != null) {
                     CommonUtils.createUpdateVersionDialog(context, apkBean)
                             .show();
                 }
             }
         }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,8 +76,6 @@ public class MainActivity extends BaseActivity {
         mTabs[2] = (Button) findViewById(R.id.btn_more);
         mChoiceness_tips = (ImageView) findViewById(R.id.iv_choiceness_tips);
         mNearby_tips = (ImageView) findViewById(R.id.iv_nearby_tips);
-        // 把第一个tab设为选中状态
-        mTabs[0].setSelected(true);
     }
 
     private void initTab() {
@@ -83,9 +85,20 @@ public class MainActivity extends BaseActivity {
         fragments = new Fragment[] { mChoicenessFrament, mNearSecretFrament,
                 mMoreFragment };
         // 添加显示第一个fragment
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, mChoicenessFrament)
-                .show(mChoicenessFrament).commit();
+        if (ThemeUtil.isThemeFinish(this)) {
+            getSupportFragmentManager().beginTransaction()
+            .add(R.id.fragment_container, mMoreFragment)
+            .show(mMoreFragment).commit();
+            mTabs[2].setSelected(true);
+            mCurrentTabIndex = 2;
+            ThemeUtil.setThemeFinish(this, false);
+        } else {
+            getSupportFragmentManager().beginTransaction()
+            .add(R.id.fragment_container, mChoicenessFrament)
+            .show(mChoicenessFrament).commit();
+            mTabs[0].setSelected(true);
+            mCurrentTabIndex = 0;
+        }
     }
 
     /**
@@ -160,12 +173,14 @@ public class MainActivity extends BaseActivity {
         firstTime = System.currentTimeMillis();
     }
 
-
     @Override
     protected void onDestroy() {
-        DateLoad.clearAll();
-        if (mBroadcastReceiver != null) {
-            unregisterReceiver(mBroadcastReceiver);
+        showLog("mSwitchTheme:" + mSwitchTheme);
+        if (!mSwitchTheme) {
+            DateLoad.clearAll();
+            if (mBroadcastReceiver != null) {
+                unregisterReceiver(mBroadcastReceiver);
+            }
         }
         super.onDestroy();
     }

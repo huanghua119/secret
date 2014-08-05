@@ -85,5 +85,9 @@
     <string name="empty_my_secret">你连一条秘密都没发表过</string>
     <string name="empty_location_no">位置服务不可用</string>
     <string name="empty_near_secret">附近连一条秘密都没有</string>
+    <string name="theme">主题</string>
+    <string name="switch_theme_to">切换主题为</string>
+    <string name="switch_theme_to_night">夜间</string>
+    <string name="switch_theme_to_during">白天</string>
 
 </resources>
