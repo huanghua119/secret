@@ -48,6 +48,7 @@ public class ChoicenessFragment extends FragmentBase implements
     private ImageView mLoadImage = null;
     private static final int LIST_DEFALUT_LIMIT = 20;
     private int mListPage = 1;
+    private View mTopView = null;
 
     private FindListener<Secret> mFindSecretListener = new FindListener<Secret>() {
         @Override
@@ -116,6 +117,8 @@ public class ChoicenessFragment extends FragmentBase implements
                 mSecretList);
         mListChoiceness.setAdapter(mChoicenessAdapter);
         mListChoiceness.setOnItemClickListener(this);
+        mTopView = findViewById(R.id.top_view);
+        mTopView.setOnClickListener(this);
     }
 
     @Override
@@ -182,6 +185,10 @@ public class ChoicenessFragment extends FragmentBase implements
             Intent intent = new Intent();
             intent.setClass(getActivity(), WriteSecretActivity.class);
             startAnimActivity(intent);
+        } else if (v == mTopView) {
+            if (mListChoiceness != null && mChoicenessAdapter.getCount() != 0) {
+                mListChoiceness.setSelection(0);
+            }
         }
     }
 

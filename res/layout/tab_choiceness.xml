@@ -8,6 +8,7 @@
     android:orientation="vertical" >
 
     <RelativeLayout
+        android:id="@+id/top_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_height"
         android:background="?attr/title_bg_color"
@@ -74,6 +75,14 @@
                 android:textColor="@android:color/white"
                 android:textSize="20sp" />
         </LinearLayout>
+        <TextView
+            android:id="@+id/empty_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="?attr/item_text_color"
+            android:visibility="gone"
+            android:gravity="center"
+            android:textSize="18sp" />
     </FrameLayout>
 
 </LinearLayout>

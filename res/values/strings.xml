@@ -81,5 +81,9 @@
     <string name="kilometer">公里</string>
     <string name="meter">米</string>
     <string name="commented">评论了</string>
+    <string name="empty_my_comment">没有找到我的评论，点击刷新</string>
+    <string name="empty_my_secret">你连一条秘密都没发表过</string>
+    <string name="empty_location_no">位置服务不可用</string>
+    <string name="empty_near_secret">附近连一条秘密都没有</string>
 
 </resources>

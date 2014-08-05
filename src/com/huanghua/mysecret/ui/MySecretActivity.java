@@ -41,6 +41,8 @@ public class MySecretActivity extends BaseActivity implements OnClickListener,
     private TextView mUserNameView = null;
     private TextView mUserSexView = null;
     private TextView mSecretCountView = null;
+    private TextView mEmptyText = null;
+    private View mTopView = null;
 
     private FindListener<Secret> mFindSecretListener = new FindListener<Secret>() {
         @Override
@@ -50,6 +52,11 @@ public class MySecretActivity extends BaseActivity implements OnClickListener,
                 mSecretListView.setPullLoadEnable(true);
             } else {
                 mSecretListView.setPullLoadEnable(false);
+            }
+            if (list.size() == 0) {
+                mEmptyText.setVisibility(View.VISIBLE);
+            } else {
+                mEmptyText.setVisibility(View.GONE);
             }
             refreshPull();
         }
@@ -63,6 +70,23 @@ public class MySecretActivity extends BaseActivity implements OnClickListener,
                 ShowToast(R.string.no_check_network);
             }
             refreshPull();
+        }
+    };
+    private CountListener mCountListener = new CountListener() {
+        @Override
+        public void onSuccess(int arg0) {
+            mSecretCountView.setText(arg0 + "");
+            mSecretCount = arg0;
+            if (mSecretCount > mListPage * LIST_DEFALUT_LIMIT) {
+                mSecretListView.setPullLoadEnable(true);
+            } else {
+                mSecretListView.setPullLoadEnable(false);
+            }
+        }
+
+        @Override
+        public void onFailure(int arg0, String arg1) {
+
         }
     };
 
@@ -88,14 +112,28 @@ public class MySecretActivity extends BaseActivity implements OnClickListener,
         mUserNameView = (TextView) topView.findViewById(R.id.user_name);
         mSecretCountView = (TextView) topView.findViewById(R.id.mysecret_count);
         mUserSexView = (TextView) topView.findViewById(R.id.user_sex);
-        //mSecretListView.addHeaderView(topView);
+        // mSecretListView.addHeaderView(topView);
         mSecretListView.setAdapter(mSecretAdapter);
         mSecretListView.setOnItemClickListener(this);
+        mTopView = findViewById(R.id.top_view);
+        mTopView.setOnClickListener(this);
+        mEmptyText = (TextView) findViewById(R.id.empty_text);
+        mEmptyText.setOnClickListener(this);
 
     }
 
     @Override
     public void onClick(View v) {
+        if (v == mTopView) {
+            if (mSecretListView != null && mSecretAdapter.getCount() != 0) {
+                mSecretListView.setSelection(0);
+            }
+        } else if (v == mEmptyText) {
+            mListPage = 1;
+            mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
+            mQuerySecret.findObjects(this, mFindSecretListener);
+            mQuerySecret.count(this, Secret.class, mCountListener);
+        }
     }
 
     @Override
@@ -146,22 +184,7 @@ public class MySecretActivity extends BaseActivity implements OnClickListener,
             mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
             mQuerySecret.setCachePolicy(CachePolicy.CACHE_THEN_NETWORK);
             mQuerySecret.findObjects(this, mFindSecretListener);
-            mQuerySecret.count(this, Secret.class, new CountListener() {
-                @Override
-                public void onSuccess(int arg0) {
-                    mSecretCountView.setText(arg0 + "");
-                    mSecretCount = arg0;
-                    if (mSecretCount > mListPage * LIST_DEFALUT_LIMIT) {
-                        mSecretListView.setPullLoadEnable(true);
-                    } else {
-                        mSecretListView.setPullLoadEnable(false);
-                    }
-                }
-
-                @Override
-                public void onFailure(int arg0, String arg1) {
-                }
-            });
+            mQuerySecret.count(this, Secret.class, mCountListener);
         }
     }
 

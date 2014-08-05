@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TextView;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobQuery.CachePolicy;
 import cn.bmob.v3.listener.CountListener;
@@ -32,6 +33,8 @@ public class MyCommentActivity extends BaseActivity implements OnClickListener,
     private int mListPage = 1;
     private boolean mQueryIng = false;
     private static final int LIST_DEFALUT_LIMIT = 20;
+    private View mTopView = null;
+    private TextView mEmptyText = null;
 
     private FindListener<Comment> mFindSecretListener = new FindListener<Comment>() {
         @Override
@@ -41,6 +44,11 @@ public class MyCommentActivity extends BaseActivity implements OnClickListener,
                 mSecretListView.setPullLoadEnable(true);
             } else {
                 mSecretListView.setPullLoadEnable(false);
+            }
+            if (list.size() == 0) {
+                mEmptyText.setVisibility(View.VISIBLE);
+            } else {
+                mEmptyText.setVisibility(View.GONE);
             }
             refreshPull();
         }
@@ -54,7 +62,29 @@ public class MyCommentActivity extends BaseActivity implements OnClickListener,
             if (arg0 == 9010) {
                 ShowToast(R.string.no_check_network);
             }
+            if (mListAdapter.getList() == null || mListAdapter.getList().size() == 0) {
+                mEmptyText.setVisibility(View.VISIBLE);
+            } else {
+                mEmptyText.setVisibility(View.GONE);
+            }
             refreshPull();
+        }
+    };
+
+    private CountListener mCountListener = new CountListener() {
+        @Override
+        public void onSuccess(int arg0) {
+            mSecretCount = arg0;
+            if (mSecretCount > mListPage * LIST_DEFALUT_LIMIT) {
+                mSecretListView.setPullLoadEnable(true);
+            } else {
+                mSecretListView.setPullLoadEnable(false);
+            }
+        }
+
+        @Override
+        public void onFailure(int arg0, String arg1) {
+
         }
     };
 
@@ -77,11 +107,26 @@ public class MyCommentActivity extends BaseActivity implements OnClickListener,
         mSecretListView.setOnItemClickListener(this);
         mListAdapter = new MyCommentListAdapter(this, mCommentList);
         mSecretListView.setAdapter(mListAdapter);
+        mTopView = findViewById(R.id.top_view);
+        mTopView.setOnClickListener(this);
+        mEmptyText = (TextView) findViewById(R.id.empty_text);
+        mEmptyText.setOnClickListener(this);
 
     }
 
     @Override
     public void onClick(View v) {
+        if (v == mTopView) {
+            if (mSecretListView != null && mListAdapter.getCount() != 0) {
+                mSecretListView.setSelection(0);
+            }
+        } else if (v == mEmptyText) {
+            mListPage = 1;
+            mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
+            mQuerySecret.setCachePolicy(CachePolicy.NETWORK_ONLY);
+            mQuerySecret.findObjects(this, mFindSecretListener);
+            mQuerySecret.count(this, Comment.class, mCountListener);
+        }
     }
 
     @Override
@@ -95,7 +140,7 @@ public class MyCommentActivity extends BaseActivity implements OnClickListener,
             mListPage++;
             mQueryIng = true;
             mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
-            mQuerySecret.setCachePolicy(CachePolicy.CACHE_THEN_NETWORK);
+            mQuerySecret.setCachePolicy(CachePolicy.NETWORK_ONLY);
             mQuerySecret.findObjects(this, mFindSecretListener);
         }
     }
@@ -120,22 +165,7 @@ public class MyCommentActivity extends BaseActivity implements OnClickListener,
             mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
             mQuerySecret.setCachePolicy(CachePolicy.NETWORK_ONLY);
             mQuerySecret.findObjects(this, mFindSecretListener);
-            mQuerySecret.count(this, Comment.class, new CountListener() {
-                @Override
-                public void onSuccess(int arg0) {
-                    mSecretCount = arg0;
-                    if (mSecretCount > mListPage * LIST_DEFALUT_LIMIT) {
-                        mSecretListView.setPullLoadEnable(true);
-                    } else {
-                        mSecretListView.setPullLoadEnable(false);
-                    }
-                }
-
-                @Override
-                public void onFailure(int arg0, String arg1) {
-
-                }
-            });
+            mQuerySecret.count(this, Comment.class, mCountListener);
         }
     }
 
