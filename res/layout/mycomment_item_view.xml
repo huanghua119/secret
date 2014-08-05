@@ -33,7 +33,8 @@
             android:drawableLeft="?attr/man"
             android:drawablePadding="4dip"
             android:gravity="center_vertical"
-            android:textColor="?attr/item_text_color"
+            android:textColor="?attr/item_name_color"
+            android:textStyle="bold"
             android:textSize="12sp" />
 
         <TextView

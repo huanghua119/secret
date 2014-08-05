@@ -88,7 +88,7 @@ public class MySecretActivity extends BaseActivity implements OnClickListener,
         mUserNameView = (TextView) topView.findViewById(R.id.user_name);
         mSecretCountView = (TextView) topView.findViewById(R.id.mysecret_count);
         mUserSexView = (TextView) topView.findViewById(R.id.user_sex);
-        mSecretListView.addHeaderView(topView);
+        //mSecretListView.addHeaderView(topView);
         mSecretListView.setAdapter(mSecretAdapter);
         mSecretListView.setOnItemClickListener(this);
 

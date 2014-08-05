@@ -5,6 +5,7 @@
         <attr name="tab_background_color" format="color" />
         <attr name="activity_bg_color" format="color" />
         <attr name="title_bg_color" format="color" />
+        <attr name="item_name_color" format="color" />
         <attr name="item_text_color" format="color" />
         <!-- 列表正文颜色 -->
         <attr name="list_item_content_color" format="color" />

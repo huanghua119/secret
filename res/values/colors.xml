@@ -9,6 +9,7 @@
 
     <!-- list item text color -->
     <color name="list_item_content_color">#ffffff</color>
+    <color name="item_name_color">#ffffff</color>
     <color name="item_text_color">#ffffff</color>
     <color name="list_item_bg_color">#38274c</color>
 
