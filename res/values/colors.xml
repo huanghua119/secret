@@ -17,8 +17,8 @@
     <color name="item_comment_contents_color">#ffffff</color>
 
     <!-- list item expression color -->
-    <drawable name="item_btn_bg_normal">#38274c</drawable>
-    <drawable name="item_btn_bg_press">#361f4c</drawable>
+    <drawable name="item_btn_bg_normal">#37214a</drawable>
+    <drawable name="item_btn_bg_press">#37214a</drawable>
 
     <!-- bottom tab color -->
     <drawable name="bottom_btn_bg_press">#381f52</drawable>

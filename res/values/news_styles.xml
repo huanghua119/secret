@@ -21,6 +21,7 @@
         <item name="home_bottom_bg">@drawable/home_bottom_bg</item>
         <item name="comment_bg">@drawable/comment_bg</item>
         <item name="comment_bg_no_bottom">@drawable/comment_bg_no_bottom</item>
+        <item name="comment_bg_no_frame">@drawable/comment_bg_no_frame</item>
         <item name="tab_choiceness">@drawable/tab_choiceness</item>
         <item name="tab_textcolor">@drawable/tab_textcolor</item>
         <item name="tab_nearby">@drawable/tab_nearby</item>
@@ -54,6 +55,7 @@
         <item name="home_bottom_bg">@drawable/space_home_bottom_bg</item>
         <item name="comment_bg">@drawable/space_comment_bg</item>
         <item name="comment_bg_no_bottom">@drawable/space_comment_bg_no_bottom</item>
+        <item name="comment_bg_no_frame">@drawable/space_comment_bg_no_frame</item>
         <item name="tab_choiceness">@drawable/tab_choiceness</item>
         <item name="tab_textcolor">@drawable/tab_textcolor</item>
         <item name="tab_nearby">@drawable/tab_nearby</item>

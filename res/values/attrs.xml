@@ -33,6 +33,7 @@
         <!-- 评论背景图片 -->
         <attr name="comment_bg" format="reference" />
         <attr name="comment_bg_no_bottom" format="reference" />
+        <attr name="comment_bg_no_frame" format="reference" />
         <attr name="xlistview_footer_textcolor" format="color" />
         <attr name="tab_choiceness" format="reference" />
         <attr name="tab_textcolor" format="reference" />
