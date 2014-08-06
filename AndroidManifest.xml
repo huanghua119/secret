@@ -62,6 +62,7 @@
         <activity
             android:name="com.huanghua.mysecret.ui.MainActivity"
             android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" >
         </activity>
         <activity
@@ -77,6 +78,8 @@
         <activity android:name="com.huanghua.mysecret.ui.MySecretActivity" >
         </activity>
         <activity android:name="com.huanghua.mysecret.ui.MyCommentActivity" >
+        </activity>
+        <activity android:name="com.huanghua.mysecret.ui.AboutOurActivity" >
         </activity>
         <service android:name="com.huanghua.mysecret.service.DateQueryService" >
         </service>
@@ -100,7 +103,7 @@
         </receiver>
         <receiver android:name=".MyPushMessageReceiver" >
             <intent-filter>
-                <action android:name="cn.bmob.pushservice.action.MESSAGE" />
+                <action android:name="cn.bmob.push.action.MESSAGE" />
             </intent-filter>
         </receiver>
 

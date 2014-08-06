@@ -191,7 +191,8 @@ public class NearSecretFragment extends FragmentBase implements
             mListPage = 1;
             BmobGeoPoint mGeoPoint = new BmobGeoPoint(mLutil.findLocation()
                     .getLongitude(), mLutil.findLocation().getLatitude());
-            mQuerySecret.addWhereNear("location", mGeoPoint);
+            //mQuerySecret.addWhereNear("location", mGeoPoint);
+            mQuerySecret.addWhereWithinRadians("location", mGeoPoint, 1.0);
             // mQuerySecret.addWhereWithinMiles("location", mGeoPoint, 1000.0);
             mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
             mQuerySecret.setCachePolicy(CachePolicy.CACHE_ELSE_NETWORK);

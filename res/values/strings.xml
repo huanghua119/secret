@@ -89,5 +89,8 @@
     <string name="switch_theme_to">切换主题为</string>
     <string name="switch_theme_to_night">夜间</string>
     <string name="switch_theme_to_during">白天</string>
+    <string name="slogan">我们是一群有理想的小屌丝</string>
+    <string name="programmers_hh">攻城狮：黄老虎</string>
+    <string name="design_hw">色剂狮：何老虎</string>
 
 </resources>

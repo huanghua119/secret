@@ -14,15 +14,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import cn.bmob.v3.BmobInstallation;
-import cn.bmob.v3.BmobPushManager;
-import cn.bmob.v3.BmobQuery;
 
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.bean.ApkBean;
 import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.config.Config;
 import com.huanghua.mysecret.manager.UserManager;
+import com.huanghua.mysecret.ui.AboutOurActivity;
 import com.huanghua.mysecret.ui.BaseActivity;
 import com.huanghua.mysecret.ui.MyCommentActivity;
 import com.huanghua.mysecret.ui.MySecretActivity;
@@ -175,12 +173,9 @@ public class MoreFragment extends FragmentBase implements View.OnClickListener,
             mDialog.show();
             startCheckVersion();
         } else if (v == mAboutOur) {
-            String installationId = "CF86DE3F8A9F6F6605A0D2CB6AEE5B10";
-            BmobPushManager bmobPush = new BmobPushManager(getActivity());
-            BmobQuery<BmobInstallation> query = BmobInstallation.getQuery();
-            query.addWhereEqualTo("installationId", installationId);
-            bmobPush.setQuery(query);
-            bmobPush.pushMessage("消息内容");
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), AboutOurActivity.class);
+            startAnimActivity(intent);
         } else if (v == mSwitchTheme) {
             ThemeUtil.switchTheme((BaseActivity) getActivity());
         } else if (((BaseActivity) getActivity()).checkUserLogin()) {

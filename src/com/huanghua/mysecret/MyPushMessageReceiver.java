@@ -3,31 +3,27 @@ package com.huanghua.mysecret;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import cn.bmob.push.BmobPushMessageReceiver;
+import cn.bmob.push.PushConstants;
 
 import com.huanghua.mysecret.util.CommonUtils;
 
-public class MyPushMessageReceiver extends BmobPushMessageReceiver {
+public class MyPushMessageReceiver extends BroadcastReceiver {
 
     private static final String TAG = "my_push_message";
-    public static final String PUSH_ACTION_MESSAGE = "cn.bmob.pushservice.action.MESSAGE";
+    public static final String PUSH_ACTION_MESSAGE = "cn.bmob.push.action.MESSAGE";
 
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         CommonUtils.showLog(TAG, "action: " + action);
         if (action != null && PUSH_ACTION_MESSAGE.equals(action)) {
-            String json = intent.getStringExtra("msg");
+            String json = intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING);
             CommonUtils.showLog(TAG, "json: " + json);
             parseMessage(context, json);
         }
-    }
-
-    @Override
-    public void onMessage(Context arg0, String arg1) {
-        CommonUtils.showLog(TAG, "onMessage: " + arg1);
     }
 
     private void parseMessage(final Context context, String json) {
