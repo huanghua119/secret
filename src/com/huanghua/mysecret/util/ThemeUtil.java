@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.ui.BaseActivity;
 
 public class ThemeUtil {
@@ -42,6 +43,7 @@ public class ThemeUtil {
         activity.setSwitchTheme(true);
         setThemeFinish(activity, true);
         activity.finish();
+        activity.overridePendingTransition(R.anim.zoomin, R.anim.zoomout);
         activity.startActivity(new Intent(activity, activity.getClass()));
     }
 

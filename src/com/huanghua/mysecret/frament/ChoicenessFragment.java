@@ -178,17 +178,17 @@ public class ChoicenessFragment extends FragmentBase implements
 
     @Override
     public void onClick(View v) {
-        if (((BaseActivity)getActivity()).checkUserLogin()) {
+        if (v == mTopView) {
+            if (mListChoiceness != null && mChoicenessAdapter.getCount() != 0) {
+                mListChoiceness.setSelection(0);
+            }
+        } else if (((BaseActivity) getActivity()).checkUserLogin()) {
             return;
         }
         if (v == mWriteSecret) {
             Intent intent = new Intent();
             intent.setClass(getActivity(), WriteSecretActivity.class);
             startAnimActivity(intent);
-        } else if (v == mTopView) {
-            if (mListChoiceness != null && mChoicenessAdapter.getCount() != 0) {
-                mListChoiceness.setSelection(0);
-            }
         }
     }
 

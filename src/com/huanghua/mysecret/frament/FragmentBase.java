@@ -56,6 +56,9 @@ public abstract class FragmentBase extends Fragment {
 
                 @Override
                 public void run() {
+                    if (getActivity() == null) {
+                        return;
+                    }
                     if (mToast == null) {
                         mToast = new Toast(getActivity());
                         mToast.setDuration(Toast.LENGTH_SHORT);
@@ -79,6 +82,9 @@ public abstract class FragmentBase extends Fragment {
 
                 @Override
                 public void run() {
+                    if (getActivity() == null) {
+                        return;
+                    }
                     if (mToast == null) {
                         mToast = new Toast(getActivity());
                         mToast.setDuration(Toast.LENGTH_SHORT);
@@ -104,6 +110,9 @@ public abstract class FragmentBase extends Fragment {
 
             @Override
             public void run() {
+                if (getActivity() == null) {
+                    return;
+                }
                 if (mToast == null) {
                     mToast = new Toast(getActivity());
                     mToast.setDuration(Toast.LENGTH_SHORT);
@@ -126,6 +135,9 @@ public abstract class FragmentBase extends Fragment {
 
             @Override
             public void run() {
+                if (getActivity() == null) {
+                    return;
+                }
                 if (mToast == null) {
                     mToast = new Toast(getActivity());
                     mToast.setDuration(Toast.LENGTH_SHORT);
@@ -141,6 +153,9 @@ public abstract class FragmentBase extends Fragment {
     }
 
     public void ShowToastOld(String text) {
+        if (getActivity() == null) {
+            return;
+        }
         if (mToast2 == null) {
             mToast2 = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
         }
@@ -149,6 +164,9 @@ public abstract class FragmentBase extends Fragment {
     }
 
     public void ShowToastOld(int text) {
+        if (getActivity() == null) {
+            return;
+        }
         if (mToast2 == null) {
             mToast2 = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
         }

@@ -175,12 +175,11 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        showLog("mSwitchTheme:" + mSwitchTheme);
         if (!mSwitchTheme) {
             DateLoad.clearAll();
-            if (mBroadcastReceiver != null) {
-                unregisterReceiver(mBroadcastReceiver);
-            }
+        }
+        if (mBroadcastReceiver != null) {
+            unregisterReceiver(mBroadcastReceiver);
         }
         super.onDestroy();
     }
