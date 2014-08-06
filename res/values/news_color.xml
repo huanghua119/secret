@@ -5,7 +5,7 @@
     <color name="space_title_bg_color">#373f53</color>
     <color name="space_tab_text_color">#f3f3f3</color>
     <color name="space_base_bg">#f4f6f6</color>
-    <color name="space_activity_bg_color">#e6e6e6</color>
+    <color name="space_activity_bg_color">#e0e0e0</color>
     <color name="space_xlistview_footer_textcolor">#FFFFFF</color>
 
     <!-- list item text color -->

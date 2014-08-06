@@ -35,10 +35,21 @@
             android:textColor="@android:color/white"
             android:textSize="16sp" />
     </RelativeLayout>
+    
+    <ImageView
+        android:id="@+id/one_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dip"
+        android:background="@drawable/defalut_photo"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/photo_frame" />
 
     <LinearLayout
         android:id="@+id/login_view"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical" >
@@ -46,15 +57,17 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dip"
+            android:layout_marginTop="20dip"
+            android:padding="10dip"
             android:gravity="center_horizontal"
+            android:background="@drawable/space_login_bg"
             android:orientation="vertical" >
 
             <EditText
                 android:id="@+id/user_name"
-                android:layout_width="250dip"
-                android:layout_height="45dip"
-                android:background="@drawable/login_text_bg"
+                android:layout_width="280dip"
+                android:layout_height="50dip"
+                android:background="@drawable/edit_box_login_top"
                 android:drawableLeft="@drawable/user"
                 android:drawablePadding="10dip"
                 android:inputType="none"
@@ -63,10 +76,9 @@
 
             <EditText
                 android:id="@+id/user_pass"
-                android:layout_width="250dip"
-                android:layout_height="45dip"
-                android:layout_marginTop="10dip"
-                android:background="@drawable/login_text_bg"
+                android:layout_width="280dip"
+                android:layout_height="50dip"
+                android:background="@drawable/edit_box_login_bottom"
                 android:drawableLeft="@drawable/password"
                 android:drawablePadding="10dip"
                 android:inputType="textPassword"

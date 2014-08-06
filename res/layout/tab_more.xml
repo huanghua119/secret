@@ -42,7 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dip"
                 android:layout_marginBottom="14dip"
-                android:background="@drawable/more_single_bg"
+                android:background="?attr/more_single_bg"
                 android:clickable="true"
                 android:gravity="center_vertical" >
 
@@ -55,7 +55,7 @@
                     android:layout_marginLeft="8dip"
                     android:gravity="center_vertical"
                     android:text="@string/user_nologin"
-                    android:textColor="@android:color/white"
+                    android:textColor="?attr/item_text_color"
                     android:textSize="17sp" />
 
                 <ImageView
@@ -82,7 +82,7 @@
                 android:id="@+id/to_write_secret"
                 android:layout_width="match_parent"
                 android:layout_height="48dip"
-                android:background="@drawable/more_up_bg"
+                android:background="?attr/more_up_bg"
                 android:clickable="true"
                 android:gravity="center_vertical" >
 
@@ -94,7 +94,7 @@
                     android:layout_marginLeft="8dip"
                     android:gravity="center_vertical"
                     android:text="@string/to_write_secret"
-                    android:textColor="@android:color/white"
+                    android:textColor="?attr/item_text_color"
                     android:textSize="17sp" />
 
                 <ImageView
@@ -111,7 +111,7 @@
                 android:id="@+id/to_my_secret"
                 android:layout_width="match_parent"
                 android:layout_height="48dip"
-                android:background="@drawable/more_center_bg"
+                android:background="?attr/more_center_bg"
                 android:clickable="true"
                 android:gravity="center_vertical" >
 
@@ -123,7 +123,7 @@
                     android:layout_marginLeft="8dip"
                     android:gravity="center_vertical"
                     android:text="@string/my_secret"
-                    android:textColor="@android:color/white"
+                    android:textColor="?attr/item_text_color"
                     android:textSize="17sp" />
 
                 <ImageView
@@ -141,7 +141,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dip"
                 android:layout_marginBottom="14dip"
-                android:background="@drawable/more_down_bg"
+                android:background="?attr/more_down_bg"
                 android:clickable="true"
                 android:gravity="center_vertical" >
 
@@ -153,7 +153,7 @@
                     android:layout_marginLeft="8dip"
                     android:gravity="center_vertical"
                     android:text="@string/my_comment"
-                    android:textColor="@android:color/white"
+                    android:textColor="?attr/item_text_color"
                     android:textSize="17sp" />
 
                 <ImageView
@@ -170,7 +170,7 @@
                 android:id="@+id/check_update"
                 android:layout_width="match_parent"
                 android:layout_height="48dip"
-                android:background="@drawable/more_up_bg"
+                android:background="?attr/more_up_bg"
                 android:clickable="true"
                 android:gravity="center_vertical" >
 
@@ -182,7 +182,7 @@
                     android:layout_marginLeft="8dip"
                     android:gravity="center_vertical"
                     android:text="@string/check_update"
-                    android:textColor="@android:color/white"
+                    android:textColor="?attr/item_text_color"
                     android:textSize="17sp" />
 
                 <TextView
@@ -209,7 +209,7 @@
                 android:id="@+id/switch_theme"
                 android:layout_width="match_parent"
                 android:layout_height="48dip"
-                android:background="@drawable/more_center_bg"
+                android:background="?attr/more_center_bg"
                 android:clickable="true"
                 android:gravity="center_vertical" >
 
@@ -221,7 +221,7 @@
                     android:layout_marginLeft="8dip"
                     android:gravity="center_vertical"
                     android:text="@string/theme"
-                    android:textColor="@android:color/white"
+                    android:textColor="?attr/item_text_color"
                     android:textSize="17sp" />
 
                 <TextView
@@ -249,7 +249,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dip"
                 android:layout_marginBottom="20dip"
-                android:background="@drawable/more_down_bg"
+                android:background="?attr/more_down_bg"
                 android:clickable="true"
                 android:gravity="center_vertical" >
 
@@ -261,7 +261,7 @@
                     android:layout_marginLeft="8dip"
                     android:gravity="center_vertical"
                     android:text="@string/about_our"
-                    android:textColor="@android:color/white"
+                    android:textColor="?attr/item_text_color"
                     android:textSize="17sp" />
 
                 <ImageView

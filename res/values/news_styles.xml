@@ -34,6 +34,10 @@
         <item name="women">@drawable/women</item>
         <item name="ic_ding_bg">@drawable/ic_ding_bg</item>
         <item name="arrow">@drawable/arrow</item>
+        <item name="more_single_bg">@drawable/more_single_bg</item>
+        <item name="more_up_bg">@drawable/more_up_bg</item>
+        <item name="more_center_bg">@drawable/more_center_bg</item>
+        <item name="more_down_bg">@drawable/more_down_bg</item>
     </style>
 
     <style name="Theme.Space" parent="AppTheme">
@@ -69,6 +73,10 @@
         <item name="women">@drawable/women</item>
         <item name="ic_ding_bg">@drawable/ic_ding_bg</item>
         <item name="arrow">@drawable/arrow</item>
+        <item name="more_single_bg">@drawable/space_more_single_bg</item>
+        <item name="more_up_bg">@drawable/space_more_up_bg</item>
+        <item name="more_center_bg">@drawable/space_more_center_bg</item>
+        <item name="more_down_bg">@drawable/space_more_down_bg</item>
     </style>
 
 </resources>

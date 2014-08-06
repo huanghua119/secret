@@ -47,6 +47,12 @@
         <attr name="women" format="reference" />
         <attr name="ic_ding_bg" format="reference" />
         <attr name="arrow" format="reference" />
+        
+        <!--  更多背景图片  -->
+        <attr name="more_single_bg" format="reference" />
+        <attr name="more_up_bg" format="reference" />
+        <attr name="more_center_bg" format="reference" />
+        <attr name="more_down_bg" format="reference" />
     </declare-styleable>
 
 </resources>
