@@ -61,6 +61,7 @@ public class MyCommentListAdapter extends BaseListAdapter<Comment> {
                             Integer position, Object values) {
                         BmobQuery<CommentSupport> querycs = new BmobQuery<CommentSupport>();
                         querycs.addWhereEqualTo("comment", comment);
+                        querycs.setLimit(1000);
                         querycs.findObjects(mContext, new FindListener<CommentSupport>() {
                             @Override
                             public void onError(int arg0, String arg1) {
