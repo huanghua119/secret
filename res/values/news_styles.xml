@@ -15,6 +15,7 @@
         <item name="item_bottom_btn_bg">@drawable/item_bottom_btn_bg</item>
         <item name="cry_bg">@drawable/cry_bg</item>
         <item name="happy_bg">@drawable/happy_bg</item>
+        <item name="cry_happy_text_color">@color/cry_happy_text_color</item>
         <item name="post_item_vertical">@drawable/post_item_vertical</item>
         <item name="xlistview_footer_textcolor">@color/xlistview_footer_textcolor</item>
         <item name="input_box_gb">@drawable/input_box_gb</item>
@@ -49,6 +50,7 @@
         <item name="item_bottom_btn_bg">@drawable/space_item_bottom_btn_bg</item>
         <item name="cry_bg">@drawable/space_cry_bg</item>
         <item name="happy_bg">@drawable/space_happy_bg</item>
+        <item name="cry_happy_text_color">@color/space_cry_happy_text_color</item>
         <item name="post_item_vertical">@drawable/space_post_item_vertical</item>
         <item name="xlistview_footer_textcolor">@color/xlistview_footer_textcolor</item>
         <item name="input_box_gb">@drawable/space_input_box_gb</item>

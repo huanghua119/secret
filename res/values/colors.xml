@@ -12,6 +12,9 @@
     <color name="item_name_color">#ffffff</color>
     <color name="item_text_color">#ffffff</color>
     <color name="list_item_bg_color">#38274c</color>
+    <color name="cry_happy_text_color">#c0b3cf</color>
+    
+    
 
     <!-- comment text color -->
     <color name="item_comment_contents_color">#ffffff</color>

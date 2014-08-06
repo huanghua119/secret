@@ -20,6 +20,7 @@
         <!-- 哭笑脸按钮 -->
         <attr name="cry_bg" format="reference" />
         <attr name="happy_bg" format="reference" />
+        <attr name="cry_happy_text_color" format="reference" />
         <attr name="post_item_vertical" format="reference" />
 
         <!-- 底部背景按钮 -->
