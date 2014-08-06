@@ -41,7 +41,8 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
     private SparseArray<SupportView> mAllSupportView = new SparseArray<SupportView>();
     private DateLoad.OnDateLoadCompleteListener mDateLoadListener = new DateLoad.OnDateLoadCompleteListener() {
 
-        public void OnLoadSecretSupportComplete(int position, List<SecretSupport> list) {
+        public void OnLoadSecretSupportComplete(int position,
+                List<SecretSupport> list) {
             SupportView sv = mAllSupportView.get(position);
             sv.setSecretSupportList(list);
             sv.refresh();
@@ -99,7 +100,7 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
                 String dd = fnum.format(m / 1000);
                 mDistance.setText(dd + mContext.getString(R.string.kilometer));
             } else {
-                mDistance.setText((int)m + mContext.getString(R.string.meter));
+                mDistance.setText((int) m + mContext.getString(R.string.meter));
             }
             mDistance.setVisibility(View.VISIBLE);
         } else {
@@ -148,7 +149,8 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
         List<SecretSupport> allss = DateLoad.get(secret.getObjectId());
         if (allss == null) {
             mAllSupportView.put(position, sv);
-            sv.setSecret(secret, mDateLoadListener, mMainThreadHandler, position);
+            sv.setSecret(secret, mDateLoadListener, mMainThreadHandler,
+                    position);
         } else {
             sv.refreshInCache(secret, allss);
             Integer commentlist = DateLoad.getComment(secret.getObjectId());
@@ -190,11 +192,16 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
     }
 
     private void deleteSecret(final Secret secret) {
+
+        final BmobQuery<SecretSupport> querySs = new BmobQuery<SecretSupport>();
+        querySs.addWhereEqualTo("secret", secret);
+        querySs.setLimit(1000);
         final BmobQuery<Comment> queryComment = new BmobQuery<Comment>();
         queryComment.addWhereEqualTo("secret", secret);
         BmobQuery<CommentSupport> querycs = new BmobQuery<CommentSupport>();
         querycs.addWhereMatchesQuery("comment", Comment.class.getSimpleName(),
                 queryComment);
+        querycs.setLimit(1000);
         querycs.findObjects(mContext, new FindListener<CommentSupport>() {
             @Override
             public void onError(int arg0, String arg1) {
@@ -223,7 +230,8 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
 
                             @Override
                             public void onFailure(int arg0, String arg1) {
-                                ShowToast(mContext.getString(R.string.delete_fail));
+                                ShowToast(mContext
+                                        .getString(R.string.delete_fail));
                             }
                         });
                     }
@@ -233,6 +241,20 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
                         ShowToast(mContext.getString(R.string.delete_fail));
                     }
                 });
+                querySs.findObjects(mContext,
+                        new FindListener<SecretSupport>() {
+                            @Override
+                            public void onError(int arg0, String arg1) {
+
+                            }
+
+                            @Override
+                            public void onSuccess(List<SecretSupport> list) {
+                                for (SecretSupport ss : list) {
+                                    ss.delete(mContext);
+                                }
+                            }
+                        });
             }
         });
     }

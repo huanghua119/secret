@@ -59,34 +59,50 @@ public class MyCommentListAdapter extends BaseListAdapter<Comment> {
                     @Override
                     public void OnClickListener(View parentV, View v,
                             Integer position, Object values) {
-                        comment.delete(mContext, new DeleteListener() {
+                        BmobQuery<CommentSupport> querycs = new BmobQuery<CommentSupport>();
+                        querycs.addWhereEqualTo("comment", comment);
+                        querycs.findObjects(mContext, new FindListener<CommentSupport>() {
                             @Override
-                            public void onSuccess() {
-                                Dialog dialog = new AlertDialog.Builder(
-                                        mContext)
-                                        .setTitle(R.string.tips)
-                                        .setMessage(R.string.delete_confirm)
-                                        .setPositiveButton(
-                                                android.R.string.ok,
-                                                new DialogInterface.OnClickListener() {
-
-                                                    @Override
-                                                    public void onClick(
-                                                            DialogInterface dialog,
-                                                            int which) {
-                                                        getList().remove(
-                                                                comment);
-                                                        notifyDataSetChanged();
-                                                    }
-                                                })
-                                        .setNegativeButton(
-                                                android.R.string.cancel, null)
-                                        .create();
-                                dialog.show();
+                            public void onError(int arg0, String arg1) {
+                                ShowToast(mContext.getString(R.string.delete_fail));
                             }
 
                             @Override
-                            public void onFailure(int arg0, String arg1) {
+                            public void onSuccess(List<CommentSupport> list) {
+                                for (CommentSupport cs : list) {
+                                    cs.delete(mContext);
+                                }
+                                comment.delete(mContext, new DeleteListener() {
+                                    @Override
+                                    public void onSuccess() {
+                                        Dialog dialog = new AlertDialog.Builder(
+                                                mContext)
+                                                .setTitle(R.string.tips)
+                                                .setMessage(R.string.delete_confirm)
+                                                .setPositiveButton(
+                                                        android.R.string.ok,
+                                                        new DialogInterface.OnClickListener() {
+
+                                                            @Override
+                                                            public void onClick(
+                                                                    DialogInterface dialog,
+                                                                    int which) {
+                                                                getList().remove(
+                                                                        comment);
+                                                                notifyDataSetChanged();
+                                                            }
+                                                        })
+                                                .setNegativeButton(
+                                                        android.R.string.cancel, null)
+                                                .create();
+                                        dialog.show();
+                                    }
+
+                                    @Override
+                                    public void onFailure(int arg0, String arg1) {
+                                        ShowToast(mContext.getString(R.string.delete_fail));
+                                    }
+                                });
                             }
                         });
                     }
