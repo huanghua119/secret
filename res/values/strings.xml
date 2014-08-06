@@ -92,5 +92,9 @@
     <string name="slogan">我们是一群有理想的小屌丝</string>
     <string name="programmers_hh">攻城狮：黄老虎</string>
     <string name="design_hw">色剂狮：何老虎</string>
+    <string name="delete_fail">删除失败！</string>
+    <string name="delete_success">删除成功！</string>
+    <string name="delete_confirm">确认要删除吗?</string>
+    <string name="tips">提示</string>
 
 </resources>

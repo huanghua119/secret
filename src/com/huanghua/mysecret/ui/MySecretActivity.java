@@ -107,6 +107,7 @@ public class MySecretActivity extends BaseActivity implements OnClickListener,
         mSecretListView.setXListViewListener(this);
         mSecretListView.pullRefreshing();
         mSecretAdapter = new ChoicenessListAdapter(this, mSecretList);
+        mSecretAdapter.setMySecret(true);
         View topView = mInFlater.inflate(R.layout.mysecret_top_view, null);
         mUserPhoto = (ImageView) topView.findViewById(R.id.user_photo);
         mUserNameView = (TextView) topView.findViewById(R.id.user_name);

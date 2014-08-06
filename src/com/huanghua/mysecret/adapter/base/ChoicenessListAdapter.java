@@ -3,7 +3,10 @@ package com.huanghua.mysecret.adapter.base;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.SparseArray;
@@ -11,9 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.listener.DeleteListener;
+import cn.bmob.v3.listener.FindListener;
 
 import com.huanghua.mysecret.CustomApplcation;
 import com.huanghua.mysecret.R;
+import com.huanghua.mysecret.bean.Comment;
+import com.huanghua.mysecret.bean.CommentSupport;
 import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.bean.SecretSupport;
 import com.huanghua.mysecret.bean.User;
@@ -28,6 +36,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
 
     private boolean mNearSecret = false;
+    private boolean mMySecret = false;
     protected Handler mMainThreadHandler;
     private SparseArray<SupportView> mAllSupportView = new SparseArray<SupportView>();
     private DateLoad.OnDateLoadCompleteListener mDateLoadListener = new DateLoad.OnDateLoadCompleteListener() {
@@ -58,7 +67,7 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
             view = mInflater.inflate(R.layout.secret_item_view, null);
         }
         List<Secret> list = getList();
-        Secret secret = list.get(position);
+        final Secret secret = list.get(position);
         User user = secret.getUser();
         ImageView mPhoto = ViewHolder.get(view, R.id.item_photo);
         TextView mName = ViewHolder.get(view, R.id.item_name);
@@ -66,6 +75,7 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
         DateTextView mDate = ViewHolder.get(view, R.id.item_date);
         mDate.setInitDate(secret.getCreatedAt());
         TextView mContents = ViewHolder.get(view, R.id.item_contents);
+        ImageView mDeleteView = ViewHolder.get(view, R.id.item_delete);
 
         String avatar = user.getAvatar();
         if (avatar != null && !avatar.equals("")) {
@@ -94,6 +104,37 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
             mDistance.setVisibility(View.VISIBLE);
         } else {
             mDistance.setVisibility(View.GONE);
+        }
+        if (mMySecret) {
+            mLocation.setVisibility(View.GONE);
+            mDeleteView.setVisibility(View.VISIBLE);
+            setOnInViewClickListener(R.id.item_delete,
+                    new onInternalClickListener() {
+                        @Override
+                        public void OnClickListener(View parentV, View v,
+                                Integer position, Object values) {
+                            Dialog dialog = new AlertDialog.Builder(mContext)
+                                    .setTitle(R.string.tips)
+                                    .setMessage(R.string.delete_confirm)
+                                    .setPositiveButton(
+                                            android.R.string.ok,
+                                            new DialogInterface.OnClickListener() {
+
+                                                @Override
+                                                public void onClick(
+                                                        DialogInterface dialog,
+                                                        int which) {
+                                                    deleteSecret(secret);
+                                                }
+                                            })
+                                    .setNegativeButton(android.R.string.cancel,
+                                            null).create();
+                            dialog.show();
+                        }
+                    });
+        } else {
+            mLocation.setVisibility(View.VISIBLE);
+            mDeleteView.setVisibility(View.GONE);
         }
         mLocation.setText(secret.getAddress());
 
@@ -144,4 +185,55 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
         mNearSecret = nearSecret;
     }
 
+    public void setMySecret(boolean mySecret) {
+        mMySecret = mySecret;
+    }
+
+    private void deleteSecret(final Secret secret) {
+        final BmobQuery<Comment> queryComment = new BmobQuery<Comment>();
+        queryComment.addWhereEqualTo("secret", secret);
+        BmobQuery<CommentSupport> querycs = new BmobQuery<CommentSupport>();
+        querycs.addWhereMatchesQuery("comment", Comment.class.getSimpleName(),
+                queryComment);
+        querycs.findObjects(mContext, new FindListener<CommentSupport>() {
+            @Override
+            public void onError(int arg0, String arg1) {
+                ShowToast(mContext.getString(R.string.delete_fail));
+            }
+
+            @Override
+            public void onSuccess(List<CommentSupport> list) {
+                showLog("delete_mysecret", "CommentSupport list:" + list.size());
+                for (CommentSupport cs : list) {
+                    cs.delete(mContext);
+                }
+                queryComment.findObjects(mContext, new FindListener<Comment>() {
+                    @Override
+                    public void onSuccess(List<Comment> list) {
+                        showLog("delete_mysecret", "list:" + list.size());
+                        for (Comment c : list) {
+                            c.delete(mContext);
+                        }
+                        secret.delete(mContext, new DeleteListener() {
+                            @Override
+                            public void onSuccess() {
+                                getList().remove(secret);
+                                notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onFailure(int arg0, String arg1) {
+                                ShowToast(mContext.getString(R.string.delete_fail));
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(int arg0, String arg1) {
+                        ShowToast(mContext.getString(R.string.delete_fail));
+                    }
+                });
+            }
+        });
+    }
 }

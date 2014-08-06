@@ -2,7 +2,10 @@ package com.huanghua.mysecret.adapter.base;
 
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -59,8 +62,27 @@ public class MyCommentListAdapter extends BaseListAdapter<Comment> {
                         comment.delete(mContext, new DeleteListener() {
                             @Override
                             public void onSuccess() {
-                                getList().remove(comment);
-                                notifyDataSetChanged();
+                                Dialog dialog = new AlertDialog.Builder(
+                                        mContext)
+                                        .setTitle(R.string.tips)
+                                        .setMessage(R.string.delete_confirm)
+                                        .setPositiveButton(
+                                                android.R.string.ok,
+                                                new DialogInterface.OnClickListener() {
+
+                                                    @Override
+                                                    public void onClick(
+                                                            DialogInterface dialog,
+                                                            int which) {
+                                                        getList().remove(
+                                                                comment);
+                                                        notifyDataSetChanged();
+                                                    }
+                                                })
+                                        .setNegativeButton(
+                                                android.R.string.cancel, null)
+                                        .create();
+                                dialog.show();
                             }
 
                             @Override
