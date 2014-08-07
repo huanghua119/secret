@@ -57,6 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dip"
                 android:background="@drawable/user_input_bg"
+                android:singleLine="true"
                 android:inputType="none"
                 android:paddingLeft="50dip"
                 android:textSize="14sp" />
@@ -68,6 +69,7 @@
                 android:layout_marginTop="10dip"
                 android:background="@drawable/password_input_bg"
                 android:inputType="textPassword"
+                android:singleLine="true"
                 android:paddingLeft="50dip"
                 android:textSize="14sp" />
         </LinearLayout>

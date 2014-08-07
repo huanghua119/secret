@@ -20,8 +20,6 @@ import cn.bmob.v3.listener.FindListener;
 
 import com.huanghua.mysecret.CustomApplcation;
 import com.huanghua.mysecret.R;
-import com.huanghua.mysecret.bean.Comment;
-import com.huanghua.mysecret.bean.CommentSupport;
 import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.bean.SecretSupport;
 import com.huanghua.mysecret.bean.User;
@@ -196,6 +194,33 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
         final BmobQuery<SecretSupport> querySs = new BmobQuery<SecretSupport>();
         querySs.addWhereEqualTo("secret", secret);
         querySs.setLimit(1000);
+        querySs.findObjects(mContext, new FindListener<SecretSupport>() {
+            @Override
+            public void onError(int arg0, String arg1) {
+                ShowToast(mContext.getString(R.string.delete_fail));
+            }
+
+            @Override
+            public void onSuccess(List<SecretSupport> list) {
+                for (SecretSupport ss : list) {
+                    ss.delete(mContext);
+                }
+                secret.delete(mContext, new DeleteListener() {
+                    @Override
+                    public void onSuccess() {
+                        getList().remove(secret);
+                        notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onFailure(int arg0, String arg1) {
+                        ShowToast(mContext.getString(R.string.delete_fail));
+                    }
+                });
+            }
+        });
+
+        /*
         final BmobQuery<Comment> queryComment = new BmobQuery<Comment>();
         queryComment.addWhereEqualTo("secret", secret);
         BmobQuery<CommentSupport> querycs = new BmobQuery<CommentSupport>();
@@ -257,5 +282,6 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
                         });
             }
         });
+         */
     }
 }

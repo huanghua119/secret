@@ -40,8 +40,6 @@
         android:id="@+id/one_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="20dip"
         android:background="@drawable/defalut_photo"
         android:contentDescription="@string/app_name"
@@ -70,6 +68,7 @@
                 android:background="@drawable/edit_box_login_top"
                 android:drawableLeft="@drawable/user"
                 android:drawablePadding="10dip"
+                android:singleLine="true"
                 android:inputType="none"
                 android:paddingLeft="15dip"
                 android:textSize="14sp" />
@@ -83,6 +82,7 @@
                 android:drawablePadding="10dip"
                 android:inputType="textPassword"
                 android:paddingLeft="15dip"
+                android:singleLine="true"
                 android:textSize="14sp" />
         </LinearLayout>
 

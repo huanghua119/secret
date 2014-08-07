@@ -162,6 +162,7 @@ public class MyCommentActivity extends BaseActivity implements OnClickListener,
             mListPage = 1;
             mQuerySecret.addWhereEqualTo("fromUser",
                     userManager.getCurrentUser());
+            //mQuerySecret.addWhereExists("secret");
             mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
             mQuerySecret.setCachePolicy(CachePolicy.NETWORK_ONLY);
             mQuerySecret.findObjects(this, mFindSecretListener);
@@ -179,7 +180,7 @@ public class MyCommentActivity extends BaseActivity implements OnClickListener,
             long id) {
         Comment c = mListAdapter.getList().get(position - 1);
         Secret s = c.getSecret();
-        if (s != null) {
+        if (s != null && s.getContents() != null && !s.getContents().equals("")) {
             Intent intent = new Intent();
             intent.setClass(this, WriteCommentActivity.class);
             intent.putExtra("secret", s);

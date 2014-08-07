@@ -79,7 +79,8 @@
         </activity>
         <activity android:name="com.huanghua.mysecret.ui.MyCommentActivity" >
         </activity>
-        <activity android:name="com.huanghua.mysecret.ui.AboutOurActivity" >
+        <activity android:name="com.huanghua.mysecret.ui.AboutOurActivity"
+            android:screenOrientation="portrait" >
         </activity>
         <service android:name="com.huanghua.mysecret.service.DateQueryService" >
         </service>
