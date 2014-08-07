@@ -98,7 +98,7 @@ public class MyCommentListAdapter extends BaseListAdapter<Comment> {
             secretContents.setText(R.string.secret_deleted);
         } else {
             TypedArray a = mContext.obtainStyledAttributes(new int[]{R.attr.list_item_content_color});
-            secretContents.setTextColor(mContext.getResources().getColor(a.getColor(0, R.color.list_item_content_color)));
+            secretContents.setTextColor(a.getColor(0, R.color.list_item_content_color));
             secretContents.setText(secret.getContents());
         }
 
