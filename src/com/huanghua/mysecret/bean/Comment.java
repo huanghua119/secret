@@ -11,6 +11,7 @@ public class Comment extends BmobObject {
     private String contents;
     private Secret secret;
     private BmobRelation commentSupport;
+    private Comment parentComment;
 
     public User getFromUser() {
         return fromUser;
@@ -50,5 +51,13 @@ public class Comment extends BmobObject {
 
     public void setCommentSupport(BmobRelation commentSupport) {
         this.commentSupport = commentSupport;
+    }
+
+    public Comment getParentComment() {
+        return parentComment;
+    }
+
+    public void setParentComment(Comment parentComment) {
+        this.parentComment = parentComment;
     }
 }

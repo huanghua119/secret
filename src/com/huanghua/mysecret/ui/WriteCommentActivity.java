@@ -84,7 +84,7 @@ public class WriteCommentActivity extends BaseActivity implements
         mCommentListView.setPullRefreshEnable(false);
         mCommentListView.setXListViewListener(this);
         mCommentListView.pullRefreshing();
-        mListAdapter = new CommentListAdapter(this, mCommentList, mCommentListView);
+        mListAdapter = new CommentListAdapter(this, mCommentList, mCommentListView, mCurrentSecret);
         mSecretView = mInFlater.inflate(R.layout.secret_item_view, null);
         initSecretView();
         mCommentListView.addHeaderView(mSecretView);
@@ -174,7 +174,7 @@ public class WriteCommentActivity extends BaseActivity implements
             } else {
                 mQueryComent.setCachePolicy(CachePolicy.CACHE_ELSE_NETWORK);
             }
-            mQueryComent.include("fromUser");
+            mQueryComent.include("fromUser,parentComment,parentComment.fromUser");
             mListPage = 1;
             mQueryComent.setLimit(mListPage * LIST_DEFALUT_LIMIT);
         }

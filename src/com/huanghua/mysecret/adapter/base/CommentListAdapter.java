@@ -3,6 +3,7 @@ package com.huanghua.mysecret.adapter.base;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +18,12 @@ import cn.bmob.v3.listener.SaveListener;
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.bean.Comment;
 import com.huanghua.mysecret.bean.CommentSupport;
+import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.load.DateLoad;
 import com.huanghua.mysecret.manager.UserManager;
 import com.huanghua.mysecret.ui.BaseActivity;
+import com.huanghua.mysecret.ui.WriteSecretActivity;
 import com.huanghua.mysecret.util.ImageLoadOptions;
 import com.huanghua.mysecret.util.ViewHolder;
 import com.huanghua.mysecret.view.xlist.XListView;
@@ -29,10 +32,12 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class CommentListAdapter extends BaseListAdapter<Comment> {
 
     private XListView mListView;
+    private Secret mCurrentSeret = null;
 
-    public CommentListAdapter(Context context, List<Comment> list, XListView listView) {
+    public CommentListAdapter(Context context, List<Comment> list, XListView listView, Secret seret) {
         super(context, list);
         mListView = listView;
+        mCurrentSeret = seret;
     }
 
     @Override
@@ -56,7 +61,12 @@ public class CommentListAdapter extends BaseListAdapter<Comment> {
             mPhoto.setImageResource(R.drawable.user_photo_default);
         }
 
-        mContents.setText(coment.getContents());
+        Comment parentComment = coment.getParentComment();
+        if (parentComment != null) {
+            mContents.setText(coment.getContents() + "  //@" + parentComment.getFromUser().getUsername() + ": " + parentComment.getContents());
+        } else {
+            mContents.setText(coment.getContents());
+        }
         Drawable drawable = mContext.getResources().getDrawable(
                 user.isSex() ? R.drawable.man : R.drawable.women);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(),
@@ -122,6 +132,33 @@ public class CommentListAdapter extends BaseListAdapter<Comment> {
                         vv.setClickable(false);
                     }
                 });
+        TextView mItemReply = (TextView) view
+                .findViewById(R.id.item_comment_reply);
+        if (mCurrentSeret.getUser().equals(UserManager.getInstance(mContext).getCurrentUser())) {
+            mItemReply.setVisibility(View.VISIBLE);
+            csView.setVisibility(View.GONE);
+            final Comment toComment = coment;
+            setOnInViewClickListener(R.id.item_comment_reply,
+                    new onInternalClickListener() {
+                        @Override
+                        public void OnClickListener(View parentV, View v,
+                                Integer position, Object values) {
+                            if (!((BaseActivity) mContext).checkNetwork()) {
+                                return;
+                            }
+                            Intent intent = new Intent();
+                            intent.putExtra("write_type", WriteSecretActivity.WRITE_TYPE_REPLY_COMMENT);
+                            intent.putExtra("toUser", toComment.getFromUser());
+                            intent.putExtra("secret", mCurrentSeret);
+                            intent.putExtra("comment", toComment);
+                            intent.setClass(mContext, WriteSecretActivity.class);
+                            ((BaseActivity) mContext).startAnimActivity(intent);
+                        }
+                    });
+        } else {
+            mItemReply.setVisibility(View.GONE);
+            csView.setVisibility(View.VISIBLE);
+        }
         View noMoreView = ViewHolder.get(view, R.id.item_no_more);
         if (!mListView.getPullLoadEnable() && position == (getCount() - 1)) {
             noMoreView.setVisibility(View.VISIBLE);

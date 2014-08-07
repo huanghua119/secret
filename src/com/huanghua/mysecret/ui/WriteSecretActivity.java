@@ -31,6 +31,7 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
 
     public static final int WRITE_TYPE_SECRET = 1;
     public static final int WRITE_TYPE_COMMENT = 2;
+    public static final int WRITE_TYPE_REPLY_COMMENT = 3;
 
     private int mWriteType = WRITE_TYPE_SECRET;
     private TextView mContentsCountView = null;
@@ -42,6 +43,7 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
     private boolean mShowLocation = true;
     private LocationUtil mLutil = null;
     private String mLocation = "";
+    private TextView mParnetCommnet = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,16 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
             mTitle.setText(R.string.publication_comment);
             mContents.setHint(R.string.write_comment_hint);
             mAddLocation.setVisibility(View.GONE);
+        } else if (mWriteType == WRITE_TYPE_REPLY_COMMENT) {
+            mTitle.setText(R.string.publication_comment);
+            mContents.setHint(R.string.write_comment_hint);
+            mAddLocation.setVisibility(View.GONE);
+            Comment parentComment = (Comment) getIntent().getSerializableExtra(
+                    "comment");
+            User user = (User) getIntent().getSerializableExtra("toUser");
+            mParnetCommnet = (TextView) findViewById(R.id.parentComment);
+            mParnetCommnet.setText("//@" + user.getUsername() + ":" + parentComment.getContents());
+            mParnetCommnet.setVisibility(View.VISIBLE);
         }
     }
 
@@ -118,6 +130,41 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
                     @Override
                     public void onFailure(int arg0, String arg1) {
                         showLog("save secret failure " + arg1);
+                        dialog.dismiss();
+                        ShowToast(R.string.publication_faile);
+                        v.setClickable(true);
+                    }
+                });
+            } else if (mWriteType == WRITE_TYPE_REPLY_COMMENT) {
+                User user = (User) getIntent().getSerializableExtra("toUser");
+                Secret secret = (Secret) getIntent().getSerializableExtra(
+                        "secret");
+                Comment parentComment = (Comment) getIntent().getSerializableExtra(
+                        "comment");
+                Comment comment = new Comment();
+                comment.setContents(content);
+                comment.setFromUser(userManager.getCurrentUser());
+                comment.setToUser(user);
+                comment.setSecret(secret);
+                comment.setParentComment(parentComment);
+                comment.save(this, new SaveListener() {
+                    @Override
+                    public void onSuccess() {
+                        showLog("save comment success ");
+                        dialog.dismiss();
+                        ShowToastOld(R.string.publication_success);
+                        sendBroadcast(new Intent(SupportView.DATE_COMMENT_CHANGER));
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                finish();
+                            }
+                        }, 100);
+                    }
+
+                    @Override
+                    public void onFailure(int arg0, String arg1) {
+                        showLog("save comment failure " + arg1);
                         dialog.dismiss();
                         ShowToast(R.string.publication_faile);
                         v.setClickable(true);

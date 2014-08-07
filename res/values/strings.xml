@@ -96,5 +96,6 @@
     <string name="delete_success">删除成功！</string>
     <string name="delete_confirm">确认要删除吗?</string>
     <string name="tips">提示</string>
+    <string name="reply">回复</string>
 
 </resources>
