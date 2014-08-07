@@ -47,7 +47,8 @@
         
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="QwpGtlezir4SCiEZagIQr6Gb" />
+            android:value="wHFU4XcT5gijCobH9cn9qvdr" />
+        <!-- 原始 QwpGtlezir4SCiEZagIQr6Gb --> 
         
         <activity
             android:name="com.huanghua.mysecret.ui.SplashActivity"

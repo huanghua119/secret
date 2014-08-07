@@ -78,7 +78,7 @@
                 android:layout_gravity="center_vertical"
                 android:gravity="center_horizontal"
                 android:text="@string/loading"
-                android:textColor="@android:color/white"
+                android:textColor="?attr/item_text_color"
                 android:textSize="20sp" />
         </LinearLayout>
         <TextView

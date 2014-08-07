@@ -57,7 +57,7 @@
         <item name="happy_bg">@drawable/space_happy_bg</item>
         <item name="cry_happy_text_color">@color/space_cry_happy_text_color</item>
         <item name="post_item_vertical">@drawable/space_post_item_vertical</item>
-        <item name="xlistview_footer_textcolor">@color/xlistview_footer_textcolor</item>
+        <item name="xlistview_footer_textcolor">@color/space_xlistview_footer_textcolor</item>
         <item name="input_box_gb">@drawable/space_input_box_gb</item>
         <item name="home_bottom_bg">@drawable/space_home_bottom_bg</item>
         <item name="comment_bg">@drawable/space_comment_bg</item>
