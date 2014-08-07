@@ -232,7 +232,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="24dip"
                     android:gravity="center_vertical"
-                    android:textColor="@android:color/white" />
+                    android:textColor="?attr/item_text_color" />
 
                 <ImageView
                     android:layout_width="wrap_content"

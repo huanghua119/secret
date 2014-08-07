@@ -6,6 +6,7 @@
     <color name="base_bg">#f4f6f6</color>
     <color name="activity_bg_color">#4f4165</color>
     <color name="xlistview_footer_textcolor">#FFFFFF</color>
+    <color name="listview_bg_color">#4f4165</color>
 
     <!-- list item text color -->
     <color name="list_item_content_color">#ffffff</color>

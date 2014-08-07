@@ -53,6 +53,9 @@
         <attr name="more_up_bg" format="reference" />
         <attr name="more_center_bg" format="reference" />
         <attr name="more_down_bg" format="reference" />
+        
+        <!-- listview 背景色  -->
+        <attr name="listview_bg_color" format="color" />
     </declare-styleable>
 
 </resources>
