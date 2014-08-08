@@ -1,8 +1,5 @@
 package com.huanghua.mysecret.ui;
 
-import com.huanghua.mysecret.R;
-import com.huanghua.mysecret.bean.User;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,9 +9,15 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import cn.bmob.v3.listener.UpdateListener;
 
+import com.huanghua.mysecret.CustomApplcation;
+import com.huanghua.mysecret.R;
+import com.huanghua.mysecret.bean.Installation;
+import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.manager.UserManager.UserManagerListener;
 import com.huanghua.mysecret.util.CommonUtils;
+import com.huanghua.mysecret.util.SharePreferenceUtil;
 import com.huanghua.mysecret.util.ThemeUtil;
 
 public class UserRegisterActivity extends BaseActivity implements
@@ -109,6 +112,18 @@ public class UserRegisterActivity extends BaseActivity implements
         userManager.signUp(bu, new UserManagerListener() {
             @Override
             public void onSuccess(User u) {
+                SharePreferenceUtil mSp = CustomApplcation.getInstance().getSpUtil();
+                Installation in = new Installation(UserRegisterActivity.this);
+                in.setUser(userManager.getCurrentUser());
+                in.update(UserRegisterActivity.this,
+                        mSp.getInstallationObjectId(), new UpdateListener() {
+                            @Override
+                            public void onSuccess() {
+                            }
+                            @Override
+                            public void onFailure(int arg0, String arg1) {
+                            }
+                        });
                 progress.dismiss();
                 ShowToastOld(R.string.register_succes);
                 startActivity(new Intent(UserRegisterActivity.this, MainActivity.class));

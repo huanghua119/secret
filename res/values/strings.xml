@@ -98,5 +98,10 @@
     <string name="tips">提示</string>
     <string name="reply">回复</string>
     <string name="secret_deleted">秘密已经被删除!</string>
+    <string name="comment_publication_success">评论已发表！</string>
+    <string name="my_message">我的通知</string>
+    <string name="comment_your_secret">回复了你的秘密!</string>
+    <string name="comment_your_comment">回复了你的评论!</string>
+    <string name="message_tips">您的百密一书有新消息！</string>
 
 </resources>

@@ -21,6 +21,8 @@ public class SharePreferenceUtil {
     private String SHARED_KEY_NOTIFY = "shared_key_notify";
     private String SHARED_KEY_VOICE = "shared_key_sound";
     private String SHARED_KEY_VIBRATE = "shared_key_vibrate";
+    private String SHARED_KEY_NEW_MESSAGE = "shared_key_new_message";
+    private String SHARED_KEY_INSTALLATION_OBJECTID = "shared_key_installation_objectid";
 
     // 是否允许推送通知
     public boolean isAllowPushNotify() {
@@ -52,4 +54,22 @@ public class SharePreferenceUtil {
         editor.commit();
     }
 
+    public boolean hasNewMessage() {
+        return mSharedPreferences.getBoolean(SHARED_KEY_NEW_MESSAGE, false);
+    }
+
+    public void setNewMessage(boolean hasNew) {
+        editor.putBoolean(SHARED_KEY_NEW_MESSAGE, hasNew);
+        editor.commit();
+    }
+
+    public void setInstallationObjectId(String obejctId) {
+        editor.putString(SHARED_KEY_INSTALLATION_OBJECTID, obejctId);
+        editor.commit();
+    }
+
+    public String getInstallationObjectId() {
+        return mSharedPreferences.getString(SHARED_KEY_INSTALLATION_OBJECTID,
+                "");
+    }
 }

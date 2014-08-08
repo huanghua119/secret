@@ -12,15 +12,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
+import cn.bmob.v3.BmobInstallation;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobQuery.CachePolicy;
 import cn.bmob.v3.listener.CountListener;
 import cn.bmob.v3.listener.FindListener;
 
+import com.huanghua.mysecret.CustomApplcation;
 import com.huanghua.mysecret.bean.ApkBean;
+import com.huanghua.mysecret.bean.Installation;
 import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.config.Config;
 import com.huanghua.mysecret.util.CommonUtils;
+import com.huanghua.mysecret.util.SharePreferenceUtil;
 
 public class DateQueryService extends Service {
 
@@ -58,6 +62,22 @@ public class DateQueryService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         CommonUtils.showLog(TAG, "onStartCommand");
         startCheckNewVersion();
+        BmobQuery<BmobInstallation> query = Installation.getQuery();
+        query.addWhereEqualTo("installationId", BmobInstallation.getCurrentInstallation(this).getInstallationId());
+        query.setLimit(1);
+        query.findObjects(this, new FindListener<BmobInstallation>() {
+            @Override
+            public void onSuccess(List<BmobInstallation> list) {
+                if (list.size() > 0) {
+                    String objectId = list.get(0).getObjectId();
+                    SharePreferenceUtil mSp = CustomApplcation.getInstance().getSpUtil();
+                    mSp.setInstallationObjectId(objectId);
+                }
+            }
+             @Override
+            public void onError(int arg0, String arg1) {
+            }
+        });
         return super.onStartCommand(intent, flags, startId);
     }
 

@@ -13,8 +13,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import cn.bmob.v3.listener.SaveListener;
 
+import com.huanghua.mysecret.MyPushMessageReceiver;
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.bean.Comment;
+import com.huanghua.mysecret.bean.PushMessage;
 import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.util.CommonUtils;
@@ -102,6 +104,9 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
         if (!checkNetwork()) {
             return;
         }
+        if (checkUserLogin()) {
+            return;
+        }
         String content = mContents.getText().toString();
         if (content != null && !"".endsWith(content)) {
             final Dialog dialog = CommonUtils.createLoadingDialog(this, getString(R.string.cominting));
@@ -136,12 +141,12 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
                     }
                 });
             } else if (mWriteType == WRITE_TYPE_REPLY_COMMENT) {
-                User user = (User) getIntent().getSerializableExtra("toUser");
+                final User user = (User) getIntent().getSerializableExtra("toUser");
                 Secret secret = (Secret) getIntent().getSerializableExtra(
                         "secret");
-                Comment parentComment = (Comment) getIntent().getSerializableExtra(
+                final Comment parentComment = (Comment) getIntent().getSerializableExtra(
                         "comment");
-                Comment comment = new Comment();
+                final Comment comment = new Comment();
                 comment.setContents(content);
                 comment.setFromUser(userManager.getCurrentUser());
                 comment.setToUser(user);
@@ -152,8 +157,13 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
                     public void onSuccess() {
                         showLog("save comment success ");
                         dialog.dismiss();
-                        ShowToastOld(R.string.publication_success);
+                        ShowToastOld(R.string.comment_publication_success);
                         sendBroadcast(new Intent(SupportView.DATE_COMMENT_CHANGER));
+                        Intent intent = new Intent(MyPushMessageReceiver.PUSH_ACTION_SEND_COMMENT);
+                        intent.putExtra("comment", comment);
+                        intent.putExtra("toUser", user);
+                        intent.putExtra("type", PushMessage.PUSH_MESSAGE_TYPE_REPLY_COMMENT);
+                        sendBroadcast(intent);
                         mHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -171,10 +181,10 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
                     }
                 });
             } else {
-                User user = (User) getIntent().getSerializableExtra("toUser");
+                final User user = (User) getIntent().getSerializableExtra("toUser");
                 Secret secret = (Secret) getIntent().getSerializableExtra(
                         "secret");
-                Comment comment = new Comment();
+                final Comment comment = new Comment();
                 comment.setContents(content);
                 comment.setFromUser(userManager.getCurrentUser());
                 comment.setToUser(user);
@@ -184,8 +194,13 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
                     public void onSuccess() {
                         showLog("save comment success ");
                         dialog.dismiss();
-                        ShowToastOld(R.string.publication_success);
+                        ShowToastOld(R.string.comment_publication_success);
                         sendBroadcast(new Intent(SupportView.DATE_COMMENT_CHANGER));
+                        Intent intent = new Intent(MyPushMessageReceiver.PUSH_ACTION_SEND_COMMENT);
+                        intent.putExtra("comment", comment);
+                        intent.putExtra("toUser", user);
+                        intent.putExtra("type", PushMessage.PUSH_MESSAGE_TYPE_COMMENT);
+                        sendBroadcast(intent);
                         mHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {

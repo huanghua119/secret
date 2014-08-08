@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.huanghua.mysecret"
+    xmlns:tools="http://schemas.android.com/tools"
     android:versionCode="1"
     android:versionName="1.2" >
 
     <uses-sdk
-        android:minSdkVersion="13"
+        android:minSdkVersion="10"
         android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -36,6 +37,7 @@
         android:theme="@style/AppTheme" >
         
         <service
+            android:exported="false"
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote" >
@@ -83,6 +85,8 @@
         <activity android:name="com.huanghua.mysecret.ui.AboutOurActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <activity android:name="com.huanghua.mysecret.ui.MyMessageActivity" >
+        </activity>
         <service android:name="com.huanghua.mysecret.service.DateQueryService" >
         </service>
 
@@ -103,9 +107,12 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".MyPushMessageReceiver" >
+        <receiver
+            tools:ignore="ExportedReceiver"
+            android:name=".MyPushMessageReceiver" >
             <intent-filter>
                 <action android:name="cn.bmob.push.action.MESSAGE" />
+                <action android:name="push_action_send_comment"/>
             </intent-filter>
         </receiver>
 

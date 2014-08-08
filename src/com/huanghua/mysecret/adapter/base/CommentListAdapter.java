@@ -62,7 +62,7 @@ public class CommentListAdapter extends BaseListAdapter<Comment> {
         }
 
         Comment parentComment = coment.getParentComment();
-        if (parentComment != null) {
+        if (parentComment != null && parentComment.getFromUser() != null) {
             mContents.setText(coment.getContents() + "  //@" + parentComment.getFromUser().getUsername() + ": " + parentComment.getContents());
         } else {
             mContents.setText(coment.getContents());

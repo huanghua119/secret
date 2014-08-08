@@ -3,9 +3,14 @@ package com.huanghua.mysecret.manager;
 import android.content.Context;
 import android.util.Log;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 import com.huanghua.mysecret.CustomApplcation;
+import com.huanghua.mysecret.MyPushMessageReceiver;
+import com.huanghua.mysecret.bean.Installation;
 import com.huanghua.mysecret.bean.User;
+import com.huanghua.mysecret.util.CommonUtils;
+import com.huanghua.mysecret.util.SharePreferenceUtil;
 
 public class UserManager {
 
@@ -64,6 +69,21 @@ public class UserManager {
     public void logout() {
         User.logOut(sContext);
         mCurrentUser = null;
+        SharePreferenceUtil mSp = CustomApplcation.getInstance().getSpUtil();
+        Installation in = new Installation(sContext);
+        in.setUser(new User());
+        in.update(sContext, mSp.getInstallationObjectId(),
+                new UpdateListener() {
+                    @Override
+                    public void onSuccess() {
+                        CommonUtils.showLog(MyPushMessageReceiver.TAG, "logout onSuccess");
+                    }
+
+                    @Override
+                    public void onFailure(int arg0, String arg1) {
+                        CommonUtils.showLog(MyPushMessageReceiver.TAG, "logout onFailure arg0:" + arg0 + " arg1:" + arg1);
+                    }
+                });
     }
 
     public User getCurrentUser() {

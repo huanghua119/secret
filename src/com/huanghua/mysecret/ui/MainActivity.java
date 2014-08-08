@@ -1,6 +1,7 @@
 package com.huanghua.mysecret.ui;
 
 import com.huanghua.mysecret.CustomApplcation;
+import com.huanghua.mysecret.MyPushMessageReceiver;
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.bean.ApkBean;
 import com.huanghua.mysecret.frament.ChoicenessFragment;
@@ -9,6 +10,7 @@ import com.huanghua.mysecret.frament.NearSecretFragment;
 import com.huanghua.mysecret.load.DateLoad;
 import com.huanghua.mysecret.service.DateQueryService;
 import com.huanghua.mysecret.util.CommonUtils;
+import com.huanghua.mysecret.util.SharePreferenceUtil;
 import com.huanghua.mysecret.util.ThemeUtil;
 
 import android.content.BroadcastReceiver;
@@ -30,10 +32,12 @@ public class MainActivity extends BaseActivity {
     private int mCurrentTabIndex;
     private ImageView mChoiceness_tips;
     private ImageView mNearby_tips;
+    private ImageView mMore_tips;
 
     private ChoicenessFragment mChoicenessFrament;
     private NearSecretFragment mNearSecretFrament;
     private MoreFragment mMoreFragment;
+    private SharePreferenceUtil mSp = null;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -53,6 +57,11 @@ public class MainActivity extends BaseActivity {
                     CommonUtils.createUpdateVersionDialog(context, apkBean)
                             .show();
                 }
+            } else if (action != null
+                    && MyPushMessageReceiver.PUSH_ACTION_NEW_MESSAGE
+                            .equals(action)) {
+                mMore_tips.setVisibility(View.VISIBLE);
+                mMoreFragment.showNewTips(View.VISIBLE);
             }
         }
     };
@@ -64,9 +73,13 @@ public class MainActivity extends BaseActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(DateQueryService.QUERY_NEW_SECRTE_ACTION);
         intentFilter.addAction(DateQueryService.CHECK_NEW_VERSION_UPDATE);
+        intentFilter.addAction(MyPushMessageReceiver.PUSH_ACTION_NEW_MESSAGE);
         registerReceiver(mBroadcastReceiver, intentFilter);
         initView();
         initTab();
+        if (mSp == null) {
+            mSp = CustomApplcation.getInstance().getSpUtil();
+        }
     }
 
     private void initView() {
@@ -76,6 +89,7 @@ public class MainActivity extends BaseActivity {
         mTabs[2] = (Button) findViewById(R.id.btn_more);
         mChoiceness_tips = (ImageView) findViewById(R.id.iv_choiceness_tips);
         mNearby_tips = (ImageView) findViewById(R.id.iv_nearby_tips);
+        mMore_tips = (ImageView) findViewById(R.id.iv_moreby_tips);
     }
 
     private void initTab() {
@@ -84,17 +98,25 @@ public class MainActivity extends BaseActivity {
         mMoreFragment = new MoreFragment();
         fragments = new Fragment[] { mChoicenessFrament, mNearSecretFrament,
                 mMoreFragment };
+        FragmentTransaction trx = getSupportFragmentManager()
+                .beginTransaction();
+        trx.add(R.id.fragment_container, mChoicenessFrament);
+        trx.add(R.id.fragment_container, mNearSecretFrament);
+        trx.add(R.id.fragment_container, mMoreFragment);
+        trx.commit();
         // 添加显示第一个fragment
         if (ThemeUtil.isThemeFinish(this)) {
             getSupportFragmentManager().beginTransaction()
-            .add(R.id.fragment_container, mMoreFragment)
+            .hide(mNearSecretFrament)
+            .hide(mChoicenessFrament)
             .show(mMoreFragment).commit();
             mTabs[2].setSelected(true);
             mCurrentTabIndex = 2;
             ThemeUtil.setThemeFinish(this, false);
         } else {
             getSupportFragmentManager().beginTransaction()
-            .add(R.id.fragment_container, mChoicenessFrament)
+            .hide(mNearSecretFrament)
+            .hide(mMoreFragment)
             .show(mChoicenessFrament).commit();
             mTabs[0].setSelected(true);
             mCurrentTabIndex = 0;
@@ -146,6 +168,13 @@ public class MainActivity extends BaseActivity {
         mChoiceness_tips.setVisibility(View.GONE);
         if (DateQueryService.sHasNewSecret) {
             mChoiceness_tips.setVisibility(View.VISIBLE);
+        }
+        if (mSp.hasNewMessage()) {
+            mMore_tips.setVisibility(View.VISIBLE);
+            mMoreFragment.showNewTips(View.VISIBLE);
+        } else {
+            mMore_tips.setVisibility(View.GONE);
+            mMoreFragment.showNewTips(View.GONE);
         }
     }
 

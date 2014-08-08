@@ -23,6 +23,7 @@ import com.huanghua.mysecret.manager.UserManager;
 import com.huanghua.mysecret.ui.AboutOurActivity;
 import com.huanghua.mysecret.ui.BaseActivity;
 import com.huanghua.mysecret.ui.MyCommentActivity;
+import com.huanghua.mysecret.ui.MyMessageActivity;
 import com.huanghua.mysecret.ui.MySecretActivity;
 import com.huanghua.mysecret.ui.UserLoginActivity;
 import com.huanghua.mysecret.ui.WriteSecretActivity;
@@ -46,6 +47,8 @@ public class MoreFragment extends FragmentBase implements View.OnClickListener,
     private View mToMyComment = null;
     private View mSwitchTheme = null;
     private TextView mCurrentTheme = null;
+    private View mToMyMessage = null;
+    private ImageView mMore_tips = null;
 
     private View mAboutOur = null;
     private View mCheckUpdate = null;
@@ -111,6 +114,8 @@ public class MoreFragment extends FragmentBase implements View.OnClickListener,
         mAboutOur = findViewById(R.id.about_out);
         mSwitchTheme = findViewById(R.id.switch_theme);
         mCurrentTheme = (TextView) findViewById(R.id.current_theme);
+        mToMyMessage = findViewById(R.id.to_my_message);
+        mMore_tips = (ImageView) findViewById(R.id.iv_moreby_tips);
         mToWriteSecret.setOnTouchListener(this);
         mToWriteSecret.setOnClickListener(this);
         mToMySecret.setOnTouchListener(this);
@@ -123,6 +128,8 @@ public class MoreFragment extends FragmentBase implements View.OnClickListener,
         mAboutOur.setOnTouchListener(this);
         mSwitchTheme.setOnClickListener(this);
         mSwitchTheme.setOnTouchListener(this);
+        mToMyMessage.setOnClickListener(this);
+        mToMyMessage.setOnTouchListener(this);
     }
 
     @Override
@@ -197,6 +204,10 @@ public class MoreFragment extends FragmentBase implements View.OnClickListener,
             Intent intent = new Intent();
             intent.setClass(getActivity(), MyCommentActivity.class);
             startAnimActivity(intent);
+        } else if (v == mToMyMessage) {
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), MyMessageActivity.class);
+            startAnimActivity(intent);
         }
     }
 
@@ -252,5 +263,11 @@ public class MoreFragment extends FragmentBase implements View.OnClickListener,
             break;
         }
         return false;
+    }
+
+    public void showNewTips(int visibility) {
+        if (mMore_tips != null) {
+            mMore_tips.setVisibility(visibility);
+        }
     }
 }

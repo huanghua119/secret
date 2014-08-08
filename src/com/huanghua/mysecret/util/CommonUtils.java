@@ -1,7 +1,11 @@
 package com.huanghua.mysecret.util;
 
+import static android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
+import static android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE;
+
 import java.io.ByteArrayInputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpEntity;
@@ -11,8 +15,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.xmlpull.v1.XmlPullParser;
 
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -211,6 +217,35 @@ public class CommonUtils {
             return null;
         }
         return mResult;
+    }
+
+    public static boolean isBackgroundRunning(Context context) {
+        String processName = context.getPackageName();
+
+        ActivityManager activityManager = (ActivityManager) context
+                .getSystemService(Context.ACTIVITY_SERVICE);
+        KeyguardManager keyguardManager = (KeyguardManager) context
+                .getSystemService(Context.KEYGUARD_SERVICE);
+
+        if (activityManager == null) {
+            return false;
+        }
+        List<ActivityManager.RunningAppProcessInfo> processList = activityManager
+                .getRunningAppProcesses();
+        for (ActivityManager.RunningAppProcessInfo process : processList) {
+            if (process.processName.startsWith(processName)) {
+                boolean isBackground = process.importance != IMPORTANCE_FOREGROUND
+                        && process.importance != IMPORTANCE_VISIBLE;
+                boolean isLockedState = keyguardManager
+                        .inKeyguardRestrictedInputMode();
+                if (isBackground || isLockedState) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 
     public static void showLog(String msg) {

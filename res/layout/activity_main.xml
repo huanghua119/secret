@@ -10,6 +10,7 @@
         android:layout_height="52dp"
         android:layout_alignParentBottom="true"
         android:background="?attr/tab_background_color"
+        android:baselineAligned="false"
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 
@@ -78,20 +79,37 @@
                 android:gravity="center"
                 android:visibility="visible" />
         </RelativeLayout>
-
-        <Button
-            android:id="@+id/btn_more"
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="?attr/home_bottom_bg"
-            android:drawableTop="?attr/tab_more"
-            android:onClick="onTabSelect"
-            android:paddingTop="8dip"
-            android:scaleType="matrix"
-            android:text="@string/tab_more"
-            android:textColor="?attr/tab_textcolor"
-            android:textSize="12sp" />
+            android:layout_weight="1" >
+
+            <Button
+                android:id="@+id/btn_more"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?attr/home_bottom_bg"
+                android:drawableTop="?attr/tab_more"
+                android:onClick="onTabSelect"
+                android:paddingTop="8dip"
+                android:scaleType="matrix"
+                android:text="@string/tab_more"
+                android:textColor="?attr/tab_textcolor"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/iv_moreby_tips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="10dp"
+                android:background="?attr/tab_notice"
+                android:contentDescription="@string/action_settings"
+                android:gravity="center"
+                android:visibility="visible" />
+        </RelativeLayout>
     </LinearLayout>
 
     <RelativeLayout
