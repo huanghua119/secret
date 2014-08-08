@@ -107,14 +107,6 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-        <receiver
-            tools:ignore="ExportedReceiver"
-            android:name=".MyPushMessageReceiver" >
-            <intent-filter>
-                <action android:name="cn.bmob.push.action.MESSAGE" />
-                <action android:name="push_action_send_comment"/>
-            </intent-filter>
-        </receiver>
 
     </application>
 

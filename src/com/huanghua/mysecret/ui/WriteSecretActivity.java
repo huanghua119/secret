@@ -13,12 +13,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import cn.bmob.v3.listener.SaveListener;
 
-import com.huanghua.mysecret.MyPushMessageReceiver;
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.bean.Comment;
 import com.huanghua.mysecret.bean.PushMessage;
 import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.bean.User;
+import com.huanghua.mysecret.service.DateQueryService;
 import com.huanghua.mysecret.util.CommonUtils;
 import com.huanghua.mysecret.util.LocationUtil;
 import com.huanghua.mysecret.view.SupportView;
@@ -159,7 +159,7 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
                         dialog.dismiss();
                         ShowToastOld(R.string.comment_publication_success);
                         sendBroadcast(new Intent(SupportView.DATE_COMMENT_CHANGER));
-                        Intent intent = new Intent(MyPushMessageReceiver.PUSH_ACTION_SEND_COMMENT);
+                        Intent intent = new Intent(DateQueryService.PUSH_ACTION_SEND_COMMENT);
                         intent.putExtra("comment", comment);
                         intent.putExtra("toUser", user);
                         intent.putExtra("type", PushMessage.PUSH_MESSAGE_TYPE_REPLY_COMMENT);
@@ -196,7 +196,7 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
                         dialog.dismiss();
                         ShowToastOld(R.string.comment_publication_success);
                         sendBroadcast(new Intent(SupportView.DATE_COMMENT_CHANGER));
-                        Intent intent = new Intent(MyPushMessageReceiver.PUSH_ACTION_SEND_COMMENT);
+                        Intent intent = new Intent(DateQueryService.PUSH_ACTION_SEND_COMMENT);
                         intent.putExtra("comment", comment);
                         intent.putExtra("toUser", user);
                         intent.putExtra("type", PushMessage.PUSH_MESSAGE_TYPE_COMMENT);

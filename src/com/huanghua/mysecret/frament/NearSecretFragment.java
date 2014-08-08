@@ -189,6 +189,9 @@ public class NearSecretFragment extends FragmentBase implements
             mQuerySecret.order("-createdAt");
             mQuerySecret.include("user");
             mListPage = 1;
+            showLog(DateQueryService.TAG, "findLocation:" + mLutil.findLocation());
+            showLog(DateQueryService.TAG, "findLocation getLongitude:" + mLutil.findLocation().getLongitude());
+            showLog(DateQueryService.TAG, "findLocation getLatitude:" + mLutil.findLocation().getLatitude());
             BmobGeoPoint mGeoPoint = new BmobGeoPoint(mLutil.findLocation()
                     .getLongitude(), mLutil.findLocation().getLatitude());
             mQuerySecret

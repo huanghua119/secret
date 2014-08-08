@@ -1,7 +1,6 @@
 package com.huanghua.mysecret.ui;
 
 import com.huanghua.mysecret.CustomApplcation;
-import com.huanghua.mysecret.MyPushMessageReceiver;
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.bean.ApkBean;
 import com.huanghua.mysecret.frament.ChoicenessFragment;
@@ -58,7 +57,7 @@ public class MainActivity extends BaseActivity {
                             .show();
                 }
             } else if (action != null
-                    && MyPushMessageReceiver.PUSH_ACTION_NEW_MESSAGE
+                    && DateQueryService.PUSH_ACTION_NEW_MESSAGE
                             .equals(action)) {
                 mMore_tips.setVisibility(View.VISIBLE);
                 mMoreFragment.showNewTips(View.VISIBLE);
@@ -73,7 +72,7 @@ public class MainActivity extends BaseActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(DateQueryService.QUERY_NEW_SECRTE_ACTION);
         intentFilter.addAction(DateQueryService.CHECK_NEW_VERSION_UPDATE);
-        intentFilter.addAction(MyPushMessageReceiver.PUSH_ACTION_NEW_MESSAGE);
+        intentFilter.addAction(DateQueryService.PUSH_ACTION_NEW_MESSAGE);
         registerReceiver(mBroadcastReceiver, intentFilter);
         initView();
         initTab();

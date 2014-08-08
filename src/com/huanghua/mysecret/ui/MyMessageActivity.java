@@ -17,11 +17,11 @@ import cn.bmob.v3.listener.CountListener;
 import cn.bmob.v3.listener.FindListener;
 
 import com.huanghua.mysecret.CustomApplcation;
-import com.huanghua.mysecret.MyPushMessageReceiver;
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.adapter.base.MyCommentListAdapter;
 import com.huanghua.mysecret.bean.Comment;
 import com.huanghua.mysecret.bean.Secret;
+import com.huanghua.mysecret.service.DateQueryService;
 import com.huanghua.mysecret.util.SharePreferenceUtil;
 import com.huanghua.mysecret.view.xlist.XListView;
 import com.huanghua.mysecret.view.xlist.XListView.IXListViewListener;
@@ -177,7 +177,7 @@ public class MyMessageActivity extends BaseActivity implements OnClickListener,
         }
         SharePreferenceUtil mSp = CustomApplcation.getInstance().getSpUtil();
         mSp.setNewMessage(false);
-        mNotificationManager.cancel(MyPushMessageReceiver.NOTIFICATION_MESSAGE_COMMENT);
+        mNotificationManager.cancel(DateQueryService.NOTIFICATION_MESSAGE_COMMENT);
     }
 
     @Override

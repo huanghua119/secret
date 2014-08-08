@@ -6,9 +6,9 @@ import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 import com.huanghua.mysecret.CustomApplcation;
-import com.huanghua.mysecret.MyPushMessageReceiver;
 import com.huanghua.mysecret.bean.Installation;
 import com.huanghua.mysecret.bean.User;
+import com.huanghua.mysecret.service.DateQueryService;
 import com.huanghua.mysecret.util.CommonUtils;
 import com.huanghua.mysecret.util.SharePreferenceUtil;
 
@@ -76,12 +76,12 @@ public class UserManager {
                 new UpdateListener() {
                     @Override
                     public void onSuccess() {
-                        CommonUtils.showLog(MyPushMessageReceiver.TAG, "logout onSuccess");
+                        CommonUtils.showLog(DateQueryService.TAG, "logout onSuccess");
                     }
 
                     @Override
                     public void onFailure(int arg0, String arg1) {
-                        CommonUtils.showLog(MyPushMessageReceiver.TAG, "logout onFailure arg0:" + arg0 + " arg1:" + arg1);
+                        CommonUtils.showLog(DateQueryService.TAG, "logout onFailure arg0:" + arg0 + " arg1:" + arg1);
                     }
                 });
     }

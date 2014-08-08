@@ -13,11 +13,11 @@ import android.widget.EditText;
 import cn.bmob.v3.listener.UpdateListener;
 
 import com.huanghua.mysecret.CustomApplcation;
-import com.huanghua.mysecret.MyPushMessageReceiver;
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.bean.Installation;
 import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.manager.UserManager.UserManagerListener;
+import com.huanghua.mysecret.service.DateQueryService;
 import com.huanghua.mysecret.util.CommonUtils;
 import com.huanghua.mysecret.util.SharePreferenceUtil;
 import com.huanghua.mysecret.util.ThemeUtil;
@@ -123,12 +123,12 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
                 in.update(UserLoginActivity.this, mSp.getInstallationObjectId() , new UpdateListener() {
                     @Override
                     public void onSuccess() {
-                        showLog(MyPushMessageReceiver.TAG, "login onSuccess");
+                        showLog(DateQueryService.TAG, "login onSuccess");
                     }
 
                     @Override
                     public void onFailure(int arg0, String arg1) {
-                        showLog(MyPushMessageReceiver.TAG, "login onFailure arg1:" + arg1
+                        showLog(DateQueryService.TAG, "login onFailure arg1:" + arg1
                                 + " arg0:" + arg0);
                     }
                 });
