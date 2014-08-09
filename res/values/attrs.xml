@@ -36,10 +36,7 @@
         <attr name="comment_bg_no_bottom" format="reference" />
         <attr name="comment_bg_no_frame" format="reference" />
         <attr name="xlistview_footer_textcolor" format="color" />
-        <attr name="tab_choiceness" format="reference" />
         <attr name="tab_textcolor" format="reference" />
-        <attr name="tab_nearby" format="reference" />
-        <attr name="tab_more" format="reference" />
         <attr name="tab_notice" format="reference" />
         <attr name="user_photo_default" format="reference" />
         <attr name="user_photo_frame" format="reference" />
@@ -56,6 +53,14 @@
         
         <!-- listview 背景色  -->
         <attr name="listview_bg_color" format="color" />
+        
+        <!-- 写秘密时的位置定位图标  -->
+        <attr name="write_secret_location_icon" format="reference" />
+        
+        <!-- 底部图标  -->
+        <attr name="tab_choiceness" format="reference" />
+        <attr name="tab_nearby" format="reference" />
+        <attr name="tab_more" format="reference" />
     </declare-styleable>
 
 </resources>

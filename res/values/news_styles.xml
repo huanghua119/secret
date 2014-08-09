@@ -23,10 +23,7 @@
         <item name="comment_bg">@drawable/comment_bg</item>
         <item name="comment_bg_no_bottom">@drawable/comment_bg_no_bottom</item>
         <item name="comment_bg_no_frame">@drawable/comment_bg_no_frame</item>
-        <item name="tab_choiceness">@drawable/tab_choiceness</item>
         <item name="tab_textcolor">@drawable/tab_textcolor</item>
-        <item name="tab_nearby">@drawable/tab_nearby</item>
-        <item name="tab_more">@drawable/tab_more</item>
         <item name="tab_notice">@drawable/notice</item>
         <item name="user_photo_default">@drawable/user_photo_default</item>
         <item name="user_photo_frame">@drawable/user_photo_frame</item>
@@ -39,6 +36,11 @@
         <item name="more_center_bg">@drawable/more_center_bg</item>
         <item name="more_down_bg">@drawable/more_down_bg</item>
         <item name="listview_bg_color">@color/listview_bg_color</item>
+        <item name="write_secret_location_icon">@drawable/write_secret_location_icon</item>
+        <item name="tab_choiceness">@drawable/tab_choiceness</item>
+        <item name="tab_nearby">@drawable/tab_nearby</item>
+        <item name="tab_more">@drawable/tab_more</item>
+        
     </style>
 
     <style name="Theme.Space" parent="AppTheme">
@@ -63,10 +65,7 @@
         <item name="comment_bg">@drawable/space_comment_bg</item>
         <item name="comment_bg_no_bottom">@drawable/space_comment_bg_no_bottom</item>
         <item name="comment_bg_no_frame">@drawable/space_comment_bg_no_frame</item>
-        <item name="tab_choiceness">@drawable/tab_choiceness</item>
         <item name="tab_textcolor">@drawable/tab_textcolor</item>
-        <item name="tab_nearby">@drawable/tab_nearby</item>
-        <item name="tab_more">@drawable/tab_more</item>
         <item name="tab_notice">@drawable/notice</item>
         <item name="user_photo_default">@drawable/user_photo_default</item>
         <item name="user_photo_frame">@drawable/user_photo_frame</item>
@@ -79,7 +78,10 @@
         <item name="more_center_bg">@drawable/space_more_center_bg</item>
         <item name="more_down_bg">@drawable/space_more_down_bg</item>
         <item name="listview_bg_color">@color/space_listview_bg_color</item>
-        
+        <item name="write_secret_location_icon">@drawable/space_write_secret_location_icon</item>
+        <item name="tab_choiceness">@drawable/space_tab_choiceness</item>
+        <item name="tab_nearby">@drawable/space_tab_nearby</item>
+        <item name="tab_more">@drawable/space_tab_more</item>
     </style>
 
 </resources>

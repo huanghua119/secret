@@ -58,7 +58,6 @@
             android:layout_marginTop="20dip"
             android:padding="10dip"
             android:gravity="center_horizontal"
-            android:background="@drawable/space_login_bg"
             android:orientation="vertical" >
 
             <EditText
