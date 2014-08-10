@@ -1,5 +1,17 @@
 package com.huanghua.mysecret.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+
+import com.baidu.location.LocationClient;
 import com.huanghua.mysecret.CustomApplcation;
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.bean.ApkBean;
@@ -11,17 +23,6 @@ import com.huanghua.mysecret.service.DateQueryService;
 import com.huanghua.mysecret.util.CommonUtils;
 import com.huanghua.mysecret.util.SharePreferenceUtil;
 import com.huanghua.mysecret.util.ThemeUtil;
-
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 
 public class MainActivity extends BaseActivity {
 
@@ -37,6 +38,7 @@ public class MainActivity extends BaseActivity {
     private NearSecretFragment mNearSecretFrament;
     private MoreFragment mMoreFragment;
     private SharePreferenceUtil mSp = null;
+    private LocationClient mLocationClient;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -61,6 +63,8 @@ public class MainActivity extends BaseActivity {
                             .equals(action)) {
                 mMore_tips.setVisibility(View.VISIBLE);
                 mMoreFragment.showNewTips(View.VISIBLE);
+            } else if (action != null && "update_near_secret_location".equals(action)) {
+                mNearSecretFrament.refreshDate();
             }
         }
     };
@@ -73,12 +77,14 @@ public class MainActivity extends BaseActivity {
         intentFilter.addAction(DateQueryService.QUERY_NEW_SECRTE_ACTION);
         intentFilter.addAction(DateQueryService.CHECK_NEW_VERSION_UPDATE);
         intentFilter.addAction(DateQueryService.PUSH_ACTION_NEW_MESSAGE);
+        intentFilter.addAction("update_near_secret_location");
         registerReceiver(mBroadcastReceiver, intentFilter);
         initView();
         initTab();
         if (mSp == null) {
             mSp = CustomApplcation.getInstance().getSpUtil();
         }
+        mLocationClient = ((CustomApplcation)getApplication()).mLocationClient;
     }
 
     private void initView() {
@@ -163,6 +169,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        mLocationClient.start();
         mNearby_tips.setVisibility(View.GONE);
         mChoiceness_tips.setVisibility(View.GONE);
         if (DateQueryService.sHasNewSecret) {
@@ -191,8 +198,8 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         if (firstTime + 2000 > System.currentTimeMillis()) {
-            if (CustomApplcation.mLocationClient.isStarted()) {
-                CustomApplcation.mLocationClient.stop();
+            if (mLocationClient.isStarted()) {
+                mLocationClient.stop();
             }
             super.onBackPressed();
         } else {
@@ -211,4 +218,5 @@ public class MainActivity extends BaseActivity {
         }
         super.onDestroy();
     }
+
 }

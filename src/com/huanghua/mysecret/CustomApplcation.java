@@ -5,6 +5,7 @@ import java.io.File;
 import android.app.Application;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.preference.PreferenceManager;
@@ -12,10 +13,11 @@ import cn.bmob.v3.datatype.BmobGeoPoint;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
-import com.baidu.location.GeofenceClient;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
+import com.huanghua.mysecret.service.DateQueryService;
+import com.huanghua.mysecret.util.CommonUtils;
 import com.huanghua.mysecret.util.SharePreferenceUtil;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -36,12 +38,11 @@ public class CustomApplcation extends Application {
 
     public static BmobGeoPoint lastPoint = null;// 上一次定位到的经纬度
     
-    public static LocationClient mLocationClient;
-    public GeofenceClient mGeofenceClient;
-    public static MyLocationListener mMyLocationListener;
+    public LocationClient mLocationClient;
+    public MyLocationListener mMyLocationListener;
     private static BmobGeoPoint mBp = null;
     private static String mAddress = null;
-    private final int UP_TIME = 60000*10;
+    private final int UP_TIME = 60 * 1000 * 10;
 
     @Override
     public void onCreate() {
@@ -55,6 +56,7 @@ public class CustomApplcation extends Application {
         mMediaPlayer = MediaPlayer.create(this, R.raw.notify);
         mNotificationManager = (NotificationManager) getSystemService(android.content.Context.NOTIFICATION_SERVICE);
         initImageLoader(getApplicationContext());
+        mBp = new BmobGeoPoint();
         mLocationClient = new LocationClient(this.getApplicationContext());
         mMyLocationListener = new MyLocationListener();
         mLocationClient.registerLocationListener(mMyLocationListener);
@@ -179,7 +181,6 @@ public class CustomApplcation extends Application {
         option.setIsNeedAddress(true);
         option.setScanSpan(UP_TIME);
         mLocationClient.setLocOption(option);
-        mLocationClient.start();
     }
     
     public class MyLocationListener implements BDLocationListener {
@@ -187,7 +188,8 @@ public class CustomApplcation extends Application {
         @Override
         public void onReceiveLocation(BDLocation location) {
             if (location != null) {
-                mBp = new BmobGeoPoint();
+                int error = location.getLocType();
+                CommonUtils.showLog(DateQueryService.TAG, "onReceiveLocation error: "+ error);
                 mBp.setLatitude(location.getLatitude());
                 mBp.setLongitude(location.getLongitude());
                 if (location.getCity() != null && location.getDistrict() != null) {
@@ -195,7 +197,11 @@ public class CustomApplcation extends Application {
                 } else if (location.getCity() != null && location.getDistrict() == null) {
                     mAddress = location.getCity();
                 } else {
+                    mLocationClient.requestLocation();
                     mAddress = getString(R.string.unknown_address);
+                }
+                if (error == 161) {
+                    sendBroadcast(new Intent("update_near_secret_location"));
                 }
             } else {
                 mLocationClient.requestLocation();

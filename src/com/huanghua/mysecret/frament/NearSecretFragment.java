@@ -21,6 +21,7 @@ import cn.bmob.v3.datatype.BmobGeoPoint;
 import cn.bmob.v3.listener.CountListener;
 import cn.bmob.v3.listener.FindListener;
 
+import com.huanghua.mysecret.CustomApplcation;
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.adapter.base.ChoicenessListAdapter;
 import com.huanghua.mysecret.bean.Secret;
@@ -189,9 +190,6 @@ public class NearSecretFragment extends FragmentBase implements
             mQuerySecret.order("-createdAt");
             mQuerySecret.include("user");
             mListPage = 1;
-            showLog(DateQueryService.TAG, "findLocation:" + mLutil.findLocation());
-            showLog(DateQueryService.TAG, "findLocation getLongitude:" + mLutil.findLocation().getLongitude());
-            showLog(DateQueryService.TAG, "findLocation getLatitude:" + mLutil.findLocation().getLatitude());
             BmobGeoPoint mGeoPoint = new BmobGeoPoint(mLutil.findLocation()
                     .getLongitude(), mLutil.findLocation().getLatitude());
             mQuerySecret
@@ -217,6 +215,13 @@ public class NearSecretFragment extends FragmentBase implements
             mQueryIng = true;
             DateLoadThreadManager.removeAllTask();
             mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
+            BmobGeoPoint mGeoPoint = new BmobGeoPoint(mLutil.findLocation()
+                    .getLongitude(), mLutil.findLocation().getLatitude());
+            mQuerySecret
+                    .addWhereWithinKilometers(
+                            "location",
+                            mGeoPoint,
+                            Double.parseDouble(getString(R.string.def_near_secret_kilometers)));
             mQuerySecret.setCachePolicy(CachePolicy.NETWORK_ONLY);
             mQuerySecret.findObjects(getActivity(), mFindSecretListener);
         }
@@ -253,9 +258,17 @@ public class NearSecretFragment extends FragmentBase implements
     @Override
     public void onClick(View v) {
         if (v == mEmptyText) {
+            ((CustomApplcation) getActivity().getApplication()).mLocationClient.requestLocation();
             if (mLutil.isValidLocation()) {
                 mListPage = 1;
                 mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
+                BmobGeoPoint mGeoPoint = new BmobGeoPoint(mLutil.findLocation()
+                        .getLongitude(), mLutil.findLocation().getLatitude());
+                mQuerySecret
+                        .addWhereWithinKilometers(
+                                "location",
+                                mGeoPoint,
+                                Double.parseDouble(getString(R.string.def_near_secret_kilometers)));
                 mQuerySecret.findObjects(getActivity(), mFindSecretListener);
                 mQuerySecret.setCachePolicy(CachePolicy.NETWORK_ONLY);
                 mQuerySecret.count(getActivity(), Secret.class, mCountListener);
@@ -293,5 +306,20 @@ public class NearSecretFragment extends FragmentBase implements
             mListChoiceness.pullRefreshing();
             mListChoiceness.startRefresh();
         }
+    }
+
+    public void refreshDate() {
+        mQuerySecret = new BmobQuery<Secret>();
+        mQuerySecret.order("-createdAt");
+        mQuerySecret.include("user");
+        mListPage = 1;
+        BmobGeoPoint mGeoPoint = new BmobGeoPoint(mLutil.findLocation()
+                .getLongitude(), mLutil.findLocation().getLatitude());
+        mQuerySecret.addWhereWithinKilometers("location", mGeoPoint, Double
+                .parseDouble(getString(R.string.def_near_secret_kilometers)));
+        mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
+        mQuerySecret.setCachePolicy(CachePolicy.NETWORK_ONLY);
+        mQuerySecret.findObjects(getActivity(), mFindSecretListener);
+        mQuerySecret.count(getActivity(), Secret.class, mCountListener);
     }
 }
