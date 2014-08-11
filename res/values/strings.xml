@@ -107,5 +107,7 @@
     <string name="reply_you">回复你：</string>
     <string name="your_comment">你的评论：</string>
     <string name="your_secret">你的秘密：</string>
+    <string name="very_top">热门</string>
+    <string name="very_new">最新</string>
 
 </resources>

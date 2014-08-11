@@ -189,6 +189,7 @@ public class NearSecretFragment extends FragmentBase implements
             mQuerySecret = new BmobQuery<Secret>();
             mQuerySecret.order("-createdAt");
             mQuerySecret.include("user");
+            mQuerySecret.addWhereExists("user");
             mListPage = 1;
             BmobGeoPoint mGeoPoint = new BmobGeoPoint(mLutil.findLocation()
                     .getLongitude(), mLutil.findLocation().getLatitude());

@@ -14,12 +14,14 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobQuery.CachePolicy;
 import cn.bmob.v3.listener.FindListener;
 
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.adapter.base.ChoicenessListAdapter;
+import com.huanghua.mysecret.bean.Comment;
 import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.load.DateLoadThreadManager;
 import com.huanghua.mysecret.service.DateQueryService;
@@ -49,6 +51,7 @@ public class ChoicenessFragment extends FragmentBase implements
     private static final int LIST_DEFALUT_LIMIT = 20;
     private int mListPage = 1;
     private View mTopView = null;
+    private RadioGroup mTitleRadioGroup = null;
 
     private FindListener<Secret> mFindSecretListener = new FindListener<Secret>() {
         @Override
@@ -82,6 +85,13 @@ public class ChoicenessFragment extends FragmentBase implements
             }
             refreshPull();
             mListChoiceness.setPullRefreshEnable(true);
+        }
+    };
+
+    private RadioGroup.OnCheckedChangeListener mRadioListener = new RadioGroup.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+            
         }
     };
 
@@ -119,6 +129,9 @@ public class ChoicenessFragment extends FragmentBase implements
         mListChoiceness.setOnItemClickListener(this);
         mTopView = findViewById(R.id.top_view);
         mTopView.setOnClickListener(this);
+        mTitleRadioGroup = (RadioGroup) findViewById(R.id.choicess_radio);
+        //mTitleRadioGroup.setVisibility(View.VISIBLE);
+        mTitleRadioGroup.setOnCheckedChangeListener(mRadioListener);
     }
 
     @Override
@@ -128,6 +141,7 @@ public class ChoicenessFragment extends FragmentBase implements
             mQuerySecret = new BmobQuery<Secret>();
             mQuerySecret.order("-createdAt");
             mQuerySecret.include("user");
+            mQuerySecret.addWhereExists("user");
             mListPage = 1;
             mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
             mQuerySecret.setCachePolicy(CachePolicy.CACHE_ELSE_NETWORK);
@@ -209,6 +223,21 @@ public class ChoicenessFragment extends FragmentBase implements
             mListChoiceness.setSelection(0);
             mListChoiceness.pullRefreshing();
             mListChoiceness.startRefresh();
+        }
+    }
+
+    private void setCheckType() {
+        int checkId = mTitleRadioGroup.getCheckedRadioButtonId();
+        switch (checkId) {
+        case R.id.radio_hot:
+            BmobQuery<Comment> queryComment = new BmobQuery<Comment>();
+            break;
+        case R.id.radio_new:
+            mQuerySecret.order("-createdAt");
+            break;
+        default:
+            mQuerySecret.order("-createdAt");
+            break;
         }
     }
 }
