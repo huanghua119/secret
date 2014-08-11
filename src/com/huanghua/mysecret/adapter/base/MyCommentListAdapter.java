@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -22,6 +23,7 @@ import cn.bmob.v3.listener.SaveListener;
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.bean.Comment;
 import com.huanghua.mysecret.bean.CommentSupport;
+import com.huanghua.mysecret.bean.PushMessage;
 import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.load.DateLoad;
@@ -87,6 +89,11 @@ public class MyCommentListAdapter extends BaseListAdapter<Comment> {
             mUserPhoto.setImageResource(R.drawable.user_photo_default);
         }
         mUserNameView.setText(user.getUsername());
+        Drawable drawable = mContext.getResources().getDrawable(
+                user.isSex() ? R.drawable.man : R.drawable.women);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(),
+                drawable.getMinimumHeight());
+        mUserNameView.setCompoundDrawables(drawable, null, null, null);
 
         TextView commentContents = (TextView) view
                 .findViewById(R.id.item_comment_contents);
@@ -223,6 +230,21 @@ public class MyCommentListAdapter extends BaseListAdapter<Comment> {
                         ShowToast(mContext.getString(R.string.delete_fail));
                     }
                 });
+            }
+        });
+
+        BmobQuery<PushMessage> querypm = new BmobQuery<PushMessage>();
+        querypm.addWhereEqualTo("comment", comment);
+        querypm.findObjects(mContext, new FindListener<PushMessage>() {
+            @Override
+            public void onError(int arg0, String arg1) {
+            }
+
+            @Override
+            public void onSuccess(List<PushMessage> list) {
+                for (PushMessage cs : list) {
+                    cs.delete(mContext);
+                }
             }
         });
     }

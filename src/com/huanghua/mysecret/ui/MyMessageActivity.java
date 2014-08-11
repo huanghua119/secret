@@ -18,8 +18,9 @@ import cn.bmob.v3.listener.FindListener;
 
 import com.huanghua.mysecret.CustomApplcation;
 import com.huanghua.mysecret.R;
-import com.huanghua.mysecret.adapter.base.MyCommentListAdapter;
+import com.huanghua.mysecret.adapter.base.MyMessageListAdapter;
 import com.huanghua.mysecret.bean.Comment;
+import com.huanghua.mysecret.bean.PushMessage;
 import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.service.DateQueryService;
 import com.huanghua.mysecret.util.SharePreferenceUtil;
@@ -29,10 +30,10 @@ import com.huanghua.mysecret.view.xlist.XListView.IXListViewListener;
 public class MyMessageActivity extends BaseActivity implements OnClickListener,
         IXListViewListener, OnItemClickListener {
 
-    private XListView mSecretListView = null;
-    private List<Comment> mCommentList = new ArrayList<Comment>();
-    private MyCommentListAdapter mListAdapter = null;
-    private BmobQuery<Comment> mQuerySecret = null;
+    private XListView mMessageListView = null;
+    private List<PushMessage> mCommentList = new ArrayList<PushMessage>();
+    private MyMessageListAdapter mListAdapter = null;
+    private BmobQuery<PushMessage> mQueryMessage = null;
     private int mSecretCount = 0;
     private int mListPage = 1;
     private boolean mQueryIng = false;
@@ -42,14 +43,14 @@ public class MyMessageActivity extends BaseActivity implements OnClickListener,
 
     private NotificationManager mNotificationManager;
 
-    private FindListener<Comment> mFindSecretListener = new FindListener<Comment>() {
+    private FindListener<PushMessage> mFindMessageListener = new FindListener<PushMessage>() {
         @Override
-        public void onSuccess(List<Comment> list) {
+        public void onSuccess(List<PushMessage> list) {
             mListAdapter.setList(list);
             if (list.size() < mSecretCount) {
-                mSecretListView.setPullLoadEnable(true);
+                mMessageListView.setPullLoadEnable(true);
             } else {
-                mSecretListView.setPullLoadEnable(false);
+                mMessageListView.setPullLoadEnable(false);
             }
             if (list.size() == 0) {
                 mEmptyText.setVisibility(View.VISIBLE);
@@ -82,9 +83,9 @@ public class MyMessageActivity extends BaseActivity implements OnClickListener,
         public void onSuccess(int arg0) {
             mSecretCount = arg0;
             if (mSecretCount > mListPage * LIST_DEFALUT_LIMIT) {
-                mSecretListView.setPullLoadEnable(true);
+                mMessageListView.setPullLoadEnable(true);
             } else {
-                mSecretListView.setPullLoadEnable(false);
+                mMessageListView.setPullLoadEnable(false);
             }
         }
 
@@ -97,7 +98,7 @@ public class MyMessageActivity extends BaseActivity implements OnClickListener,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.mycomment_view);
+        setContentView(R.layout.mymessage_view);
         if (userManager.getCurrentUser() == null) {
             finish();
         }
@@ -106,14 +107,14 @@ public class MyMessageActivity extends BaseActivity implements OnClickListener,
     }
 
     private void init() {
-        mSecretListView = (XListView) findViewById(R.id.mycommnet_list);
-        mSecretListView.setPullLoadEnable(false);
-        mSecretListView.setPullRefreshEnable(false);
-        mSecretListView.setXListViewListener(this);
-        mSecretListView.pullRefreshing();
-        mSecretListView.setOnItemClickListener(this);
-        mListAdapter = new MyCommentListAdapter(this, mCommentList);
-        mSecretListView.setAdapter(mListAdapter);
+        mMessageListView = (XListView) findViewById(R.id.mymessage_list);
+        mMessageListView.setPullLoadEnable(false);
+        mMessageListView.setPullRefreshEnable(false);
+        mMessageListView.setXListViewListener(this);
+        mMessageListView.pullRefreshing();
+        mMessageListView.setOnItemClickListener(this);
+        mListAdapter = new MyMessageListAdapter(this, mCommentList);
+        mMessageListView.setAdapter(mListAdapter);
         mTopView = findViewById(R.id.top_view);
         mTopView.setOnClickListener(this);
         mEmptyText = (TextView) findViewById(R.id.empty_text);
@@ -124,15 +125,15 @@ public class MyMessageActivity extends BaseActivity implements OnClickListener,
     @Override
     public void onClick(View v) {
         if (v == mTopView) {
-            if (mSecretListView != null && mListAdapter.getCount() != 0) {
-                mSecretListView.setSelection(0);
+            if (mMessageListView != null && mListAdapter.getCount() != 0) {
+                mMessageListView.setSelection(0);
             }
         } else if (v == mEmptyText) {
             mListPage = 1;
-            mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
-            mQuerySecret.setCachePolicy(CachePolicy.NETWORK_ONLY);
-            mQuerySecret.findObjects(this, mFindSecretListener);
-            mQuerySecret.count(this, Comment.class, mCountListener);
+            mQueryMessage.setLimit(mListPage * LIST_DEFALUT_LIMIT);
+            mQueryMessage.setCachePolicy(CachePolicy.NETWORK_ONLY);
+            mQueryMessage.findObjects(this, mFindMessageListener);
+            mQueryMessage.count(this, Comment.class, mCountListener);
         }
     }
 
@@ -146,15 +147,15 @@ public class MyMessageActivity extends BaseActivity implements OnClickListener,
         if (!mQueryIng) {
             mListPage++;
             mQueryIng = true;
-            mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
-            mQuerySecret.setCachePolicy(CachePolicy.NETWORK_ONLY);
-            mQuerySecret.findObjects(this, mFindSecretListener);
+            mQueryMessage.setLimit(mListPage * LIST_DEFALUT_LIMIT);
+            mQueryMessage.setCachePolicy(CachePolicy.NETWORK_ONLY);
+            mQueryMessage.findObjects(this, mFindMessageListener);
         }
     }
 
     private void refreshPull() {
-        if (mSecretListView.getPullLoading()) {
-            mSecretListView.stopLoadMore();
+        if (mMessageListView.getPullLoading()) {
+            mMessageListView.stopLoadMore();
         }
         mQueryIng = false;
     }
@@ -162,18 +163,17 @@ public class MyMessageActivity extends BaseActivity implements OnClickListener,
     @Override
     protected void onResume() {
         super.onResume();
-        if (mQuerySecret == null) {
-            mQuerySecret = new BmobQuery<Comment>();
-            mQuerySecret.order("-createdAt");
-            mQuerySecret.include("secret,fromUser");
+        if (mQueryMessage == null) {
+            mQueryMessage = new BmobQuery<PushMessage>();
+            mQueryMessage.order("-createdAt");
+            mQueryMessage.include("comment,comment.secret,comment.fromUser,comment.parentComment,comment.secret.user");
             mListPage = 1;
-            mQuerySecret.addWhereEqualTo("fromUser",
+            mQueryMessage.addWhereEqualTo("toUser",
                     userManager.getCurrentUser());
-            //mQuerySecret.addWhereExists("secret");
-            mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
-            mQuerySecret.setCachePolicy(CachePolicy.NETWORK_ONLY);
-            //mQuerySecret.findObjects(this, mFindSecretListener);
-            //mQuerySecret.count(this, Comment.class, mCountListener);
+            mQueryMessage.setLimit(mListPage * LIST_DEFALUT_LIMIT);
+            mQueryMessage.setCachePolicy(CachePolicy.NETWORK_ONLY);
+            mQueryMessage.findObjects(this, mFindMessageListener);
+            mQueryMessage.count(this, Comment.class, mCountListener);
         }
         SharePreferenceUtil mSp = CustomApplcation.getInstance().getSpUtil();
         mSp.setNewMessage(false);
@@ -188,8 +188,12 @@ public class MyMessageActivity extends BaseActivity implements OnClickListener,
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
             long id) {
-        Comment c = mListAdapter.getList().get(position - 1);
-        Secret s = c.getSecret();
+        int headCount = mMessageListView.getHeaderViewsCount();
+        if (position < headCount) {
+            return;
+        }
+        PushMessage pm = mListAdapter.getList().get(position - headCount);
+        Secret s = pm.getComment().getSecret();
         if (s != null && s.getContents() != null && !s.getContents().equals("")) {
             Intent intent = new Intent();
             intent.setClass(this, WriteCommentActivity.class);

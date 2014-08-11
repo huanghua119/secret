@@ -158,7 +158,7 @@ public class MyCommentActivity extends BaseActivity implements OnClickListener,
         if (mQuerySecret == null) {
             mQuerySecret = new BmobQuery<Comment>();
             mQuerySecret.order("-createdAt");
-            mQuerySecret.include("secret,fromUser");
+            mQuerySecret.include("secret,secret.user,fromUser");
             mListPage = 1;
             mQuerySecret.addWhereEqualTo("fromUser",
                     userManager.getCurrentUser());

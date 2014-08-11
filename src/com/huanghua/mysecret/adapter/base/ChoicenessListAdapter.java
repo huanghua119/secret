@@ -20,6 +20,8 @@ import cn.bmob.v3.listener.FindListener;
 
 import com.huanghua.mysecret.CustomApplcation;
 import com.huanghua.mysecret.R;
+import com.huanghua.mysecret.bean.Comment;
+import com.huanghua.mysecret.bean.PushMessage;
 import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.bean.SecretSupport;
 import com.huanghua.mysecret.bean.User;
@@ -205,6 +207,24 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
                 for (SecretSupport ss : list) {
                     ss.delete(mContext);
                 }
+                BmobQuery<PushMessage> querypm = new BmobQuery<PushMessage>();
+                querypm.include("comment.secret");
+                BmobQuery<Comment> querypc = new BmobQuery<Comment>();
+                querypc.addWhereEqualTo("secret", secret);
+                querypm.addWhereMatchesQuery("comment", Comment.class.getSimpleName(),
+                        querypc);
+                querypm.findObjects(mContext, new FindListener<PushMessage>() {
+                    @Override
+                    public void onError(int arg0, String arg1) {
+                    }
+
+                    @Override
+                    public void onSuccess(List<PushMessage> list) {
+                        for (PushMessage cs : list) {
+                            cs.delete(mContext);
+                        }
+                    }
+                });
                 secret.delete(mContext, new DeleteListener() {
                     @Override
                     public void onSuccess() {

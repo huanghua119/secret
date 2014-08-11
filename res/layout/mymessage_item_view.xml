@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/activity_bg_color"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/item_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dip"
+        android:layout_marginRight="6dip"
+        android:background="?attr/list_item_bg_color"
+        android:padding="6dip" >
+
+        <ImageView
+            android:id="@+id/item_message_photo"
+            android:layout_width="35dip"
+            android:layout_height="35dip"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="5dip"
+            android:background="?attr/user_photo_frame"
+            android:contentDescription="@string/app_name"
+            android:src="?attr/user_photo_default" />
+
+        <TextView
+            android:id="@+id/item_message_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/item_message_photo"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:textColor="?attr/item_name_color"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/item_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/item_message_photo"
+            android:gravity="center_vertical"
+            android:textColor="?attr/item_text_color"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dip"
+        android:layout_marginRight="6dip"
+        android:background="?attr/list_item_bg_color"
+        android:orientation="horizontal"
+        android:padding="6dip"
+        android:paddingBottom="10dip" >
+
+        <TextView
+            android:id="@+id/item_contents_one"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:textColor="?attr/list_item_content_color"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/driver"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dip"
+        android:layout_marginRight="6dip"
+        android:background="@drawable/divider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dip"
+        android:layout_marginRight="6dip"
+        android:background="?attr/list_item_bg_color"
+        android:orientation="vertical"
+        android:padding="10dip"
+        android:paddingTop="6dip" >
+
+        <TextView
+            android:id="@+id/item_contents_two"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/list_item_content_color"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dip"
+        android:background="@android:color/transparent" />
+
+</LinearLayout>
