@@ -47,24 +47,24 @@
             android:layout_height="match_parent"
             android:gravity="center_horizontal" >
 
+
+            <TextView
+                android:id="@+id/logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dip"
+                android:background="@drawable/font" />
+            
             <ImageView
                 android:id="@+id/one_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
                 android:layout_marginTop="15dip"
                 android:background="@drawable/defalut_photo"
                 android:contentDescription="@string/app_name"
                 android:src="@drawable/photo_frame" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/one_view"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="10dip"
-                android:background="@drawable/font" />
 
             <LinearLayout
                 android:layout_width="match_parent"

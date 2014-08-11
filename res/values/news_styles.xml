@@ -71,7 +71,7 @@
         <item name="user_photo_frame">@drawable/user_photo_frame</item>
         <item name="man">@drawable/man</item>
         <item name="women">@drawable/women</item>
-        <item name="ic_ding_bg">@drawable/ic_ding_bg</item>
+        <item name="ic_ding_bg">@drawable/space_ic_ding_bg</item>
         <item name="arrow">@drawable/arrow</item>
         <item name="more_single_bg">@drawable/space_more_single_bg</item>
         <item name="more_up_bg">@drawable/space_more_up_bg</item>
