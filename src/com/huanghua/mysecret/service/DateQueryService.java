@@ -272,7 +272,8 @@ public class DateQueryService extends Service {
         if (mQuerySecret == null) {
             mQuerySecret = new BmobQuery<Secret>();
             mQuerySecret.order("-createdAt");
-            mQuerySecret.include("user");
+            mQuerySecret.addWhereGreaterThanOrEqualTo("commentCount",
+                    Integer.parseInt(getString(R.string.def_top_sercet_count)));
             mQuerySecret.setCachePolicy(CachePolicy.NETWORK_ONLY);
         }
         mQuerySecret.findObjects(this, mQuerySecretListener);

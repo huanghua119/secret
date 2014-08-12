@@ -174,6 +174,8 @@ public class SupportView extends LinearLayout implements View.OnClickListener {
                     @Override
                     public void onSuccess() {
                         CommonUtils.showLog("save secretSupport success");
+                        mCurrentSecret.increment("commentCount");
+                        mCurrentSecret.update(getContext());
                         if (mIsComment) {
                             getContext().sendBroadcast(new Intent(DATE_COMMENT_CHANGER));
                         } else {
