@@ -12,6 +12,7 @@ public class Secret extends BmobObject {
     private User user;
     private BmobGeoPoint location;
     private String address;
+    private Integer commentCount;
 
     public String getAddress() {
         return address;
@@ -55,5 +56,13 @@ public class Secret extends BmobObject {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Integer getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(Integer commentCount) {
+        this.commentCount = commentCount;
     }
 }

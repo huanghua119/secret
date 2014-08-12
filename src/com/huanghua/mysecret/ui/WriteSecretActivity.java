@@ -144,6 +144,8 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
                 final User user = (User) getIntent().getSerializableExtra("toUser");
                 Secret secret = (Secret) getIntent().getSerializableExtra(
                         "secret");
+                secret.increment("commentCount");
+                secret.update(this);
                 final Comment parentComment = (Comment) getIntent().getSerializableExtra(
                         "comment");
                 final Comment comment = new Comment();
@@ -184,6 +186,8 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
                 final User user = (User) getIntent().getSerializableExtra("toUser");
                 Secret secret = (Secret) getIntent().getSerializableExtra(
                         "secret");
+                secret.increment("commentCount");
+                secret.update(this);
                 final Comment comment = new Comment();
                 comment.setContents(content);
                 comment.setFromUser(userManager.getCurrentUser());

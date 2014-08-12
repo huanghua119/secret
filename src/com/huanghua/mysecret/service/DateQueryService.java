@@ -25,9 +25,11 @@ import cn.bmob.v3.BmobInstallation;
 import cn.bmob.v3.BmobPushManager;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobQuery.CachePolicy;
+import cn.bmob.v3.BmobRealTimeData;
 import cn.bmob.v3.listener.CountListener;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.ValueEventListener;
 
 import com.huanghua.mysecret.CustomApplcation;
 import com.huanghua.mysecret.R;
@@ -172,6 +174,7 @@ public class DateQueryService extends Service {
                 }
             }
         }, 0, QUERY_PERIOD_TIME);
+        queryNewSecret2();
         super.onCreate();
     }
 
@@ -180,6 +183,7 @@ public class DateQueryService extends Service {
         CommonUtils.showLog(TAG, "onDestroy");
         mTimer.cancel();
         unregisterReceiver(mPushMessageReceiver);
+        mRtd.unsubTableUpdate(Secret.class.getSimpleName());
         super.onDestroy();
     }
 
@@ -223,6 +227,7 @@ public class DateQueryService extends Service {
     public static final String QUERY_NEW_SECRTE_ACTION = "query_new_secret_action";
     public static final String CHECK_NEW_VERSION_UPDATE = "check_new_version_update";
     private static final int QUERY_PERIOD_TIME = 10 * 1000 * 60;
+    private BmobRealTimeData mRtd = null;
     private FindListener<Secret> mQuerySecretListener = new FindListener<Secret>() {
         @Override
         public void onError(int arg0, String arg1) {
@@ -330,5 +335,31 @@ public class DateQueryService extends Service {
         int day = c.get(Calendar.DAY_OF_MONTH);
         editor.putString("check_last_date", month + ":" + day);
         editor.commit();
+    }
+
+    private void queryNewSecret2() {
+        mRtd = new BmobRealTimeData();
+        mRtd.start(this, new ValueEventListener() {
+            @Override
+            public void onDataChange(JSONObject arg0) {
+                CommonUtils.showLog(TAG, "onDataChange arg0:" +  arg0);
+                JSONObject jsonObject = arg0;
+                try {
+                    String tag = jsonObject.getString("data");
+                    CommonUtils.showLog(TAG, "onDataChange tag:" +  tag);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onConnectCompleted() {
+                if (mRtd.isConnected()) {
+                    mRtd.subTableUpdate(Secret.class.getSimpleName());
+                }
+            }
+        });
+        if (mRtd.isConnected()) {
+            mRtd.subTableUpdate(Secret.class.getSimpleName());
+        }
     }
 }

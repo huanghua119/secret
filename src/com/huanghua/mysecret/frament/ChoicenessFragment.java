@@ -1,35 +1,21 @@
 package com.huanghua.mysecret.frament;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RadioGroup;
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.BmobQuery.CachePolicy;
-import cn.bmob.v3.listener.FindListener;
 
 import com.huanghua.mysecret.R;
-import com.huanghua.mysecret.adapter.base.ChoicenessListAdapter;
-import com.huanghua.mysecret.bean.Comment;
-import com.huanghua.mysecret.bean.Secret;
-import com.huanghua.mysecret.load.DateLoadThreadManager;
-import com.huanghua.mysecret.service.DateQueryService;
 import com.huanghua.mysecret.ui.BaseActivity;
-import com.huanghua.mysecret.ui.WriteCommentActivity;
 import com.huanghua.mysecret.ui.WriteSecretActivity;
-import com.huanghua.mysecret.view.xlist.XListView;
-import com.huanghua.mysecret.view.xlist.XListView.IXListViewListener;
 
 /***
  * 精选秘密
@@ -38,60 +24,29 @@ import com.huanghua.mysecret.view.xlist.XListView.IXListViewListener;
  * 
  */
 public class ChoicenessFragment extends FragmentBase implements
-        IXListViewListener, View.OnClickListener, OnItemClickListener {
+        View.OnClickListener {
 
-    private XListView mListChoiceness;
-    private ChoicenessListAdapter mChoicenessAdapter;
-    private List<Secret> mSecretList = new ArrayList<Secret>();
-    private BmobQuery<Secret> mQuerySecret = null;
     private ImageButton mWriteSecret = null;
-    private boolean mQueryIng = false;
-    private View mLoadView = null;
-    private ImageView mLoadImage = null;
-    private static final int LIST_DEFALUT_LIMIT = 20;
-    private int mListPage = 1;
     private View mTopView = null;
     private RadioGroup mTitleRadioGroup = null;
-
-    private FindListener<Secret> mFindSecretListener = new FindListener<Secret>() {
-        @Override
-        public void onSuccess(List<Secret> list) {
-            showLog("query secret success:" + list.size());
-            mChoicenessAdapter.setList(list);
-            refreshPull();
-            if (mLoadView.getVisibility() == View.VISIBLE) {
-                mLoadView.setVisibility(View.GONE);
-                mLoadImage.clearAnimation();
-            }
-            if (list.size() > 0) {
-                DateQueryService.mLastSecretId = list.get(0).getObjectId();
-            }
-            if (list.size() < DateQueryService.sSecretCount) {
-                mListChoiceness.setPullLoadEnable(true);
-            } else {
-                mListChoiceness.setPullLoadEnable(false);
-            }
-            mListChoiceness.setPullRefreshEnable(true);
-        }
-
-        @Override
-        public void onError(int arg0, String arg1) {
-            showLog("query secret error:" + arg1 + " arg0:" + arg0);
-            if (mListPage > 1) {
-                mListPage--;
-            }
-            if (arg0 == 9010) {
-                ShowToast(R.string.no_check_network);
-            }
-            refreshPull();
-            mListChoiceness.setPullRefreshEnable(true);
-        }
-    };
+    private ViewPager mPager;
+    private VeryTopFragment mTopFragment = null;
+    private VeryNewFragment mNewFragment = null;
+    private static final int TAB_VERY_TOP = 0;
+    private static final int TAB_VERY_NEW = 1;
+    private static final int TAB_COUNT = 2;
 
     private RadioGroup.OnCheckedChangeListener mRadioListener = new RadioGroup.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
-            
+            switch (checkedId) {
+            case R.id.radio_hot:
+                mPager.setCurrentItem(TAB_VERY_TOP);
+                break;
+            case R.id.radio_new:
+                mPager.setCurrentItem(TAB_VERY_NEW);
+                break;
+            }
         }
     };
 
@@ -109,92 +64,48 @@ public class ChoicenessFragment extends FragmentBase implements
     }
 
     private void init() {
+        mPager = (ViewPager) findViewById(R.id.pager);
+        mPager.setAdapter(new ViewPagerAdapter(getActivity()
+                .getFragmentManager()));
+        mPager.setOnPageChangeListener(new PageChangeListener());
+
         mWriteSecret = (ImageButton) findViewById(R.id.write_secret);
         mWriteSecret.setOnClickListener(this);
 
-        mLoadView = findViewById(R.id.load_view);
-        mLoadImage = (ImageView) findViewById(R.id.load_img);
-        Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(
-                getActivity(), R.anim.loading_animation);
-        mLoadImage.startAnimation(hyperspaceJumpAnimation);
-
-        mListChoiceness = (XListView) findViewById(R.id.list_choiceness);
-        mListChoiceness.setPullLoadEnable(false);
-        mListChoiceness.setPullRefreshEnable(true);
-        mListChoiceness.setXListViewListener(this);
-        mListChoiceness.pullRefreshing();
-        mChoicenessAdapter = new ChoicenessListAdapter(getActivity(),
-                mSecretList);
-        mListChoiceness.setAdapter(mChoicenessAdapter);
-        mListChoiceness.setOnItemClickListener(this);
         mTopView = findViewById(R.id.top_view);
         mTopView.setOnClickListener(this);
         mTitleRadioGroup = (RadioGroup) findViewById(R.id.choicess_radio);
-        //mTitleRadioGroup.setVisibility(View.VISIBLE);
+        mTitleRadioGroup.setVisibility(View.VISIBLE);
         mTitleRadioGroup.setOnCheckedChangeListener(mRadioListener);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (mQuerySecret == null) {
-            mQuerySecret = new BmobQuery<Secret>();
-            mQuerySecret.order("-createdAt");
-            mQuerySecret.include("user");
-            mQuerySecret.addWhereExists("user");
-            mListPage = 1;
-            mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
-            mQuerySecret.setCachePolicy(CachePolicy.CACHE_ELSE_NETWORK);
-            mQuerySecret.findObjects(getActivity(), mFindSecretListener);
-            //toTopSelect();
+        int checkId = mTitleRadioGroup.getCheckedRadioButtonId();
+        switch (checkId) {
+        case R.id.radio_hot:
+            mPager.setCurrentItem(TAB_VERY_TOP, false);
+            break;
+        case R.id.radio_new:
+        default:
+            mPager.setCurrentItem(TAB_VERY_NEW, false);
+            break;
         }
-    }
 
-    @Override
-    public void onRefresh() {
-        showLog("choiceness onRefresh");
-        if (!mQueryIng) {
-            mListPage = 1;
-            mQueryIng = true;
-            DateLoadThreadManager.removeAllTask();
-            mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
-            mQuerySecret.setCachePolicy(CachePolicy.NETWORK_ONLY);
-            mQuerySecret.findObjects(getActivity(), mFindSecretListener);
-        }
-    }
-
-    @Override
-    public void onLoadMore() {
-        showLog("choiceness onLoadMore:" + mListChoiceness.getPullLoading());
-        if (!mQueryIng) {
-            mListPage++;
-            mQueryIng = true;
-            mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
-            mQuerySecret.setCachePolicy(CachePolicy.NETWORK_ONLY);
-            mQuerySecret.findObjects(getActivity(), mFindSecretListener);
-        }
-    }
-
-    private void refreshPull() {
-        showLog("refreshPull :" + mListChoiceness.getPullRefreshing());
-        if (mListChoiceness.getPullRefreshing()) {
-            mListChoiceness.stopRefresh();
-            if (DateQueryService.sHasNewSecret && mQueryIng) {
-                DateQueryService.sHasNewSecret = false;
-                getActivity().sendBroadcast(new Intent(DateQueryService.QUERY_NEW_SECRTE_ACTION));
-            }
-        }
-        if (mListChoiceness.getPullLoading()) {
-            mListChoiceness.stopLoadMore();
-        }
-        mQueryIng = false;
     }
 
     @Override
     public void onClick(View v) {
         if (v == mTopView) {
-            if (mListChoiceness != null && mChoicenessAdapter.getCount() != 0) {
-                mListChoiceness.setSelection(0);
+            int checkId = mTitleRadioGroup.getCheckedRadioButtonId();
+            switch (checkId) {
+            case R.id.radio_hot:
+                mTopFragment.toListViewTop();
+                break;
+            case R.id.radio_new:
+                mNewFragment.toListViewTop();
+                break;
             }
         } else if (((BaseActivity) getActivity()).checkUserLogin()) {
             return;
@@ -206,38 +117,71 @@ public class ChoicenessFragment extends FragmentBase implements
         }
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
-        Secret s = mChoicenessAdapter.getList().get(position - 1);
-        if (s != null) {
-            Intent intent = new Intent();
-            intent.setClass(getActivity(), WriteCommentActivity.class);
-            intent.putExtra("secret", s);
-            startAnimActivity(intent);
-        }
-    }
-
     public void toTopSelect() {
-        if (mListChoiceness != null && mListChoiceness.getCount() > 0 && !mListChoiceness.getPullRefreshing()) {
-            mListChoiceness.setSelection(0);
-            mListChoiceness.pullRefreshing();
-            mListChoiceness.startRefresh();
-        }
-    }
-
-    private void setCheckType() {
         int checkId = mTitleRadioGroup.getCheckedRadioButtonId();
         switch (checkId) {
         case R.id.radio_hot:
-            BmobQuery<Comment> queryComment = new BmobQuery<Comment>();
+            mTopFragment.toTopSelect();
             break;
         case R.id.radio_new:
-            mQuerySecret.order("-createdAt");
-            break;
-        default:
-            mQuerySecret.order("-createdAt");
+            mNewFragment.toTopSelect();
             break;
         }
     }
+
+    public class ViewPagerAdapter extends FragmentPagerAdapter {
+
+        public ViewPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int arg0) {
+            switch (arg0) {
+            case TAB_VERY_TOP:
+                mTopFragment = new VeryTopFragment();
+                return mTopFragment;
+            case TAB_VERY_NEW:
+                mNewFragment = new VeryNewFragment();
+                return mNewFragment;
+            }
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            return TAB_COUNT;
+        }
+    }
+
+    private class PageChangeListener implements OnPageChangeListener {
+
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+
+        }
+
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+        }
+
+        @Override
+        public void onPageSelected(int arg0) {
+            checkRadio(arg0);
+        }
+
+    }
+
+    private void checkRadio(int itemId) {
+        switch (itemId) {
+        case TAB_VERY_TOP:
+            mTitleRadioGroup.check(R.id.radio_hot);
+            break;
+        case TAB_VERY_NEW:
+            mTitleRadioGroup.check(R.id.radio_new);
+            break;
+        }
+    }
+
 }

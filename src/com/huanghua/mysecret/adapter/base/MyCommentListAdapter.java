@@ -51,7 +51,7 @@ public class MyCommentListAdapter extends BaseListAdapter<Comment> {
         List<Comment> list = getList();
         final Comment comment = list.get(position);
         User user = comment.getFromUser();
-        Secret secret = comment.getSecret();
+        final Secret secret = comment.getSecret();
 
         ImageView mUserPhoto = (ImageView) view
                 .findViewById(R.id.item_comment_photo);
@@ -72,7 +72,7 @@ public class MyCommentListAdapter extends BaseListAdapter<Comment> {
                                             public void onClick(
                                                     DialogInterface dialog,
                                                     int which) {
-                                                deleteComment(comment);
+                                                deleteComment(comment, secret);
                                             }
                                         })
                                 .setNegativeButton(android.R.string.cancel,
@@ -203,7 +203,7 @@ public class MyCommentListAdapter extends BaseListAdapter<Comment> {
         });
     }
 
-    private void deleteComment(final Comment comment) {
+    private void deleteComment(final Comment comment, final Secret secret) {
         BmobQuery<CommentSupport> querycs = new BmobQuery<CommentSupport>();
         querycs.addWhereEqualTo("comment", comment);
         querycs.setLimit(1000);
@@ -218,6 +218,8 @@ public class MyCommentListAdapter extends BaseListAdapter<Comment> {
                 for (CommentSupport cs : list) {
                     cs.delete(mContext);
                 }
+                secret.increment("commentCount", -1);
+                secret.update(mContext);
                 comment.delete(mContext, new DeleteListener() {
                     @Override
                     public void onSuccess() {

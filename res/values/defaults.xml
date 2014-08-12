@@ -3,5 +3,6 @@
 
     <string name="def_near_secret_kilometers">100.0</string>
     <string name="text_zero">0</string>
+    <string name="def_top_sercet_count">5</string>
 
 </resources>
