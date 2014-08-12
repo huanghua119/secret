@@ -61,6 +61,10 @@
         <attr name="tab_choiceness" format="reference" />
         <attr name="tab_nearby" format="reference" />
         <attr name="tab_more" format="reference" />
+        
+        <!-- 标题切换图标 -->
+        <attr name="title_left_selected" format="reference" />
+        <attr name="title_right_selected" format="reference" />
     </declare-styleable>
 
 </resources>

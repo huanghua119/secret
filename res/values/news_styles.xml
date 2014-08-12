@@ -40,6 +40,8 @@
         <item name="tab_choiceness">@drawable/tab_choiceness</item>
         <item name="tab_nearby">@drawable/tab_nearby</item>
         <item name="tab_more">@drawable/tab_more</item>
+        <item name="title_left_selected">@drawable/title_radio_left_bg</item>
+        <item name="title_right_selected">@drawable/title_radio_right_bg</item>
         
     </style>
 
@@ -82,6 +84,8 @@
         <item name="tab_choiceness">@drawable/space_tab_choiceness</item>
         <item name="tab_nearby">@drawable/space_tab_nearby</item>
         <item name="tab_more">@drawable/space_tab_more</item>
+        <item name="title_left_selected">@drawable/space_title_radio_left_bg</item>
+        <item name="title_right_selected">@drawable/space_title_radio_right_bg</item>
     </style>
 
 </resources>
