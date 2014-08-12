@@ -242,6 +242,7 @@ public class DateQueryService extends Service {
                     return;
                 }
                 sHasNewSecret = false;
+                CommonUtils.showLog(TAG, "mLastSecretId:" + mLastSecretId + " newSecretId:" + secret.getObjectId());
                 if (mLastSecretId != null) {
                     if (!secret.getObjectId().equals(mLastSecretId)) {
                         sHasNewSecret = true;

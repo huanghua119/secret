@@ -57,9 +57,6 @@ public class VeryNewFragment extends FragmentBase2 implements
                 mLoadView.setVisibility(View.GONE);
                 mLoadImage.clearAnimation();
             }
-            if (list.size() > 0) {
-                DateQueryService.mLastSecretId = list.get(0).getObjectId();
-            }
             if (list.size() < mSecretCount) {
                 mListChoiceness.setPullLoadEnable(true);
             } else {
@@ -176,11 +173,6 @@ public class VeryNewFragment extends FragmentBase2 implements
         showLog("refreshPull :" + mListChoiceness.getPullRefreshing());
         if (mListChoiceness.getPullRefreshing()) {
             mListChoiceness.stopRefresh();
-            if (DateQueryService.sHasNewSecret && mQueryIng) {
-                DateQueryService.sHasNewSecret = false;
-                getActivity().sendBroadcast(
-                        new Intent(DateQueryService.QUERY_NEW_SECRTE_ACTION));
-            }
         }
         if (mListChoiceness.getPullLoading()) {
             mListChoiceness.stopLoadMore();
