@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
@@ -43,11 +45,17 @@ public class MySecretActivity extends BaseActivity implements OnClickListener,
     private TextView mSecretCountView = null;
     private TextView mEmptyText = null;
     private View mTopView = null;
+    private View mLoadView = null;
+    private ImageView mLoadImage = null;
 
     private FindListener<Secret> mFindSecretListener = new FindListener<Secret>() {
         @Override
         public void onSuccess(List<Secret> list) {
             mSecretAdapter.setList(list);
+            if (mLoadView.getVisibility() == View.VISIBLE) {
+                mLoadView.setVisibility(View.GONE);
+                mLoadImage.clearAnimation();
+            }
             if (list.size() < mSecretCount) {
                 mSecretListView.setPullLoadEnable(true);
             } else {
@@ -101,6 +109,12 @@ public class MySecretActivity extends BaseActivity implements OnClickListener,
     }
 
     private void init() {
+        mLoadView = findViewById(R.id.load_view);
+        mLoadImage = (ImageView) findViewById(R.id.load_img);
+        Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(this,
+                R.anim.loading_animation);
+        mLoadImage.startAnimation(hyperspaceJumpAnimation);
+        mLoadView.setVisibility(View.VISIBLE);
         mSecretListView = (XListView) findViewById(R.id.secret_list);
         mSecretListView.setPullLoadEnable(false);
         mSecretListView.setPullRefreshEnable(false);

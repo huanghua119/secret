@@ -22,7 +22,6 @@ import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.adapter.base.ChoicenessListAdapter;
 import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.load.DateLoadThreadManager;
-import com.huanghua.mysecret.service.DateQueryService;
 import com.huanghua.mysecret.ui.WriteCommentActivity;
 import com.huanghua.mysecret.view.xlist.XListView;
 import com.huanghua.mysecret.view.xlist.XListView.IXListViewListener;

@@ -8,7 +8,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 import cn.bmob.v3.BmobQuery;
@@ -40,6 +43,8 @@ public class MyMessageActivity extends BaseActivity implements OnClickListener,
     private static final int LIST_DEFALUT_LIMIT = 20;
     private View mTopView = null;
     private TextView mEmptyText = null;
+    private View mLoadView = null;
+    private ImageView mLoadImage = null;
 
     private NotificationManager mNotificationManager;
 
@@ -47,6 +52,10 @@ public class MyMessageActivity extends BaseActivity implements OnClickListener,
         @Override
         public void onSuccess(List<PushMessage> list) {
             mListAdapter.setList(list);
+            if (mLoadView.getVisibility() == View.VISIBLE) {
+                mLoadView.setVisibility(View.GONE);
+                mLoadImage.clearAnimation();
+            }
             if (list.size() < mSecretCount) {
                 mMessageListView.setPullLoadEnable(true);
             } else {
@@ -107,6 +116,12 @@ public class MyMessageActivity extends BaseActivity implements OnClickListener,
     }
 
     private void init() {
+        mLoadView = findViewById(R.id.load_view);
+        mLoadImage = (ImageView) findViewById(R.id.load_img);
+        Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(this,
+                R.anim.loading_animation);
+        mLoadImage.startAnimation(hyperspaceJumpAnimation);
+        mLoadView.setVisibility(View.VISIBLE);
         mMessageListView = (XListView) findViewById(R.id.mymessage_list);
         mMessageListView.setPullLoadEnable(false);
         mMessageListView.setPullRefreshEnable(false);
