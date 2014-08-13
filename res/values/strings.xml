@@ -109,5 +109,7 @@
     <string name="your_secret">你的秘密：</string>
     <string name="very_top">热门</string>
     <string name="very_new">最新</string>
+    <string name="weibo_login">新浪微博登陆</string>
+    <string name="qq_login">腾讯QQ登陆</string>
 
 </resources>

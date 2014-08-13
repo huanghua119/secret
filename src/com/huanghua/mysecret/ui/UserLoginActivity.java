@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import cn.bmob.v3.listener.UpdateListener;
 
 import com.huanghua.mysecret.CustomApplcation;
@@ -32,8 +33,11 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
     private View mUserDetail = null;
 
     private User mCurrentUser = null;
+    private TextView mWeiboLogin = null;
+    private TextView mQQLogin = null;
 
     public static final int DIALOG_NEW_REGISTER = 1;
+    public static final int OTHEN_LOGIN_WEIBO = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +66,10 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
         mLogout.setOnClickListener(this);
         mLoginView = findViewById(R.id.login_view);
         mUserDetail = findViewById(R.id.user_detail_view);
+        mWeiboLogin = (TextView) findViewById(R.id.weibo_login);
+        mWeiboLogin.setOnClickListener(this);
+        mQQLogin = (TextView) findViewById(R.id.qq_login);
+        mQQLogin.setOnClickListener(this);
     }
 
     @Override
@@ -96,6 +104,50 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
         } else if (v == mLogout) {
             userManager.logout();
             onBackPressed();
+        } else if (v == mWeiboLogin) {
+            othonLogin(OTHEN_LOGIN_WEIBO);
+        } else if (v == mQQLogin) {
+            
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void othonLogin(int type) {
+        showDialog(DIALOG_NEW_REGISTER);
+        if (type == OTHEN_LOGIN_WEIBO) {
+            userManager.weiboLogin(new UserManagerListener() {
+                @Override
+                public void onSuccess(User u) {
+                    SharePreferenceUtil mSp = CustomApplcation.getInstance().getSpUtil();
+                    Installation in = new Installation(UserLoginActivity.this);
+                    in.setUser(userManager.getCurrentUser());
+                    in.update(UserLoginActivity.this, mSp.getInstallationObjectId() , new UpdateListener() {
+                        @Override
+                        public void onSuccess() {
+                            showLog(DateQueryService.TAG, "login onSuccess");
+                        }
+
+                        @Override
+                        public void onFailure(int arg0, String arg1) {
+                            showLog(DateQueryService.TAG, "login onFailure arg1:" + arg1
+                                    + " arg0:" + arg0);
+                        }
+                    });
+                    removeDialog(DIALOG_NEW_REGISTER);
+                    finish();
+                }
+                
+                @Override
+                public void onError(int arg0, String arg1) {
+                    showLog("user login failure:" + arg0);
+                    String str = getString(R.string.no_conn_network);
+                    if (arg0 == 101 || arg0 == 0) {
+                        str = getString(R.string.login_fail);
+                    }
+                    removeDialog(DIALOG_NEW_REGISTER);
+                    ShowToast(str);
+                }
+            }, 1);
         }
     }
 
