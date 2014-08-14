@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
@@ -49,7 +50,7 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
 
     private User mCurrentUser = null;
     private WeiboLoginButton mWeiboLogin = null;
-    private TextView mQQLogin = null;
+    private ImageView mQQLogin = null;
     /** 登陆认证对应的listener */
     private AuthListener mLoginListener = new AuthListener();
     /** 登出操作对应的listener */
@@ -102,7 +103,7 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
         mLogout.setOnClickListener(this);
         mLoginView = findViewById(R.id.login_view);
         mUserDetail = findViewById(R.id.user_detail_view);
-        mQQLogin = (TextView) findViewById(R.id.qq_login);
+        mQQLogin = (ImageView) findViewById(R.id.qq_login);
         mQQLogin.setOnClickListener(this);
     }
 

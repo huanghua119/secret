@@ -53,10 +53,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="30dip"
+                android:layout_marginTop="100dip"
                 android:background="@drawable/font" />
             
-            <ImageView
+            <!--<ImageView
                 android:id="@+id/one_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -64,14 +64,13 @@
                 android:layout_marginTop="15dip"
                 android:background="@drawable/defalut_photo"
                 android:contentDescription="@string/app_name"
-                android:src="@drawable/photo_frame" />
+                android:src="@drawable/photo_frame" />-->
 
-            <LinearLayout
+              <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="60dip"
                 android:gravity="center_horizontal"
+                android:layout_marginTop="200dip"
                 android:orientation="vertical" >
 
                 <TextView
@@ -97,7 +96,18 @@
                 android:layout_marginBottom="12dip"
                 android:gravity="center_horizontal"
                 android:text="@string/slogan"
-                android:textColor="@android:color/black"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="14sp" />
+            
+            <TextView
+                android:id="@+id/copyright"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="40dip"
+                android:gravity="center_horizontal"
+                android:text="@string/copyright"
+                android:textColor="@android:color/darker_gray"
                 android:textSize="14sp" />
         </RelativeLayout>
     </FrameLayout>

@@ -46,7 +46,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="34dip"
+            android:layout_marginTop="30dip"
             android:background="@drawable/password_bg"
             android:gravity="center_horizontal"
             android:orientation="vertical" >
@@ -101,26 +101,38 @@
                 android:textColor="@drawable/text_white_black"
                 android:textSize="18sp" />
         </LinearLayout>
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:drawablePadding="10dip"
+            android:text="@string/other_login"
+            android:drawableLeft="@drawable/other_purple"
+            android:drawableRight="@drawable/other_purple"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+        
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:layout_marginTop="20dip"
+            android:visibility="visible"
             android:orientation="horizontal" >
 
             <com.huanghua.mysecret.weibologin.WeiboLoginButton
-                android:id="@+id/weibo_login"
+            	android:id="@+id/weibo_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/weibo_login"
-                android:textSize="16sp" />
-            <TextView
-                android:id="@+id/qq_login"
+                android:background="@drawable/sina_bg" />
+            
+            <ImageView
+               	android:id="@+id/qq_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dip"
-                android:text="@string/qq_login"
-                android:textSize="16sp" />
+                android:layout_marginLeft="30dip"
+                android:background="@drawable/qq_bg" />
         </LinearLayout>
     </LinearLayout>
 

@@ -36,14 +36,14 @@
             android:textSize="16sp" />
     </RelativeLayout>
     
-    <ImageView
+    <!--  <ImageView
         android:id="@+id/one_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dip"
         android:background="@drawable/defalut_photo"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/photo_frame" />
+        android:src="@drawable/photo_frame" />-->
 
     <LinearLayout
         android:id="@+id/login_view"
@@ -55,7 +55,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dip"
+            android:layout_marginTop="30dip"
             android:padding="10dip"
             android:gravity="center_horizontal"
             android:orientation="vertical" >
@@ -63,7 +63,7 @@
             <EditText
                 android:id="@+id/user_name"
                 android:layout_width="280dip"
-                android:layout_height="50dip"
+                android:layout_height="60dip"
                 android:background="@drawable/edit_box_login_top"
                 android:drawableLeft="@drawable/user"
                 android:drawablePadding="10dip"
@@ -75,7 +75,7 @@
             <EditText
                 android:id="@+id/user_pass"
                 android:layout_width="280dip"
-                android:layout_height="50dip"
+                android:layout_height="60dip"
                 android:background="@drawable/edit_box_login_bottom"
                 android:drawableLeft="@drawable/password"
                 android:drawablePadding="10dip"
@@ -88,7 +88,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dip"
+            android:layout_marginTop="30dip"
             android:gravity="center_horizontal"
             android:orientation="horizontal" >
 
@@ -96,6 +96,7 @@
                 android:id="@+id/login"
                 android:layout_width="100dip"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="24dip"
                 android:background="@drawable/login_commit_left_bg"
                 android:paddingRight="15dip"
                 android:text="@string/user_login"
@@ -113,33 +114,45 @@
                 android:id="@+id/register"
                 android:layout_width="100dip"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="24dip"
                 android:background="@drawable/login_commit_right_bg"
                 android:onClick="onRegister"
                 android:paddingLeft="15dip"
                 android:text="@string/user_register"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
+            
         </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dip"
+            android:drawablePadding="10dip"
+            android:text="@string/other_login"
+            android:drawableLeft="@drawable/other"
+            android:drawableRight="@drawable/other"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:layout_marginTop="20dip"
+            android:layout_marginTop="30dip"
+            android:visibility="visible"
             android:orientation="horizontal" >
 
             <com.huanghua.mysecret.weibologin.WeiboLoginButton
-                android:id="@+id/weibo_login"
+            	android:id="@+id/weibo_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/weibo_login"
-                android:textSize="16sp" />
-            <TextView
-                android:id="@+id/qq_login"
+                android:background="@drawable/sina_bg" />
+            
+            <ImageView
+               	android:id="@+id/qq_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dip"
-                android:text="@string/qq_login"
-                android:textSize="16sp" />
+                android:layout_marginLeft="30dip"
+                android:background="@drawable/qq_bg" />
         </LinearLayout>
 
     </LinearLayout>
