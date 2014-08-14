@@ -5,10 +5,15 @@ import cn.bmob.v3.BmobUser;
 public class User extends BmobUser {
 
     private static final long serialVersionUID = 1L;
+    public static final int LOGIN_TYPE_WEIBO = 1;
 
     private boolean sex;
 
     private String avatar;
+
+    private String othername;
+
+    private Integer logintype;
 
     public User() {
 
@@ -40,4 +45,30 @@ public class User extends BmobUser {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
+
+    public String getOthername() {
+        return othername;
+    }
+
+    public void setOthername(String othername) {
+        this.othername = othername;
+    }
+
+    public Integer getLogintype() {
+        return logintype;
+    }
+
+    public void setLogintype(Integer logintype) {
+        this.logintype = logintype;
+    }
+
+    @Override
+    public String getUsername() {
+        if (logintype != null && logintype == LOGIN_TYPE_WEIBO) {
+            return this.othername;
+        } else {
+            return super.getUsername();
+        }
+    }
+
 }

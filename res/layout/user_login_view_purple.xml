@@ -106,10 +106,9 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:layout_marginTop="20dip"
-            android:visibility="gone"
             android:orientation="horizontal" >
 
-            <TextView
+            <com.huanghua.mysecret.weibologin.WeiboLoginButton
                 android:id="@+id/weibo_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

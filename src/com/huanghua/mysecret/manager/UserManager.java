@@ -134,28 +134,6 @@ public class UserManager {
     }
 
     public void logout() {
-        weiboLogout(new RequestListener() {
-            @Override
-            public void onWeiboException(WeiboException arg0) {
-                
-            }
-            @Override
-            public void onComplete(String response) {
-                try {
-                    CommonUtils.showLog("weibo_login","logout response:"+response);
-                    JSONObject obj = new JSONObject(response);
-                    if(obj.isNull("error")){
-                        String value = obj.getString("result");
-                        // 注销成功
-                        if ("true".equalsIgnoreCase(value)) {
-                            
-                        }
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
         User.logOut(sContext);
         mCurrentUser = null;
         SharePreferenceUtil mSp = CustomApplcation.getInstance().getSpUtil();
