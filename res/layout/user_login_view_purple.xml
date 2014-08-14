@@ -101,12 +101,14 @@
                 android:textColor="@drawable/text_white_black"
                 android:textSize="18sp" />
         </LinearLayout>
+
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="307dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dip"
+            android:layout_marginTop="30dip"
             android:gravity="center_vertical"
             android:orientation="horizontal" >
+
             <View
                 android:layout_width="0dip"
                 android:layout_height="1dip"
@@ -134,7 +136,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dip"
+            android:layout_marginTop="25dip"
             android:gravity="center_horizontal"
             android:orientation="horizontal"
             android:visibility="visible" >

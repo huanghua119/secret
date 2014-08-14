@@ -123,16 +123,18 @@
                 android:textSize="18sp" />
             
         </LinearLayout>
+
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="307dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dip"
+            android:layout_marginTop="30dip"
             android:gravity="center_vertical"
             android:orientation="horizontal" >
+
             <View
                 android:layout_width="0dip"
                 android:layout_height="1dip"
-                android:background="@drawable/other_purple"
+                android:background="@drawable/other"
                 android:layout_gravity="left|center_vertical"
                 android:layout_weight="0.2" />
             <TextView
@@ -144,19 +146,19 @@
                 android:singleLine="true"
                 android:layout_gravity="center_horizontal|center_vertical"
                 android:gravity="center"
-                android:textColor="@android:color/white"
+                android:textColor="@android:color/darker_gray"
                 android:textSize="16sp" />
              <View
                 android:layout_width="0dip"
                 android:layout_height="1dip"
-                android:background="@drawable/other_purple"
+                android:background="@drawable/other"
                 android:layout_gravity="right|center_vertical"
                 android:layout_weight="0.2" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dip"
+            android:layout_marginTop="25dip"
             android:gravity="center_horizontal"
             android:orientation="horizontal"
             android:visibility="visible" >
