@@ -61,7 +61,7 @@
             <TextView
                 android:layout_width="90dip"
                 android:layout_height="match_parent"
-                android:background="@drawable/register_edit_left"
+                android:background="@drawable/register_edit_left_purple"
                 android:gravity="center"
                 android:text="@string/user_name"
                 android:textColor="@color/tab_text_color"
@@ -86,7 +86,7 @@
             <TextView
                 android:layout_width="90dip"
                 android:layout_height="match_parent"
-                android:background="@drawable/register_edit_left"
+                android:background="@drawable/register_edit_left_purple"
                 android:gravity="center"
                 android:text="@string/user_pass"
                 android:textColor="@color/tab_text_color"
@@ -111,7 +111,7 @@
             <TextView
                 android:layout_width="90dip"
                 android:layout_height="match_parent"
-                android:background="@drawable/register_edit_left"
+                android:background="@drawable/register_edit_left_purple"
                 android:gravity="center"
                 android:text="@string/twopass"
                 android:textColor="@color/tab_text_color"
@@ -128,7 +128,7 @@
             <TextView
                 android:layout_width="90dip"
                 android:layout_height="match_parent"
-                android:background="@drawable/register_edit_left"
+                android:background="@drawable/register_edit_left_purple"
                 android:gravity="center"
                 android:text="@string/sex"
                 android:textColor="@color/tab_text_color"

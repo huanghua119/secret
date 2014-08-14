@@ -171,7 +171,7 @@
             android:background="@drawable/red_button_bg"
             android:gravity="center"
             android:text="@string/commit"
-            android:textColor="@drawable/text_white_black"
+            android:textColor="@drawable/text_register"
             android:textSize="18sp" />
     </LinearLayout>
 
