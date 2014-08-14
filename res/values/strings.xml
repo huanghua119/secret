@@ -113,5 +113,6 @@
     <string name="qq_login">腾讯QQ登陆</string>
     <string name="other_login">第三方帐号登录</string>
     <string name="copyright">Copyright © 2014 - 2018 www.jerryblog.net</string>
+    <string name="other_login_fail">第三方登录登陆失败！</string>
 
 </resources>

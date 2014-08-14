@@ -14,15 +14,12 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
-import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 import com.huanghua.mysecret.CustomApplcation;
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.bean.Installation;
 import com.huanghua.mysecret.bean.User;
-import com.huanghua.mysecret.config.Config;
 import com.huanghua.mysecret.manager.UserManager.UserManagerListener;
 import com.huanghua.mysecret.service.DateQueryService;
 import com.huanghua.mysecret.util.CommonUtils;
@@ -32,12 +29,10 @@ import com.huanghua.mysecret.weibologin.AccessTokenKeeper;
 import com.huanghua.mysecret.weibologin.WeiboConstants;
 import com.huanghua.mysecret.weibologin.WeiboLoginButton;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
-import com.sina.weibo.sdk.auth.WeiboAuthListener;
 import com.sina.weibo.sdk.auth.WeiboAuth.AuthInfo;
+import com.sina.weibo.sdk.auth.WeiboAuthListener;
 import com.sina.weibo.sdk.exception.WeiboException;
-import com.sina.weibo.sdk.net.AsyncWeiboRunner;
 import com.sina.weibo.sdk.net.RequestListener;
-import com.sina.weibo.sdk.net.WeiboParameters;
 
 public class UserLoginActivity extends BaseActivity implements OnClickListener {
 
@@ -80,7 +75,7 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
     }
 
     private void initWeiboLogin() {
-     // 创建授权认证信息
+        // 创建授权认证信息
         mAccessToken = AccessTokenKeeper.readAccessToken(this);
         AuthInfo authInfo = new AuthInfo(this, WeiboConstants.APP_KEY, WeiboConstants.REDIRECT_URL, WeiboConstants.SCOPE);
         mWeiboLogin = (WeiboLoginButton) findViewById(R.id.weibo_login);
@@ -88,10 +83,8 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
         mWeiboLogin.setExternalOnClickListener(mButtonClickListener);
         if (mAccessToken == null || mAccessToken.getToken().equals("")) {
             mWeiboLogin.setVisibility(View.VISIBLE);
-            mQQLogin.setVisibility(View.GONE);
         } else {
             mWeiboLogin.setVisibility(View.GONE);
-            mQQLogin.setVisibility(View.VISIBLE);
         }
     }
     private void init() {
@@ -137,53 +130,13 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
         if (v == mLogin) {
             login();
         } else if (v == mLogout) {
-            userManager.logout();
-            weiboLogout(mLogoutListener);
-            onBackPressed();
-        } else if (v == mWeiboLogin) {
-            othonLogin(OTHEN_LOGIN_WEIBO);
+            if (mCurrentUser.getLogintype() != null && mCurrentUser.getLogintype() == User.LOGIN_TYPE_WEIBO) {
+                userManager.weiboLogout(mLogoutListener, mAccessToken);
+            } else {
+                userManager.logout();
+                onBackPressed();
+            }
         } else if (v == mQQLogin) {
-            weiboLogout(mLogoutListener);
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    private void othonLogin(int type) {
-        showDialog(DIALOG_NEW_REGISTER);
-        if (type == OTHEN_LOGIN_WEIBO) {
-            userManager.weiboLogin(new UserManagerListener() {
-                @Override
-                public void onSuccess(User u) {
-                    SharePreferenceUtil mSp = CustomApplcation.getInstance().getSpUtil();
-                    Installation in = new Installation(UserLoginActivity.this);
-                    in.setUser(userManager.getCurrentUser());
-                    in.update(UserLoginActivity.this, mSp.getInstallationObjectId() , new UpdateListener() {
-                        @Override
-                        public void onSuccess() {
-                            showLog(DateQueryService.TAG, "login onSuccess");
-                        }
-
-                        @Override
-                        public void onFailure(int arg0, String arg1) {
-                            showLog(DateQueryService.TAG, "login onFailure arg1:" + arg1
-                                    + " arg0:" + arg0);
-                        }
-                    });
-                    removeDialog(DIALOG_NEW_REGISTER);
-                    finish();
-                }
-                
-                @Override
-                public void onError(int arg0, String arg1) {
-                    showLog("user login failure:" + arg0);
-                    String str = getString(R.string.no_conn_network);
-                    if (arg0 == 101 || arg0 == 0) {
-                        str = getString(R.string.login_fail);
-                    }
-                    removeDialog(DIALOG_NEW_REGISTER);
-                    ShowToast(str);
-                }
-            }, 1);
         }
     }
 
@@ -281,6 +234,7 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
     /**
      * 登入按钮的监听器，接收授权结果。
      */
+    @SuppressWarnings("deprecation")
     private class AuthListener implements WeiboAuthListener {
         @Override
         public void onComplete(Bundle values) {
@@ -290,86 +244,34 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
                 showDialog(DIALOG_NEW_REGISTER);
                 AccessTokenKeeper.writeAccessToken(getApplicationContext(), accessToken);
                 mAccessToken = accessToken;
-                show(Long.parseLong(accessToken.getUid()), new RequestListener() {
+                userManager.weiboLogin(mAccessToken, new UserManagerListener() {
                     @Override
-                    public void onWeiboException(WeiboException arg0) {
-                        showLog(WeiboConstants.TAG, "singup onWeiboException:" + arg0.getMessage());
+                    public void onSuccess(User u) {
+                        SharePreferenceUtil mSp = CustomApplcation.getInstance().getSpUtil();
+                        Installation in = new Installation(UserLoginActivity.this);
+                        in.setUser(userManager.getCurrentUser());
+                        in.update(UserLoginActivity.this, mSp.getInstallationObjectId() , new UpdateListener() {
+                            @Override
+                            public void onSuccess() {
+                                showLog(WeiboConstants.TAG, "login onSuccess");
+                            }
+
+                            @Override
+                            public void onFailure(int arg0, String arg1) {
+                                showLog(WeiboConstants.TAG, "login onFailure arg1:" + arg1
+                                        + " arg0:" + arg0);
+                            }
+                        });
+                        removeDialog(DIALOG_NEW_REGISTER);
+                        finish();
                     }
                     @Override
-                    public void onComplete(String arg0) {
-                        try {
-                            final JSONObject jsonObject = new JSONObject(
-                                    arg0);
-                            final User u = new User();
-                            u.setUsername(WeiboConstants.USER_NAME_HEAD + mAccessToken.getUid());
-                            u.setPassword(Config.applicationId);
-                            u.login(UserLoginActivity.this, new SaveListener() {
-                                @Override
-                                public void onSuccess() {
-                                    SharePreferenceUtil mSp = CustomApplcation.getInstance().getSpUtil();
-                                    Installation in = new Installation(UserLoginActivity.this);
-                                    in.setUser(userManager.getCurrentUser());
-                                    in.update(UserLoginActivity.this, mSp.getInstallationObjectId() , new UpdateListener() {
-                                        @Override
-                                        public void onSuccess() {
-                                            showLog(WeiboConstants.TAG, "login onSuccess");
-                                        }
-
-                                        @Override
-                                        public void onFailure(int arg0, String arg1) {
-                                            showLog(WeiboConstants.TAG, "login onFailure arg1:" + arg1
-                                                    + " arg0:" + arg0);
-                                        }
-                                    });
-                                    userManager.setCreentUser(u);
-                                    removeDialog(DIALOG_NEW_REGISTER);
-                                    finish();
-                                }
-
-                                @Override
-                                public void onFailure(int arg0, String arg1) {
-                                    showLog(WeiboConstants.TAG, "login onFailure arg0:" + arg0
-                                            + " arg1:" + arg1);
-                                    String screen_name = jsonObject
-                                            .optString("screen_name", "");
-                                    String gender = jsonObject.optString("gender", "");
-                                    String avatar_large = jsonObject.optString("avatar_large", "");
-                                    u.setSex("m".equals(gender));
-                                    u.setAvatar(avatar_large);
-                                    u.setOthername(screen_name);
-                                    u.setLogintype(User.LOGIN_TYPE_WEIBO);
-                                    userManager.signUp(u, new UserManagerListener() {
-                                        @Override
-                                        public void onSuccess(User u) {
-                                            SharePreferenceUtil mSp = CustomApplcation.getInstance().getSpUtil();
-                                            Installation in = new Installation(UserLoginActivity.this);
-                                            in.setUser(userManager.getCurrentUser());
-                                            in.update(UserLoginActivity.this,
-                                                    mSp.getInstallationObjectId(), new UpdateListener() {
-                                                        @Override
-                                                        public void onSuccess() {
-                                                        }
-                                                        @Override
-                                                        public void onFailure(int arg0, String arg1) {
-                                                        }
-                                                    });
-                                            ShowToastOld(R.string.register_succes);
-                                            finish();
-                                        }
-                                        
-                                        @Override
-                                        public void onError(int arg0, String arg1) {
-                                            CommonUtils.showLog(WeiboConstants.TAG,
-                                                    "singup onError arg0:" + arg0 + " arg1:" + arg1);
-                                            removeDialog(DIALOG_NEW_REGISTER);
-                                        }
-                                    });
-                                }
-                            });
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
+                    public void onError(int arg0, String arg1) {
+                        CommonUtils.showLog(WeiboConstants.TAG,
+                                "singup onError arg0:" + arg0 + " arg1:" + arg1);
+                        String str = getString(R.string.other_login_fail);
+                        ShowToast(str);
+                        removeDialog(DIALOG_NEW_REGISTER);
                     }
                 });
             }
@@ -396,9 +298,10 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
                 try {
                     JSONObject obj = new JSONObject(response);
                     String value = obj.getString("result");
-
                     if ("true".equalsIgnoreCase(value)) {
                         AccessTokenKeeper.clear(UserLoginActivity.this);
+                        userManager.logout();
+                        onBackPressed();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -422,38 +325,4 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
         }
     }
 
-    /**
-     * 异步取消用户的授权。
-     *
-     * @param listener
-     *            异步请求回调接口
-     */
-    public void weiboLogout(RequestListener listener) {
-        requestAsync(WeiboConstants.REVOKE_OAUTH_URL, new WeiboParameters(), WeiboConstants.HTTPMETHOD_POST,
-                listener);
-    }
-
-    /**
-     * 根据用户ID获取用户信息。
-     *
-     * @param uid
-     *            需要查询的用户ID
-     * @param listener
-     *            异步请求回调接口
-     */
-    public void show(long uid, RequestListener listener) {
-        WeiboParameters params = new WeiboParameters();
-        params.put("uid", uid);
-        requestAsync(WeiboConstants.API_BASE_URL, params, WeiboConstants.HTTPMETHOD_GET, listener);
-    }
-
-    private void requestAsync(String url, WeiboParameters params,
-            String httpMethod, RequestListener listener) {
-        if (null == mAccessToken || TextUtils.isEmpty(url) || null == params
-                || TextUtils.isEmpty(httpMethod) || null == listener) {
-            return;
-        }
-        params.put(WeiboConstants.KEY_ACCESS_TOKEN, mAccessToken.getToken());
-        AsyncWeiboRunner.requestAsync(url, params, httpMethod, listener);
-    }
 }

@@ -6,16 +6,18 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
-import cn.bmob.v3.listener.OtherLoginListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 import com.huanghua.mysecret.CustomApplcation;
 import com.huanghua.mysecret.bean.Installation;
 import com.huanghua.mysecret.bean.User;
+import com.huanghua.mysecret.config.Config;
 import com.huanghua.mysecret.service.DateQueryService;
 import com.huanghua.mysecret.util.CommonUtils;
 import com.huanghua.mysecret.util.SharePreferenceUtil;
+import com.huanghua.mysecret.weibologin.WeiboConstants;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.AsyncWeiboRunner;
 import com.sina.weibo.sdk.net.RequestListener;
@@ -52,64 +54,72 @@ public class UserManager {
         mCurrentUser = User.getCurrentUser(sContext, User.class);
     }
 
-    public void weiboLogin(final UserManagerListener userListener, final int step) {
-        User.weiboLogin(sContext, WEIBO_APPID, WEIBO_RESULT_URI, new OtherLoginListener() {
+    public void weiboLogin(final Oauth2AccessToken mAccessToken, final UserManagerListener userListener) {
+        mCurrentUser = new User();
+        mCurrentUser.setUsername(WeiboConstants.USER_NAME_HEAD + mAccessToken.getUid());
+        mCurrentUser.setPassword(Config.applicationId);
+        mCurrentUser.login(sContext, new SaveListener() {
             @Override
-            public void onSuccess(final JSONObject userAuth) {
+            public void onSuccess() {
                 mCurrentUser = User.getCurrentUser(sContext, User.class);
-                CommonUtils.showLog("weibo_login","第三方登陆成功:"+userAuth);
-                CommonUtils.showLog("weibo_login","mCurrentUser:"+mCurrentUser);
-                if (mCurrentUser != null && step == 2) {
-                    try {
-                        JSONObject weibo = userAuth.getJSONObject("weibo");
-                        mAccessToken = weibo.getString("access_token");
-                        uid = weibo.getLong("uid");
-                        show(uid, new RequestListener() {
-                            @Override
-                            public void onWeiboException(WeiboException arg0) {
-                                CommonUtils.showLog("weibo_login",
-                                        "onWeiboException" + arg0);
-                                userListener.onSuccess(mCurrentUser);
-                            }
-
-                            @Override
-                            public void onComplete(String arg0) {
-                                CommonUtils.showLog("weibo_login",
-                                        "onComplete arg0:" + arg0);
-
-                                try {
-                                    JSONObject jsonObject = new JSONObject(
-                                            arg0);
-                                    String screen_name = jsonObject
-                                            .optString("screen_name", "");
-                                    String gender = jsonObject.optString("gender", "");
-                                    String avatar_large = jsonObject.optString("avatar_large", "");
-                                    mCurrentUser.setUsername(screen_name);
-                                    mCurrentUser.setSex("m".equals(gender));
-                                    mCurrentUser.setAvatar(avatar_large);
-                                    mCurrentUser.update(sContext);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-
-                                userListener.onSuccess(mCurrentUser);
-                            }
-                        });
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    weiboLogin(userListener, 2);
+                if (userListener != null) {
+                    userListener.onSuccess(mCurrentUser);
                 }
             }
-
             @Override
-            public void onFailure(int code, String msg) {
-                CommonUtils.showLog("weibo_login","第三方登陆失败："+msg);
-                userListener.onError(code,msg);
+            public void onFailure(int arg0, String arg1) {
+                if (arg0 == 101) {
+                    show(Long.parseLong(mAccessToken.getUid()), new RequestListener() {
+                        @Override
+                        public void onWeiboException(WeiboException arg0) {
+                            CommonUtils.showLog(WeiboConstants.TAG, "singup onWeiboException:" + arg0.getMessage());
+                        }
+                        @Override
+                        public void onComplete(String arg0) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(
+                                        arg0);
+                                String screen_name = jsonObject
+                                        .optString("screen_name", "");
+                                String gender = jsonObject.optString("gender", "");
+                                String avatar_large = jsonObject.optString("avatar_large", "");
+                                User u = new User();
+                                u.setUsername(WeiboConstants.USER_NAME_HEAD + mAccessToken.getUid());
+                                u.setPassword(Config.applicationId);
+                                u.setSex("m".equals(gender));
+                                u.setAvatar(avatar_large);
+                                u.setOthername(screen_name);
+                                u.setLogintype(User.LOGIN_TYPE_WEIBO);
+                                u.signUp(sContext, new SaveListener() {
+                                    @Override
+                                    public void onSuccess() {
+                                        if (userListener != null) {
+                                            userListener.onSuccess(mCurrentUser);
+                                        }
+                                    }
+                                    @Override
+                                    public void onFailure(int arg0, String arg1) {
+                                        if (userListener != null) {
+                                            userListener.onError(arg0, arg1);
+                                        }
+                                        mCurrentUser = null;
+                                    }
+                                });
+                                mCurrentUser = u;
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                if (userListener != null) {
+                                    userListener.onError(0, "");
+                                }
+                                mCurrentUser = null;
+                            }
+                        }
+                    }, mAccessToken);
+                }
             }
         });
     }
+
     public void login(String userName, String passWord,
             final UserManagerListener userListener) {
         mCurrentUser = new User();
@@ -118,6 +128,7 @@ public class UserManager {
         mCurrentUser.login(sContext, new SaveListener() {
             @Override
             public void onSuccess() {
+                mCurrentUser = User.getCurrentUser(sContext, User.class);
                 if (userListener != null) {
                     userListener.onSuccess(mCurrentUser);
                 }
@@ -187,22 +198,17 @@ public class UserManager {
         }
     }
 
-    /** 访问微博服务接口的地址 */
-    private static final String API_SERVER = "https://api.weibo.com/2";
-    /** GET 请求方式 */
-    private static final String HTTPMETHOD_GET = "GET";
-    /** POST 请求方式 */
-    private static final String HTTPMETHOD_POST = "POST";
-    /** HTTP 参数 */
-    private static final String KEY_ACCESS_TOKEN = "access_token";
-    private static final String API_BASE_URL = API_SERVER + "/users/show.json";
-    private static final String WEIBO_APPID = "2935574131";
-    private static final String WEIBO_RESULT_URI = "https://api.weibo.com/oauth2/default.html";
-    /** 注销地址（URL） */
-    private static final String REVOKE_OAUTH_URL = "https://api.weibo.com/oauth2/revokeoauth2";
-    /** 当前的 Token */
-    private String mAccessToken;
-    private long uid;
+    /**
+     * 异步取消用户的授权。
+     *
+     * @param listener
+     *            异步请求回调接口
+     */
+    public void weiboLogout(RequestListener listener,
+            Oauth2AccessToken accessToken) {
+        requestAsync(WeiboConstants.REVOKE_OAUTH_URL, new WeiboParameters(),
+                WeiboConstants.HTTPMETHOD_POST, listener, accessToken);
+    }
 
     /**
      * 根据用户ID获取用户信息。
@@ -212,29 +218,23 @@ public class UserManager {
      * @param listener
      *            异步请求回调接口
      */
-    public void show(long uid, RequestListener listener) {
+    public void show(long uid, RequestListener listener,
+            Oauth2AccessToken accessToken) {
         WeiboParameters params = new WeiboParameters();
         params.put("uid", uid);
-        requestAsync(API_BASE_URL, params, HTTPMETHOD_GET, listener);
+        requestAsync(WeiboConstants.API_BASE_URL, params,
+                WeiboConstants.HTTPMETHOD_GET, listener, accessToken);
     }
 
-    /**
-     * 异步取消用户的授权。
-     *
-     * @param listener
-     *            异步请求回调接口
-     */
-    public void weiboLogout(RequestListener listener) {
-        requestAsync(REVOKE_OAUTH_URL, new WeiboParameters(), HTTPMETHOD_POST,
-                listener);
-    }
     private void requestAsync(String url, WeiboParameters params,
-            String httpMethod, RequestListener listener) {
-        if (null == mAccessToken || TextUtils.isEmpty(url) || null == params
+            String httpMethod, RequestListener listener,
+            Oauth2AccessToken accessToken) {
+        if (null == accessToken || TextUtils.isEmpty(url) || null == params
                 || TextUtils.isEmpty(httpMethod) || null == listener) {
             return;
         }
-        params.put(KEY_ACCESS_TOKEN, mAccessToken);
+        params.put(WeiboConstants.KEY_ACCESS_TOKEN, accessToken.getToken());
         AsyncWeiboRunner.requestAsync(url, params, httpMethod, listener);
     }
+
 }
