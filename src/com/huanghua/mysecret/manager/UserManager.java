@@ -115,6 +115,10 @@ public class UserManager {
                             }
                         }
                     }, mAccessToken);
+                } else {
+                    if (userListener != null) {
+                        userListener.onError(0, "");
+                    }
                 }
             }
         });

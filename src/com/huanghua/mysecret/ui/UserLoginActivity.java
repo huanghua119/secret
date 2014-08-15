@@ -81,11 +81,7 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
         mWeiboLogin = (WeiboLoginButton) findViewById(R.id.weibo_login);
         mWeiboLogin.setWeiboAuthInfo(authInfo, mLoginListener);
         mWeiboLogin.setExternalOnClickListener(mButtonClickListener);
-        if (mAccessToken == null || mAccessToken.getToken().equals("")) {
-            mWeiboLogin.setVisibility(View.VISIBLE);
-        } else {
-            mWeiboLogin.setVisibility(View.GONE);
-        }
+        mWeiboLogin.setVisibility(View.VISIBLE);
     }
     private void init() {
         mUserName = (EditText) findViewById(R.id.user_name);
@@ -300,14 +296,14 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
                     String value = obj.getString("result");
                     if ("true".equalsIgnoreCase(value)) {
                         AccessTokenKeeper.clear(UserLoginActivity.this);
-                        userManager.logout();
-                        onBackPressed();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-        }     
+            userManager.logout();
+            onBackPressed();
+        }
 
         @Override
         public void onWeiboException(WeiboException e) {
