@@ -6,6 +6,7 @@ public class User extends BmobUser {
 
     private static final long serialVersionUID = 1L;
     public static final int LOGIN_TYPE_WEIBO = 1;
+    public static final int LOGIN_TYPE_TENCENT_QQ = 2;
 
     private boolean sex;
 
@@ -64,7 +65,7 @@ public class User extends BmobUser {
 
     @Override
     public String getUsername() {
-        if (logintype != null && logintype == LOGIN_TYPE_WEIBO) {
+        if (logintype != null && (logintype == LOGIN_TYPE_WEIBO || logintype == LOGIN_TYPE_TENCENT_QQ)) {
             return this.othername;
         } else {
             return super.getUsername();

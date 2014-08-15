@@ -22,6 +22,7 @@ import com.huanghua.mysecret.bean.Installation;
 import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.manager.UserManager.UserManagerListener;
 import com.huanghua.mysecret.service.DateQueryService;
+import com.huanghua.mysecret.tencentlogin.TencentConstants;
 import com.huanghua.mysecret.util.CommonUtils;
 import com.huanghua.mysecret.util.SharePreferenceUtil;
 import com.huanghua.mysecret.util.ThemeUtil;
@@ -76,13 +77,19 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
 
     private void initWeiboLogin() {
         // 创建授权认证信息
-        mAccessToken = AccessTokenKeeper.readAccessToken(this);
+        mCurrentUser = userManager.getCurrentUser();
+        if (mCurrentUser != null && mCurrentUser.getLogintype() == User.LOGIN_TYPE_WEIBO ) {
+            mAccessToken = AccessTokenKeeper.readAccessToken(this);
+        }
         AuthInfo authInfo = new AuthInfo(this, WeiboConstants.APP_KEY, WeiboConstants.REDIRECT_URL, WeiboConstants.SCOPE);
         mWeiboLogin = (WeiboLoginButton) findViewById(R.id.weibo_login);
         mWeiboLogin.setWeiboAuthInfo(authInfo, mLoginListener);
         mWeiboLogin.setExternalOnClickListener(mButtonClickListener);
         mWeiboLogin.setVisibility(View.VISIBLE);
+        mQQLogin = (ImageView) findViewById(R.id.qq_login);
+        mQQLogin.setOnClickListener(this);
     }
+
     private void init() {
         mUserName = (EditText) findViewById(R.id.user_name);
         mUserPass = (EditText) findViewById(R.id.user_pass);
@@ -92,8 +99,6 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
         mLogout.setOnClickListener(this);
         mLoginView = findViewById(R.id.login_view);
         mUserDetail = findViewById(R.id.user_detail_view);
-        mQQLogin = (ImageView) findViewById(R.id.qq_login);
-        mQQLogin.setOnClickListener(this);
     }
 
     @Override
@@ -128,11 +133,16 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
         } else if (v == mLogout) {
             if (mCurrentUser.getLogintype() != null && mCurrentUser.getLogintype() == User.LOGIN_TYPE_WEIBO) {
                 userManager.weiboLogout(mLogoutListener, mAccessToken);
+            } else if (mCurrentUser.getLogintype() != null && mCurrentUser.getLogintype() == User.LOGIN_TYPE_TENCENT_QQ) {
+                userManager.tencentLogout(this, null);
+                userManager.logout();
+                onBackPressed();
             } else {
                 userManager.logout();
                 onBackPressed();
             }
         } else if (v == mQQLogin) {
+            tencentLogin();
         }
     }
 
@@ -321,4 +331,40 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
         }
     }
 
+    @SuppressWarnings("deprecation")
+    private void tencentLogin() {
+        showDialog(DIALOG_NEW_REGISTER);
+        userManager.tencentLogin(this, new UserManagerListener() {
+            @Override
+            public void onSuccess(User u) {
+                SharePreferenceUtil mSp = CustomApplcation.getInstance().getSpUtil();
+                Installation in = new Installation(UserLoginActivity.this);
+                in.setUser(userManager.getCurrentUser());
+                in.update(UserLoginActivity.this, mSp.getInstallationObjectId() , new UpdateListener() {
+                    @Override
+                    public void onSuccess() {
+                        showLog(TencentConstants.TAG, "login onSuccess");
+                    }
+
+                    @Override
+                    public void onFailure(int arg0, String arg1) {
+                        showLog(TencentConstants.TAG, "login onFailure arg1:" + arg1
+                                + " arg0:" + arg0);
+                    }
+                });
+                removeDialog(DIALOG_NEW_REGISTER);
+                finish();
+            }
+            
+            @Override
+            public void onError(int arg0, String arg1) {
+                showLog(TencentConstants.TAG, "user login failure arg0:" + arg0 + " arg1:"+ arg0);
+                String str = getString(R.string.no_conn_network);
+                if (arg0 == 101 || arg0 == 0) {
+                    str = getString(R.string.other_login_fail);
+                }
+                ShowToast(str);
+            }
+        });
+    }
 }
