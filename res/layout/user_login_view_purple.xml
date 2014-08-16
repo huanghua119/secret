@@ -13,7 +13,7 @@
         android:background="?attr/title_bg_color"
         android:gravity="center_vertical" >
 
-        <TextView
+        <ImageView
             android:id="@+id/btn_cancel"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -22,9 +22,8 @@
             android:gravity="center_vertical"
             android:onClick="onBack"
             android:paddingLeft="15dip"
-            android:text="@string/back"
-            android:textColor="@android:color/white"
-            android:textSize="13sp" />
+            android:src="@drawable/back_left_bg"
+            android:textColor="@android:color/white" />
 
         <TextView
             android:id="@+id/title"
@@ -33,7 +32,7 @@
             android:layout_centerInParent="true"
             android:text="@string/my_user"
             android:textColor="@android:color/white"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
     </RelativeLayout>
 
     <LinearLayout
