@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import cn.bmob.v3.listener.SaveListener;
@@ -275,7 +276,7 @@ public class UserManager {
             CommonUtils.showLog(TencentConstants.TAG, "onCancel: ");
         }
     }
-    public void tencentLogin(Activity activity, final UserManagerListener userListener) {
+    public void tencentLogin(Activity activity, final UserManagerListener userListener, final Handler handler) {
         if (mTencent == null) {
             mTencent = Tencent.createInstance(TencentConstants.APP_ID, activity);
         }
@@ -285,6 +286,7 @@ public class UserManager {
                 CommonUtils.showLog(TencentConstants.TAG,
                         "tencentLogin doComplete values:" + values);
                 try {
+                    handler.sendEmptyMessage(1);
                     final String user_name = values.getString("access_token");
                     mCurrentUser = new User();
                     mCurrentUser.setUsername(TencentConstants.USER_NAME_HEAD + user_name);

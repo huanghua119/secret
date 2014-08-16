@@ -34,7 +34,6 @@ public class WriteCommentActivity extends BaseActivity implements
         OnClickListener, IXListViewListener {
 
     private TextView mGoToComment;
-    private TextView mBack;
     private XListView mCommentListView = null;
     private Secret mCurrentSecret = null;
     private View mSecretView = null;
@@ -77,8 +76,6 @@ public class WriteCommentActivity extends BaseActivity implements
     private void init() {
         mGoToComment = (TextView) findViewById(R.id.goToComment);
         mGoToComment.setOnClickListener(this);
-        mBack = (TextView) findViewById(R.id.btn_cancel);
-        mBack.setOnClickListener(this);
         mCommentListView = (XListView) findViewById(R.id.commit_list);
         mCommentListView.setPullLoadEnable(false);
         mCommentListView.setPullRefreshEnable(false);
@@ -137,8 +134,6 @@ public class WriteCommentActivity extends BaseActivity implements
             intent.putExtra("secret", mCurrentSecret);
             intent.setClass(this, WriteSecretActivity.class);
             startAnimActivity(intent);
-        } else if (v == mBack) {
-            onBackPressed();
         }
     }
 

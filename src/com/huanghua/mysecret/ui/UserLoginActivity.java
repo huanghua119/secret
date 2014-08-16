@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -56,6 +58,18 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
     public static final int DIALOG_NEW_REGISTER = 1;
     public static final int OTHEN_LOGIN_WEIBO = 1;
 
+    @SuppressWarnings("deprecation")
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+            case 1:
+                showDialog(DIALOG_NEW_REGISTER);
+                break;
+            }
+            super.handleMessage(msg);
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -333,7 +347,6 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
 
     @SuppressWarnings("deprecation")
     private void tencentLogin() {
-        showDialog(DIALOG_NEW_REGISTER);
         userManager.tencentLogin(this, new UserManagerListener() {
             @Override
             public void onSuccess(User u) {
@@ -365,6 +378,6 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
                 }
                 ShowToast(str);
             }
-        });
+        }, mHandler);
     }
 }

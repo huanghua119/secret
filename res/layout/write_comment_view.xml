@@ -19,6 +19,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:clickable="true"
+            android:onClick="onBack"
             android:gravity="center_vertical"
             android:paddingLeft="15dip"
             android:src="@drawable/back_left_bg" />
