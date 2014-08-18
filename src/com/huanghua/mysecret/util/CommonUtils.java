@@ -7,6 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -258,5 +259,17 @@ public class CommonUtils {
         if (CustomApplcation.DEBUG) {
             Log.i(tag, msg);
         }
+    }
+
+    public static int[] HEAD_RESOURS = { R.drawable.head_beer,
+            R.drawable.head_boy, R.drawable.head_cat, R.drawable.head_devil,
+            R.drawable.head_knife, R.drawable.head_pioneers,
+            R.drawable.head_whale, R.drawable.head_lemon, R.drawable.head_rain,
+            R.drawable.head_girl };
+
+    public static int getRandomHead() {
+        Random random = new Random();
+        int head_index = random.nextInt(HEAD_RESOURS.length - 1);
+        return HEAD_RESOURS[head_index];
     }
 }

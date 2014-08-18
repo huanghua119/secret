@@ -134,7 +134,7 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
         mUserDetail = findViewById(R.id.user_detail_view);
     }
 
-    private void initUpdate(){
+    private void initUpdate() {
         mUpdateHead = findViewById(R.id.update_head);
         mUpdateName = findViewById(R.id.update_name);
         mUpdateEmail = findViewById(R.id.update_email);
