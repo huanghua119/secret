@@ -78,7 +78,7 @@ public class DateTextView extends TextView {
             } else if (day >= (60 * 24) && day < (60 * 24 * 30)) {
                 setText(day / (60 * 24)
                         + mContext.getString(R.string.date_day_befor));
-            } else if (day >= (60 * 24 * 30) && day < (3600 * 24 * 30 * 12)) {
+            } else if (day >= (60 * 24 * 30) && day < (60 * 24 * 30 * 12)) {
                 setText(day / (60 * 24 * 30)
                         + mContext.getString(R.string.date_month_befor));
             } else {

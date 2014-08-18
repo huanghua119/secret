@@ -3,8 +3,10 @@ package com.huanghua.mysecret.ui;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,6 +18,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import cn.bmob.v3.listener.EmailVerifyListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 import com.huanghua.mysecret.CustomApplcation;
@@ -26,11 +30,13 @@ import com.huanghua.mysecret.manager.UserManager.UserManagerListener;
 import com.huanghua.mysecret.service.DateQueryService;
 import com.huanghua.mysecret.tencentlogin.TencentConstants;
 import com.huanghua.mysecret.util.CommonUtils;
+import com.huanghua.mysecret.util.ImageLoadOptions;
 import com.huanghua.mysecret.util.SharePreferenceUtil;
 import com.huanghua.mysecret.util.ThemeUtil;
 import com.huanghua.mysecret.weibologin.AccessTokenKeeper;
 import com.huanghua.mysecret.weibologin.WeiboConstants;
 import com.huanghua.mysecret.weibologin.WeiboLoginButton;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuth.AuthInfo;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
@@ -45,6 +51,18 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
     private Button mLogout = null;
     private View mLoginView = null;
     private View mUserDetail = null;
+
+    private View mUpdateHead = null;
+    private View mUpdateName = null;
+    private View mUpdateEmail = null;
+    private View mUpdatePass = null;
+    private View mUpdateSex = null;
+    private TextView mUserName2 = null;
+    private ImageView mUserPhoto = null;
+    private TextView mUserSex = null;
+    private TextView mLoginType = null;
+    private TextView mEmail = null;
+    private int mWhichSex = 0;
 
     private User mCurrentUser = null;
     private WeiboLoginButton mWeiboLogin = null;
@@ -87,6 +105,7 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
         }
         init();
         initWeiboLogin();
+        initUpdate();
     }
 
     private void initWeiboLogin() {
@@ -115,6 +134,24 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
         mUserDetail = findViewById(R.id.user_detail_view);
     }
 
+    private void initUpdate(){
+        mUpdateHead = findViewById(R.id.update_head);
+        mUpdateName = findViewById(R.id.update_name);
+        mUpdateEmail = findViewById(R.id.update_email);
+        mUpdatePass = findViewById(R.id.update_password);
+        mUpdateSex = findViewById(R.id.update_sex);
+        mUpdateHead.setOnClickListener(this);
+        mUpdateName.setOnClickListener(this);
+        mUpdateEmail.setOnClickListener(this);
+        mUpdatePass.setOnClickListener(this);
+        mUpdateSex.setOnClickListener(this);
+        mUserName2 = (TextView) findViewById(R.id.user_name2);
+        mUserPhoto = (ImageView) findViewById(R.id.user_photo);
+        mUserSex = (TextView) findViewById(R.id.user_sex);
+        mLoginType = (TextView) findViewById(R.id.login_type);
+        mEmail = (TextView) findViewById(R.id.email);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -127,6 +164,38 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
         if (mCurrentUser != null) {
             mLoginView.setVisibility(View.GONE);
             mUserDetail.setVisibility(View.VISIBLE);
+            String avatar = mCurrentUser.getAvatar();
+            if (avatar != null && !avatar.equals("")) {
+                ImageLoader.getInstance().displayImage(avatar, mUserPhoto,
+                        ImageLoadOptions.getOptions());
+            } else {
+                mUserPhoto.setImageResource(R.drawable.user_photo_default);
+            }
+            mUserName2.setText(mCurrentUser.getUsername());
+            mUserSex.setText(mCurrentUser.isSex() ? R.string.sex_man : R.string.sex_woman);
+            int loginType = mCurrentUser.getLogintype() != null ? mCurrentUser.getLogintype() : 0;
+            String type = getString(R.string.baimi);
+            mUpdateEmail.setVisibility(View.GONE);
+            mUpdatePass.setVisibility(View.GONE);
+            if (loginType == User.LOGIN_TYPE_TENCENT_QQ) {
+                type = getString(R.string.qq);
+            } else if (loginType == User.LOGIN_TYPE_WEIBO) {
+                type = getString(R.string.weibo);
+            } else {
+                mUpdateEmail.setVisibility(View.VISIBLE);
+                mUpdatePass.setVisibility(View.VISIBLE);
+            }
+            mLoginType.setText(type);
+            String email = mCurrentUser.getEmail();
+            if (email != null && !"".equals(email)) {
+                if (mCurrentUser.getEmailVerified()) {
+                    mEmail.setText(email);
+                } else {
+                    mEmail.setText(email + " (" + getString(R.string.no_verified) + ")");
+                }
+            } else {
+                mEmail.setText(R.string.no_settings);
+            }
         } else {
             mLoginView.setVisibility(View.VISIBLE);
             mUserDetail.setVisibility(View.GONE);
@@ -157,6 +226,13 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
             }
         } else if (v == mQQLogin) {
             tencentLogin();
+        } else if (v == mUpdateHead) {
+        } else if (v == mUpdateName) {
+        } else if (v == mUpdatePass) {
+        } else if (v == mUpdateEmail) {
+            showUpdateEmailDialog();
+        } else if (v == mUpdateSex) {
+            showUpdateSexDialog();
         }
     }
 
@@ -379,5 +455,83 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
                 ShowToast(str);
             }
         }, mHandler);
+    }
+
+    private void showUpdateSexDialog() {
+        CharSequence[] items = { getString(R.string.sex_man),
+                getString(R.string.sex_woman) };
+        boolean isMan = mCurrentUser.isSex();
+        mWhichSex = isMan ? 0 : 1;
+        Dialog dialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.sex)
+                .setSingleChoiceItems(items, isMan ? 0 : 1,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                    int which) {
+                                mWhichSex = which;
+                            }
+                        })
+                .setPositiveButton(android.R.string.ok,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                    int which) {
+                                boolean isMan = mCurrentUser.isSex();
+                                int tempWhichSex = isMan ? 0 : 1;
+                                if (tempWhichSex == mWhichSex) {
+                                    return;
+                                }
+                                mCurrentUser.setSex(mWhichSex == 0);
+                                mCurrentUser.update(UserLoginActivity.this,
+                                        new UpdateListener() {
+                                            @Override
+                                            public void onSuccess() {
+                                                mUserSex.setText(mCurrentUser
+                                                        .isSex() ? R.string.sex_man
+                                                        : R.string.sex_woman);
+                                                ShowToast(R.string.update_success, R.drawable.tenpay_toast_logo_success);
+                                            }
+
+                                            @Override
+                                            public void onFailure(int arg0,
+                                                    String arg1) {
+                                                ShowToast(R.string.update_fail);
+                                            }
+                                        });
+                            }
+                        }).setNegativeButton(android.R.string.cancel, null)
+                .create();
+        dialog.show();
+    }
+
+    private void showUpdateEmailDialog() {
+        Boolean isVerified = mCurrentUser.getEmailVerified();
+        if (isVerified == null) {
+        } else if (!isVerified) {
+            Dialog dialog = new AlertDialog.Builder(this)
+                    .setTitle(R.string.update_email)
+                    .setMessage(R.string.send_verified_email)
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .setPositiveButton(android.R.string.ok,
+                            new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog,
+                                        int which) {
+                                    User.requestEmailVerify(UserLoginActivity.this, mCurrentUser.getEmail(), new EmailVerifyListener() {
+                                        @Override
+                                        public void onSuccess() {
+                                            ShowToast(R.string.send_verified_email_success,  R.drawable.tenpay_toast_logo_success);
+                                        }
+                                        @Override
+                                        public void onFailure(int arg0, String arg1) {
+                                            ShowToast(R.string.send_verified_email_fail);
+                                        }
+                                    });
+                                }
+                            }).create();
+            dialog.show();
+        }
     }
 }

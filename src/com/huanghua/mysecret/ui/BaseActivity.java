@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -92,6 +93,54 @@ public class BaseActivity extends FragmentActivity {
                 View toast = mToast.getView();
                 TextView m = (TextView) toast.findViewById(R.id.toast_msg);
                 m.setText(resId);
+                mToast.show();
+            }
+        });
+    }
+
+    public void ShowToast(final String text, final int drawableId) {
+        if (!TextUtils.isEmpty(text)) {
+            runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    if (mToast == null) {
+                        mToast = new Toast(BaseActivity.this);
+                        mToast.setDuration(Toast.LENGTH_SHORT);
+                        mToast.setView(mInFlater.inflate(R.layout.toast_view,
+                                null));
+                        mToast.setGravity(Gravity.CENTER, 0, 0);
+                    }
+                    View toast = mToast.getView();
+                    TextView m = (TextView) toast.findViewById(R.id.toast_msg);
+                    m.setText(text);
+                    ImageView image = (ImageView) toast
+                            .findViewById(R.id.toast_image);
+                    image.setBackgroundResource(drawableId);
+                    mToast.show();
+                }
+            });
+
+        }
+    }
+
+    public void ShowToast(final int resId, final int drawableId) {
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                if (mToast == null) {
+                    mToast = new Toast(BaseActivity.this);
+                    mToast.setDuration(Toast.LENGTH_SHORT);
+                    mToast.setView(mInFlater.inflate(R.layout.toast_view, null));
+                    mToast.setGravity(Gravity.CENTER, 0, 0);
+                }
+                View toast = mToast.getView();
+                TextView m = (TextView) toast.findViewById(R.id.toast_msg);
+                m.setText(resId);
+                ImageView image = (ImageView) toast
+                        .findViewById(R.id.toast_image);
+                image.setBackgroundResource(drawableId);
                 mToast.show();
             }
         });

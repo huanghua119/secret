@@ -5,6 +5,7 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -63,7 +64,9 @@ public class CommentListAdapter extends BaseListAdapter<Comment> {
 
         Comment parentComment = coment.getParentComment();
         if (parentComment != null && parentComment.getFromUser() != null) {
-            mContents.setText(coment.getContents() + "  //@" + parentComment.getFromUser().getUsername() + ": " + parentComment.getContents());
+            String parentName = "  <font color=\"#0000FF\">//@" + parentComment.getFromUser().getUsername() + ":</font> ";
+            String text = coment.getContents() + parentName + parentComment.getContents();
+            mContents.setText(Html.fromHtml(text));
         } else {
             mContents.setText(coment.getContents());
         }

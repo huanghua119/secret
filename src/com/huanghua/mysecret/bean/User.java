@@ -56,6 +56,9 @@ public class User extends BmobUser {
     }
 
     public Integer getLogintype() {
+        if (logintype == null) {
+            return 0;
+        }
         return logintype;
     }
 
