@@ -1,5 +1,7 @@
 package com.huanghua.mysecret.ui;
 
+import java.util.List;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,7 +21,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.EmailVerifyListener;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 import com.huanghua.mysecret.CustomApplcation;
@@ -161,7 +165,7 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
     protected void onResume() {
         super.onResume();
         mCurrentUser = userManager.getCurrentUser();
-        if (mCurrentUser != null) {
+        if (mCurrentUser != null && mCurrentUser.getObjectId() != null) {
             mLoginView.setVisibility(View.GONE);
             mUserDetail.setVisibility(View.VISIBLE);
             String avatar = mCurrentUser.getAvatar();
@@ -186,6 +190,32 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
                 mUpdatePass.setVisibility(View.VISIBLE);
             }
             mLoginType.setText(type);
+            BmobQuery<User> query = new BmobQuery<User>();
+            query.addWhereEndsWith("objectId", mCurrentUser.getObjectId());
+            query.findObjects(this, new FindListener<User>() {
+                @Override
+                public void onSuccess(List<User> arg0) {
+                    if (arg0.size() < 0) {
+                        return;
+                    }
+                    User u = arg0.get(0);
+                    String email = u.getEmail();
+                    if (email != null && !"".equals(email)) {
+                        if (u.getEmailVerified()) {
+                            mEmail.setText(email);
+                        } else {
+                            mEmail.setText(email + " ("
+                                    + getString(R.string.no_verified) + ")");
+                        }
+                    } else {
+                        mEmail.setText(R.string.no_settings);
+                    }
+                    mCurrentUser.setEmailVerified(u.getEmailVerified());
+                }
+
+                public void onError(int arg0, String arg1) {
+                }
+            });
             String email = mCurrentUser.getEmail();
             if (email != null && !"".equals(email)) {
                 if (mCurrentUser.getEmailVerified()) {
@@ -229,6 +259,7 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
         } else if (v == mUpdateHead) {
         } else if (v == mUpdateName) {
         } else if (v == mUpdatePass) {
+            showUpdatePassDialog();
         } else if (v == mUpdateEmail) {
             showUpdateEmailDialog();
         } else if (v == mUpdateSex) {
@@ -507,7 +538,11 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
 
     private void showUpdateEmailDialog() {
         Boolean isVerified = mCurrentUser.getEmailVerified();
-        if (isVerified == null) {
+        if (isVerified == null || isVerified) {
+            Intent intent = new Intent();
+            intent.putExtra("update_type", UpdateUserInfoActivity.UPDATE_TYPE_USER_EMAIL);
+            intent.setClass(this, UpdateUserInfoActivity.class);
+            startAnimActivity(intent);
         } else if (!isVerified) {
             Dialog dialog = new AlertDialog.Builder(this)
                     .setTitle(R.string.update_email)
@@ -533,5 +568,53 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
                             }).create();
             dialog.show();
         }
+    }
+
+    private void showUpdatePassDialog() {
+        View view = getLayoutInflater()
+                .inflate(R.layout.update_pass_view, null);
+        final EditText old_edit = (EditText) view.findViewById(R.id.old_pass);
+        final EditText new_edit = (EditText) view.findViewById(R.id.new_pass);
+        Dialog dialog = new AlertDialog.Builder(this)
+                .setView(view)
+                .setTitle(R.string.update_password2)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(android.R.string.ok,
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                    int which) {
+                                String old_pass = old_edit.getText().toString();
+                                String new_pass = new_edit.getText().toString();
+                                if (TextUtils.isEmpty(old_pass)) {
+                                    ShowToast(R.string.not_old_pass);
+                                    return;
+                                }
+                                String old_pass2 = User.getCurrentUser(UserLoginActivity.this).getPassword();
+                                showLog("update_pass", "old_pass2: " + old_pass2);
+                                if (!old_pass.equals(old_pass2)) {
+                                    ShowToast(R.string.correct_old_pass);
+                                    return;
+                                }
+                                if (TextUtils.isEmpty(new_pass)) {
+                                    ShowToast(R.string.not_new_pass);
+                                    return;
+                                }
+                                if (old_pass2.equals(new_pass)) {
+                                    return;
+                                }
+                                mCurrentUser.setPassword(new_pass);
+                                mCurrentUser.update(UserLoginActivity.this, new UpdateListener() {
+                                    @Override
+                                    public void onSuccess() {
+                                    }
+                                    @Override
+                                    public void onFailure(int arg0, String arg1) {
+                                    }
+                                });
+                            }
+                        }).create();
+        dialog.show();
     }
 }

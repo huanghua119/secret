@@ -125,10 +125,18 @@
     <string name="no_verified">未验证</string>
     <string name="password">密码</string>
     <string name="update_password">********</string>
+    <string name="update_password2">修改密码</string>
     <string name="update_success">修改成功</string>
     <string name="update_fail">修改失败 </string>
     <string name="send_verified_email">您的邮箱未验证，是否发送验证信息到邮箱？</string>
     <string name="send_verified_email_success">验证邮件已发送!</string>
     <string name="send_verified_email_fail">验证邮件发送失败！</string>
+    <string name="old_pass">原密码:</string>
+    <string name="new_pass">新密码:</string>
+    <string name="not_old_pass">请输入原密码</string>
+    <string name="not_new_pass">请输入新密码</string>
+    <string name="correct_old_pass">原密码不正确</string>
+    <string name="update_email2">修改邮箱</string>
+    <string name="save">保存</string>
 
 </resources>

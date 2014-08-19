@@ -87,6 +87,8 @@
         </activity>
         <activity android:name="com.huanghua.mysecret.ui.MyMessageActivity" >
         </activity>
+        <activity android:name="com.huanghua.mysecret.ui.UpdateUserInfoActivity" >
+        </activity>
         <service android:name="com.huanghua.mysecret.service.DateQueryService" >
         </service>
 
