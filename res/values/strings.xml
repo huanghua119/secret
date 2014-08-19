@@ -121,7 +121,7 @@
     <string name="qq">腾讯QQ</string>
     <string name="baimi">百秘帐号</string>
     <string name="update_email">邮箱</string>
-    <string name="no_settings">邮件可用于找回密码</string>
+    <string name="no_settings">未设置</string>
     <string name="no_verified">未验证</string>
     <string name="password">密码</string>
     <string name="update_password">********</string>
@@ -138,5 +138,12 @@
     <string name="correct_old_pass">原密码不正确</string>
     <string name="update_email2">修改邮箱</string>
     <string name="save">保存</string>
+    <string name="alert_email">您已经设置过邮箱并且已经通过验证，如果更改，我们将重新发送验证邮件到新的邮箱！</string>
+    <string name="alert_email2">设置邮箱后可找回您的登录密码！设置后，我们将发送验证邮件到您的邮箱，您验证后即可生效！</string>
+    <string name="alert_email3">您已经设置过邮箱但没有通过验证！，如果更改，我们将重新发送验证邮件到新的邮箱！</string>
+    <string name="input_valid_email">请输入正确的邮箱！</string>
+    <string name="email_exist">邮箱已经存在！</string>
+    <string name="update">修改</string>
+    <string name="tease_me">你是在逗我吗？</string>
 
 </resources>

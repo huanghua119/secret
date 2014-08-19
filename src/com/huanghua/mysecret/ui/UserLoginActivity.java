@@ -216,9 +216,10 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
                 public void onError(int arg0, String arg1) {
                 }
             });
-            String email = mCurrentUser.getEmail();
-            if (email != null && !"".equals(email)) {
-                if (mCurrentUser.getEmailVerified()) {
+            Boolean isVerified= mCurrentUser.getEmailVerified();
+            if (isVerified != null) {
+                String email = mCurrentUser.getEmail();
+                if (isVerified) {
                     mEmail.setText(email);
                 } else {
                     mEmail.setText(email + " (" + getString(R.string.no_verified) + ")");
@@ -548,22 +549,40 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
                     .setTitle(R.string.update_email)
                     .setMessage(R.string.send_verified_email)
                     .setNegativeButton(android.R.string.cancel, null)
+                    .setNeutralButton(R.string.update,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog,
+                                        int which) {
+                                    Intent intent = new Intent();
+                                    intent.putExtra("update_type", UpdateUserInfoActivity.UPDATE_TYPE_USER_EMAIL);
+                                    intent.setClass(UserLoginActivity.this, UpdateUserInfoActivity.class);
+                                    startAnimActivity(intent);
+                                }
+                            })
                     .setPositiveButton(android.R.string.ok,
                             new DialogInterface.OnClickListener() {
 
                                 @Override
                                 public void onClick(DialogInterface dialog,
                                         int which) {
-                                    User.requestEmailVerify(UserLoginActivity.this, mCurrentUser.getEmail(), new EmailVerifyListener() {
-                                        @Override
-                                        public void onSuccess() {
-                                            ShowToast(R.string.send_verified_email_success,  R.drawable.tenpay_toast_logo_success);
-                                        }
-                                        @Override
-                                        public void onFailure(int arg0, String arg1) {
-                                            ShowToast(R.string.send_verified_email_fail);
-                                        }
-                                    });
+                                    User.requestEmailVerify(
+                                            UserLoginActivity.this,
+                                            mCurrentUser.getEmail(),
+                                            new EmailVerifyListener() {
+                                                @Override
+                                                public void onSuccess() {
+                                                    ShowToast(
+                                                            R.string.send_verified_email_success,
+                                                            R.drawable.tenpay_toast_logo_success);
+                                                }
+
+                                                @Override
+                                                public void onFailure(int arg0,
+                                                        String arg1) {
+                                                    ShowToast(R.string.send_verified_email_fail);
+                                                }
+                                            });
                                 }
                             }).create();
             dialog.show();
@@ -591,26 +610,28 @@ public class UserLoginActivity extends BaseActivity implements OnClickListener {
                                     ShowToast(R.string.not_old_pass);
                                     return;
                                 }
-                                String old_pass2 = User.getCurrentUser(UserLoginActivity.this).getPassword();
+/*                                String old_pass2 = User.getCurrentUser(UserLoginActivity.this).getPassword();
                                 showLog("update_pass", "old_pass2: " + old_pass2);
                                 if (!old_pass.equals(old_pass2)) {
                                     ShowToast(R.string.correct_old_pass);
                                     return;
-                                }
+                                }*/
                                 if (TextUtils.isEmpty(new_pass)) {
                                     ShowToast(R.string.not_new_pass);
                                     return;
                                 }
-                                if (old_pass2.equals(new_pass)) {
+/*                                if (old_pass2.equals(new_pass)) {
                                     return;
-                                }
+                                }*/
                                 mCurrentUser.setPassword(new_pass);
                                 mCurrentUser.update(UserLoginActivity.this, new UpdateListener() {
                                     @Override
                                     public void onSuccess() {
+                                        ShowToast(R.string.update_success,  R.drawable.tenpay_toast_logo_success);
                                     }
                                     @Override
                                     public void onFailure(int arg0, String arg1) {
+                                        ShowToast(R.string.update_fail);
                                     }
                                 });
                             }
