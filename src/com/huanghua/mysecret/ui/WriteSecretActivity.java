@@ -9,7 +9,9 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import cn.bmob.v3.listener.SaveListener;
 
@@ -46,6 +48,9 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
     private LocationUtil mLutil = null;
     private String mLocation = "";
     private TextView mParnetCommnet = null;
+    private View mPhotoView = null;
+    private ImageView mUserPhoto = null;
+    private int mRandomHead = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +64,23 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
         mContents.addTextChangedListener(this);
         mContentsCountView = (TextView) findViewById(R.id.contents_count);
         mAddLocation = (TextView) findViewById(R.id.add_location);
+        mPhotoView = findViewById(R.id.photo_view);
+        mPhotoView.setVisibility(View.GONE);
+        mUserPhoto = (ImageView) findViewById(R.id.item_photo);
+        mUserPhoto.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mRandomHead = CommonUtils.getRandomHead();
+                mUserPhoto.setImageResource(CommonUtils.HEAD_RESOURS[mRandomHead]);
+            }
+        });
         mLutil = new LocationUtil(this);
         if (mWriteType == WRITE_TYPE_SECRET) {
             mTitle.setText(R.string.publication_secret);
             mContents.setHint(R.string.write_secret_hint);
             mAddLocation.setVisibility(View.VISIBLE);
+            mPhotoView.setVisibility(View.VISIBLE);
+            mRandomHead = CommonUtils.getRandomHead();
         } else if (mWriteType == WRITE_TYPE_COMMENT) {
             mTitle.setText(R.string.publication_comment);
             mContents.setHint(R.string.write_comment_hint);
@@ -91,6 +108,9 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
         mLocation = mShowLocation ? mLutil.getAddress(mLutil.findLocation())
                 : getString(R.string.unknown_address);
         mAddLocation.setText(mLocation);
+        if (mWriteType == WRITE_TYPE_SECRET) {
+            mUserPhoto.setImageResource(CommonUtils.HEAD_RESOURS[mRandomHead]);
+        }
     }
 
     public void onHideLocation(View v) {
@@ -118,6 +138,7 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
                 s.setStatus(0);
                 s.setLocation(mShowLocation ? mLutil.findLocation() : null);
                 s.setAddress(mLocation);
+                s.setRandomHead(mRandomHead);
                 s.save(this, new SaveListener() {
                     @Override
                     public void onSuccess() {

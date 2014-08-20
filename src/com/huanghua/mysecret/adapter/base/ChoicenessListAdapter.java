@@ -26,12 +26,11 @@ import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.bean.SecretSupport;
 import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.load.DateLoad;
-import com.huanghua.mysecret.util.ImageLoadOptions;
+import com.huanghua.mysecret.util.CommonUtils;
 import com.huanghua.mysecret.util.LocationUtil;
 import com.huanghua.mysecret.util.ViewHolder;
 import com.huanghua.mysecret.view.DateTextView;
 import com.huanghua.mysecret.view.SupportView;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
 
@@ -77,14 +76,7 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
         mDate.setInitDate(secret.getCreatedAt());
         TextView mContents = ViewHolder.get(view, R.id.item_contents);
         ImageView mDeleteView = ViewHolder.get(view, R.id.item_delete);
-
-        String avatar = user.getAvatar();
-        if (avatar != null && !avatar.equals("")) {
-            ImageLoader.getInstance().displayImage(avatar, mPhoto,
-                    ImageLoadOptions.getOptions());
-        } else {
-            mPhoto.setImageResource(R.drawable.user_photo_default);
-        }
+        mPhoto.setImageResource(CommonUtils.HEAD_RESOURS[secret.getRandomHead()]);
 
         mContents.setText(secret.getContents());
         mName.setText(user.getUsername());

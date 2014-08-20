@@ -145,5 +145,6 @@
     <string name="email_exist">邮箱已经存在！</string>
     <string name="update">修改</string>
     <string name="tease_me">你是在逗我吗？</string>
+    <string name="no_user_photo">为了保护你的隐私，发表秘密不使用您的头像！</string>
 
 </resources>

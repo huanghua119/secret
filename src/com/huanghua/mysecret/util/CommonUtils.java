@@ -270,6 +270,6 @@ public class CommonUtils {
     public static int getRandomHead() {
         Random random = new Random();
         int head_index = random.nextInt(HEAD_RESOURS.length - 1);
-        return HEAD_RESOURS[head_index];
+        return head_index;
     }
 }

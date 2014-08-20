@@ -222,7 +222,6 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="24dip"
-                    android:background="@drawable/default_icon"
                     android:contentDescription="@string/app_name" />
 
                 <ImageView

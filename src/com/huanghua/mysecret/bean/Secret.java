@@ -13,6 +13,7 @@ public class Secret extends BmobObject {
     private BmobGeoPoint location;
     private String address;
     private Integer commentCount;
+    private Integer randomHead;
 
     public String getAddress() {
         return address;
@@ -64,5 +65,16 @@ public class Secret extends BmobObject {
 
     public void setCommentCount(Integer commentCount) {
         this.commentCount = commentCount;
+    }
+
+    public Integer getRandomHead() {
+        if (randomHead == null) {
+            return 0;
+        }
+        return randomHead;
+    }
+
+    public void setRandomHead(Integer randomHead) {
+        this.randomHead = randomHead;
     }
 }

@@ -15,12 +15,10 @@ import com.huanghua.mysecret.bean.SecretSupport;
 import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.load.DateLoad;
 import com.huanghua.mysecret.util.CommonUtils;
-import com.huanghua.mysecret.util.ImageLoadOptions;
 import com.huanghua.mysecret.view.DateTextView;
 import com.huanghua.mysecret.view.SupportView;
 import com.huanghua.mysecret.view.xlist.XListView;
 import com.huanghua.mysecret.view.xlist.XListView.IXListViewListener;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -97,13 +95,7 @@ public class WriteCommentActivity extends BaseActivity implements
         mDate.setInitDate(mCurrentSecret.getCreatedAt());
         TextView mContents = (TextView) mSecretView
                 .findViewById(R.id.item_contents);
-        String avatar = user.getAvatar();
-        if (avatar != null && !avatar.equals("")) {
-            ImageLoader.getInstance().displayImage(avatar, mPhoto,
-                    ImageLoadOptions.getOptions());
-        } else {
-            mPhoto.setImageResource(R.drawable.user_photo_default);
-        }
+        mPhoto.setImageResource(CommonUtils.HEAD_RESOURS[mCurrentSecret.getRandomHead()]);
 
         mContents.setText(mCurrentSecret.getContents());
         mName.setText(user.getUsername());
