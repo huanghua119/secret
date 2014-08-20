@@ -2,7 +2,7 @@
 <resources>
 
     <color name="tab_background_color_purple">#2f1747</color>
-    <color name="space_title_bg_color">#373f53</color>
+    <color name="space_title_bg_color">#378d86</color>
     <color name="space_tab_text_color">#f3f3f3</color>
     <color name="space_base_bg">#f4f6f6</color>
     <color name="space_activity_bg_color">#d2d2d2</color>
@@ -24,7 +24,7 @@
     <drawable name="space_item_btn_bg_press">#f8f8f8</drawable>
 
     <!-- bottom tab color -->
-    <drawable name="space_bottom_btn_bg_press">#373f53</drawable>
-    <drawable name="space_bottom_btn_bg_normal">#373f53</drawable>
+    <drawable name="space_bottom_btn_bg_press">#378d86</drawable>
+    <drawable name="space_bottom_btn_bg_normal">#378d86</drawable>
 
 </resources>
