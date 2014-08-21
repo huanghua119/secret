@@ -20,8 +20,8 @@
     <color name="space_item_comment_contents_color">#323131</color>
 
     <!-- list item expression color -->
-    <drawable name="space_item_btn_bg_normal">#f8f8f8</drawable>
-    <drawable name="space_item_btn_bg_press">#f8f8f8</drawable>
+    <drawable name="space_item_btn_bg_normal">#f0f0f0</drawable>
+    <drawable name="space_item_btn_bg_press">#f0f0f0</drawable>
 
     <!-- bottom tab color -->
     <drawable name="space_bottom_btn_bg_press">#378d86</drawable>
