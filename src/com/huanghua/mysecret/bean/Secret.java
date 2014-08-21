@@ -14,6 +14,7 @@ public class Secret extends BmobObject {
     private String address;
     private Integer commentCount;
     private Integer randomHead;
+    private String pic;
 
     public String getAddress() {
         return address;
@@ -76,5 +77,13 @@ public class Secret extends BmobObject {
 
     public void setRandomHead(Integer randomHead) {
         this.randomHead = randomHead;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
     }
 }

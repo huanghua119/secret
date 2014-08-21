@@ -18,6 +18,7 @@ import com.huanghua.mysecret.bean.ApkBean;
 import com.huanghua.mysecret.frament.ChoicenessFragment;
 import com.huanghua.mysecret.frament.MoreFragment;
 import com.huanghua.mysecret.frament.NearSecretFragment;
+import com.huanghua.mysecret.frament.PicSecretFragment;
 import com.huanghua.mysecret.load.DateLoad;
 import com.huanghua.mysecret.service.DateQueryService;
 import com.huanghua.mysecret.util.CommonUtils;
@@ -33,9 +34,11 @@ public class MainActivity extends BaseActivity {
     private ImageView mChoiceness_tips;
     private ImageView mNearby_tips;
     private ImageView mMore_tips;
+    private ImageView mPic_tipes;
 
     private ChoicenessFragment mChoicenessFrament;
     private NearSecretFragment mNearSecretFrament;
+    private PicSecretFragment mPicSecretFrament;
     private MoreFragment mMoreFragment;
     private SharePreferenceUtil mSp = null;
     private LocationClient mLocationClient;
@@ -88,25 +91,29 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initView() {
-        mTabs = new Button[3];
+        mTabs = new Button[4];
         mTabs[0] = (Button) findViewById(R.id.btn_choiceness);
         mTabs[1] = (Button) findViewById(R.id.btn_nearby);
-        mTabs[2] = (Button) findViewById(R.id.btn_more);
+        mTabs[2] = (Button) findViewById(R.id.btn_pic);
+        mTabs[3] = (Button) findViewById(R.id.btn_more);
         mChoiceness_tips = (ImageView) findViewById(R.id.iv_choiceness_tips);
         mNearby_tips = (ImageView) findViewById(R.id.iv_nearby_tips);
         mMore_tips = (ImageView) findViewById(R.id.iv_moreby_tips);
+        mPic_tipes = (ImageView) findViewById(R.id.iv_pic_tips);
     }
 
     private void initTab() {
         mChoicenessFrament = new ChoicenessFragment();
         mNearSecretFrament = new NearSecretFragment();
+        mPicSecretFrament = new PicSecretFragment();
         mMoreFragment = new MoreFragment();
-        fragments = new Fragment[] { mChoicenessFrament, mNearSecretFrament,
+        fragments = new Fragment[] { mChoicenessFrament, mNearSecretFrament,mPicSecretFrament,
                 mMoreFragment };
         FragmentTransaction trx = getSupportFragmentManager()
                 .beginTransaction();
         trx.add(R.id.fragment_container, mChoicenessFrament);
         trx.add(R.id.fragment_container, mNearSecretFrament);
+        trx.add(R.id.fragment_container, mPicSecretFrament);
         trx.add(R.id.fragment_container, mMoreFragment);
         trx.commit();
         // 添加显示第一个fragment
@@ -114,14 +121,16 @@ public class MainActivity extends BaseActivity {
             getSupportFragmentManager().beginTransaction()
             .hide(mNearSecretFrament)
             .hide(mChoicenessFrament)
+            .hide(mPicSecretFrament)
             .show(mMoreFragment).commit();
-            mTabs[2].setSelected(true);
-            mCurrentTabIndex = 2;
+            mTabs[3].setSelected(true);
+            mCurrentTabIndex = 3;
             ThemeUtil.setThemeFinish(this, false);
         } else {
             getSupportFragmentManager().beginTransaction()
             .hide(mNearSecretFrament)
             .hide(mMoreFragment)
+            .hide(mPicSecretFrament)
             .show(mChoicenessFrament).commit();
             mTabs[0].setSelected(true);
             mCurrentTabIndex = 0;
@@ -147,8 +156,14 @@ public class MainActivity extends BaseActivity {
                 mNearSecretFrament.toTopSelect();
             }
             break;
-        case R.id.btn_more:
+        case R.id.btn_pic:
             mIndex = 2;
+            if (mCurrentTabIndex == mIndex) {
+                mPicSecretFrament.toTopSelect();
+            }
+            break;
+        case R.id.btn_more:
+            mIndex = 3;
             break;
         }
         if (mCurrentTabIndex != mIndex) {
@@ -172,6 +187,7 @@ public class MainActivity extends BaseActivity {
         mLocationClient.start();
         mNearby_tips.setVisibility(View.GONE);
         mChoiceness_tips.setVisibility(View.GONE);
+        mPic_tipes.setVisibility(View.GONE);
         if (DateQueryService.sHasNewSecret) {
             mChoiceness_tips.setVisibility(View.VISIBLE);
         }

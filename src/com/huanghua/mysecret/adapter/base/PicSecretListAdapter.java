@@ -34,7 +34,7 @@ import com.huanghua.mysecret.view.DateTextView;
 import com.huanghua.mysecret.view.SupportView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
+public class PicSecretListAdapter extends BaseListAdapter<Secret> {
 
     private boolean mNearSecret = false;
     private boolean mMySecret = false;
@@ -56,7 +56,7 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
         }
     };
 
-    public ChoicenessListAdapter(Context context, List<Secret> list) {
+    public PicSecretListAdapter(Context context, List<Secret> list) {
         super(context, list);
         mMainThreadHandler = new Handler(context.getApplicationContext()
                 .getMainLooper());
@@ -214,8 +214,8 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
                 querypm.include("comment.secret");
                 BmobQuery<Comment> querypc = new BmobQuery<Comment>();
                 querypc.addWhereEqualTo("secret", secret);
-                querypm.addWhereMatchesQuery("comment", Comment.class.getSimpleName(),
-                        querypc);
+                querypm.addWhereMatchesQuery("comment",
+                        Comment.class.getSimpleName(), querypc);
                 querypm.findObjects(mContext, new FindListener<PushMessage>() {
                     @Override
                     public void onError(int arg0, String arg1) {
@@ -244,67 +244,42 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
         });
 
         /*
-        final BmobQuery<Comment> queryComment = new BmobQuery<Comment>();
-        queryComment.addWhereEqualTo("secret", secret);
-        BmobQuery<CommentSupport> querycs = new BmobQuery<CommentSupport>();
-        querycs.addWhereMatchesQuery("comment", Comment.class.getSimpleName(),
-                queryComment);
-        querycs.setLimit(1000);
-        querycs.findObjects(mContext, new FindListener<CommentSupport>() {
-            @Override
-            public void onError(int arg0, String arg1) {
-                ShowToast(mContext.getString(R.string.delete_fail));
-            }
-
-            @Override
-            public void onSuccess(List<CommentSupport> list) {
-                showLog("delete_mysecret", "CommentSupport list:" + list.size());
-                for (CommentSupport cs : list) {
-                    cs.delete(mContext);
-                }
-                queryComment.findObjects(mContext, new FindListener<Comment>() {
-                    @Override
-                    public void onSuccess(List<Comment> list) {
-                        showLog("delete_mysecret", "list:" + list.size());
-                        for (Comment c : list) {
-                            c.delete(mContext);
-                        }
-                        secret.delete(mContext, new DeleteListener() {
-                            @Override
-                            public void onSuccess() {
-                                getList().remove(secret);
-                                notifyDataSetChanged();
-                            }
-
-                            @Override
-                            public void onFailure(int arg0, String arg1) {
-                                ShowToast(mContext
-                                        .getString(R.string.delete_fail));
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onError(int arg0, String arg1) {
-                        ShowToast(mContext.getString(R.string.delete_fail));
-                    }
-                });
-                querySs.findObjects(mContext,
-                        new FindListener<SecretSupport>() {
-                            @Override
-                            public void onError(int arg0, String arg1) {
-
-                            }
-
-                            @Override
-                            public void onSuccess(List<SecretSupport> list) {
-                                for (SecretSupport ss : list) {
-                                    ss.delete(mContext);
-                                }
-                            }
-                        });
-            }
-        });
+         * final BmobQuery<Comment> queryComment = new BmobQuery<Comment>();
+         * queryComment.addWhereEqualTo("secret", secret);
+         * BmobQuery<CommentSupport> querycs = new BmobQuery<CommentSupport>();
+         * querycs.addWhereMatchesQuery("comment",
+         * Comment.class.getSimpleName(), queryComment); querycs.setLimit(1000);
+         * querycs.findObjects(mContext, new FindListener<CommentSupport>() {
+         * 
+         * @Override public void onError(int arg0, String arg1) {
+         * ShowToast(mContext.getString(R.string.delete_fail)); }
+         * 
+         * @Override public void onSuccess(List<CommentSupport> list) {
+         * showLog("delete_mysecret", "CommentSupport list:" + list.size()); for
+         * (CommentSupport cs : list) { cs.delete(mContext); }
+         * queryComment.findObjects(mContext, new FindListener<Comment>() {
+         * 
+         * @Override public void onSuccess(List<Comment> list) {
+         * showLog("delete_mysecret", "list:" + list.size()); for (Comment c :
+         * list) { c.delete(mContext); } secret.delete(mContext, new
+         * DeleteListener() {
+         * 
+         * @Override public void onSuccess() { getList().remove(secret);
+         * notifyDataSetChanged(); }
+         * 
+         * @Override public void onFailure(int arg0, String arg1) {
+         * ShowToast(mContext .getString(R.string.delete_fail)); } }); }
+         * 
+         * @Override public void onError(int arg0, String arg1) {
+         * ShowToast(mContext.getString(R.string.delete_fail)); } });
+         * querySs.findObjects(mContext, new FindListener<SecretSupport>() {
+         * 
+         * @Override public void onError(int arg0, String arg1) {
+         * 
+         * }
+         * 
+         * @Override public void onSuccess(List<SecretSupport> list) { for
+         * (SecretSupport ss : list) { ss.delete(mContext); } } }); } });
          */
     }
 }

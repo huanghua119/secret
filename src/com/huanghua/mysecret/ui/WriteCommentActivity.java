@@ -15,10 +15,12 @@ import com.huanghua.mysecret.bean.SecretSupport;
 import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.load.DateLoad;
 import com.huanghua.mysecret.util.CommonUtils;
+import com.huanghua.mysecret.util.ImageLoadOptions;
 import com.huanghua.mysecret.view.DateTextView;
 import com.huanghua.mysecret.view.SupportView;
 import com.huanghua.mysecret.view.xlist.XListView;
 import com.huanghua.mysecret.view.xlist.XListView.IXListViewListener;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -96,6 +98,15 @@ public class WriteCommentActivity extends BaseActivity implements
         TextView mContents = (TextView) mSecretView
                 .findViewById(R.id.item_contents);
         mPhoto.setImageResource(CommonUtils.HEAD_RESOURS[mCurrentSecret.getRandomHead()]);
+        ImageView mItemPicView = (ImageView) mSecretView.findViewById(R.id.item_pic);
+        String pic = mCurrentSecret.getPic();
+        if (pic != null && !pic.equals("")) {
+            ImageLoader.getInstance().displayImage(pic, mItemPicView,
+                    ImageLoadOptions.getOptions());
+            mItemPicView.setVisibility(View.VISIBLE);
+        } else {
+            mItemPicView.setVisibility(View.GONE);
+        }
 
         mContents.setText(mCurrentSecret.getContents());
         mName.setText(user.getUsername());

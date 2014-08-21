@@ -132,6 +132,7 @@ public class VeryNewFragment extends FragmentBase2 implements
             mQuerySecretNew = new BmobQuery<Secret>();
             mQuerySecretNew.include("user");
             mQuerySecretNew.addWhereExists("user");
+            mQuerySecretNew.addWhereDoesNotExists("pic");
             mQuerySecretNew.order("-createdAt");
             mListPage = 1;
             mQuerySecretNew.setLimit(mListPage * LIST_DEFALUT_LIMIT);
