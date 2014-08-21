@@ -219,4 +219,14 @@ public class MainActivity extends BaseActivity {
         super.onDestroy();
     }
 
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        if (fragment instanceof ChoicenessFragment) {
+            if (mChoicenessFrament != null) {
+                mChoicenessFrament.onAttachFragment();
+            }
+        }
+        super.onAttachFragment(fragment);
+    }
+
 }

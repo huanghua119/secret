@@ -46,7 +46,38 @@
                 android:gravity="center"
                 android:visibility="visible" />
         </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
 
+            <Button
+                android:id="@+id/btn_pic"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?attr/home_bottom_bg"
+                android:drawableTop="@drawable/tab_pic"
+                android:onClick="onTabSelect"
+                android:paddingTop="8dip"
+                android:layout_centerInParent="true"
+                android:scaleType="matrix"
+                android:text="@string/tab_pic"
+                android:textColor="?attr/tab_textcolor"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/iv_pic_tips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="10dp"
+                android:background="?attr/tab_notice"
+                android:contentDescription="@string/action_settings"
+                android:gravity="center"
+                android:visibility="visible" />
+        </RelativeLayout>
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"

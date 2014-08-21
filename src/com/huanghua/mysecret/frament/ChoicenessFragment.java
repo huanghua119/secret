@@ -139,10 +139,14 @@ public class ChoicenessFragment extends FragmentBase implements
         public Fragment getItem(int arg0) {
             switch (arg0) {
             case TAB_VERY_TOP:
-                mTopFragment = new VeryTopFragment();
+                if (mTopFragment == null) {
+                    mTopFragment = new VeryTopFragment();
+                }
                 return mTopFragment;
             case TAB_VERY_NEW:
-                mNewFragment = new VeryNewFragment();
+                if (mNewFragment == null) {
+                    mNewFragment = new VeryNewFragment();
+                }
                 return mNewFragment;
             }
             return null;
@@ -184,4 +188,8 @@ public class ChoicenessFragment extends FragmentBase implements
         }
     }
 
+    public void onAttachFragment() {
+        mTopFragment = new VeryTopFragment();
+        mNewFragment = new VeryNewFragment();
+    }
 }
