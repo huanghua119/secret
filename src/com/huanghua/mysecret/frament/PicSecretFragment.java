@@ -139,6 +139,7 @@ public class PicSecretFragment extends FragmentBase implements
     private void init() {
         mWriteSecret = (ImageButton) findViewById(R.id.write_secret);
         mWriteSecret.setOnClickListener(this);
+        mWriteSecret.setImageResource(R.drawable.write_pic_secret);
 
         mLoadView = findViewById(R.id.load_view);
         mLoadImage = (ImageView) findViewById(R.id.load_img);
@@ -235,6 +236,7 @@ public class PicSecretFragment extends FragmentBase implements
         }
         if (v == mWriteSecret) {
             Intent intent = new Intent();
+            intent.putExtra("write_type", WriteSecretActivity.WRITE_TYPE_PIC_SECRET);
             intent.setClass(getActivity(), WriteSecretActivity.class);
             startAnimActivity(intent);
         }

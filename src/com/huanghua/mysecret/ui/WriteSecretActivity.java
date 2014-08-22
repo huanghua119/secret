@@ -31,11 +31,12 @@ import com.huanghua.mysecret.view.SupportView;
  * @author huanghua
  * 
  */
-public class WriteSecretActivity extends BaseActivity implements TextWatcher {
+public class WriteSecretActivity extends BaseActivity implements TextWatcher, View.OnClickListener {
 
     public static final int WRITE_TYPE_SECRET = 1;
     public static final int WRITE_TYPE_COMMENT = 2;
     public static final int WRITE_TYPE_REPLY_COMMENT = 3;
+    public static final int WRITE_TYPE_PIC_SECRET = 4;
 
     private int mWriteType = WRITE_TYPE_SECRET;
     private TextView mContentsCountView = null;
@@ -51,6 +52,7 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
     private View mPhotoView = null;
     private ImageView mUserPhoto = null;
     private int mRandomHead = 0;
+    private ImageView mAddPic = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +76,11 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
                 mUserPhoto.setImageResource(CommonUtils.HEAD_RESOURS[mRandomHead]);
             }
         });
+        mAddPic = (ImageView) findViewById(R.id.add_pic);
+        mAddPic.setVisibility(mWriteType == WRITE_TYPE_PIC_SECRET ? View.VISIBLE : View.GONE);
+        mAddPic.setOnClickListener(this);
         mLutil = new LocationUtil(this);
-        if (mWriteType == WRITE_TYPE_SECRET) {
+        if (mWriteType == WRITE_TYPE_SECRET || mWriteType == WRITE_TYPE_PIC_SECRET) {
             mTitle.setText(R.string.publication_secret);
             mContents.setHint(R.string.write_secret_hint);
             mAddLocation.setVisibility(View.VISIBLE);
@@ -108,7 +113,7 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
         mLocation = mShowLocation ? mLutil.getAddress(mLutil.findLocation())
                 : getString(R.string.unknown_address);
         mAddLocation.setText(mLocation);
-        if (mWriteType == WRITE_TYPE_SECRET) {
+        if (mWriteType == WRITE_TYPE_SECRET || mWriteType == WRITE_TYPE_PIC_SECRET) {
             mUserPhoto.setImageResource(CommonUtils.HEAD_RESOURS[mRandomHead]);
         }
     }
@@ -131,7 +136,7 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
         if (content != null && !"".endsWith(content)) {
             final Dialog dialog = CommonUtils.createLoadingDialog(this, getString(R.string.cominting));
             dialog.show();
-            if (mWriteType == WRITE_TYPE_SECRET) {
+            if (mWriteType == WRITE_TYPE_SECRET || mWriteType == WRITE_TYPE_PIC_SECRET) {
                 Secret s = new Secret();
                 s.setContents(content);
                 s.setUser(userManager.getCurrentUser());
@@ -289,5 +294,12 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher {
     @Override
     public void afterTextChanged(Editable s) {
         mContentsCountView.setText(mContentsCount + "");
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == mAddPic) {
+            
+        }
     }
 }
