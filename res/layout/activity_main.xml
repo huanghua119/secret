@@ -56,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="?attr/home_bottom_bg"
-                android:drawableTop="@drawable/tab_pic"
+                android:drawableTop="?attr/tab_pic"
                 android:onClick="onTabSelect"
                 android:paddingTop="8dip"
                 android:layout_centerInParent="true"

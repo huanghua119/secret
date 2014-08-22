@@ -60,6 +60,7 @@
         
         <!-- 底部图标  -->
         <attr name="tab_choiceness" format="reference" />
+        <attr name="tab_pic" format="reference" />
         <attr name="tab_nearby" format="reference" />
         <attr name="tab_more" format="reference" />
         

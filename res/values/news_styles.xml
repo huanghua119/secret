@@ -39,6 +39,7 @@
         <item name="listview_bg_color">@color/listview_bg_color</item>
         <item name="write_secret_location_icon">@drawable/write_secret_location_icon</item>
         <item name="tab_choiceness">@drawable/tab_choiceness</item>
+        <item name="tab_pic">@drawable/tab_pic</item>
         <item name="tab_nearby">@drawable/tab_nearby</item>
         <item name="tab_more">@drawable/tab_more</item>
         <item name="title_left_selected">@drawable/title_radio_left_bg</item>
@@ -84,6 +85,7 @@
         <item name="listview_bg_color">@color/space_listview_bg_color</item>
         <item name="write_secret_location_icon">@drawable/space_write_secret_location_icon</item>
         <item name="tab_choiceness">@drawable/space_tab_choiceness</item>
+        <item name="tab_pic">@drawable/space_tab_pic</item>
         <item name="tab_nearby">@drawable/space_tab_nearby</item>
         <item name="tab_more">@drawable/space_tab_more</item>
         <item name="title_left_selected">@drawable/space_title_radio_left_bg</item>
