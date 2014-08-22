@@ -17,9 +17,10 @@
         <attr name="item_btn_bg_normal" format="color" />
         <attr name="item_btn_bg_press" format="color" />
         <attr name="item_bottom_btn_bg" format="reference" />
-        <!-- 哭笑脸按钮 -->
+        <!-- 哭笑脸评论按钮 -->
         <attr name="cry_bg" format="reference" />
         <attr name="happy_bg" format="reference" />
+        <attr name="post_coment_bg" format="reference" />
         <attr name="cry_happy_text_color" format="reference" />
         <attr name="post_item_vertical" format="reference" />
 
