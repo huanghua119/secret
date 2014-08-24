@@ -50,7 +50,7 @@
     <style name="Theme.Space" parent="AppTheme">
         <item name="tab_background_color">@color/tab_background_color_purple</item>
         <item name="activity_bg_color">@color/space_activity_bg_color</item>
-        <item name="title_bg_color">@color/space_title_bg_color</item>
+        <item name="title_bg_color">@drawable/space_title_bg</item>
         <item name="item_name_color">@color/space_item_name_color</item>
         <item name="item_text_color">@color/space_item_text_color</item>
         <item name="list_item_content_color">@color/space_item_text_color</item>

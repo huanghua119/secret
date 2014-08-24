@@ -5,14 +5,14 @@
     <color name="space_title_bg_color">#378d86</color>
     <color name="space_tab_text_color">#f3f3f3</color>
     <color name="space_base_bg">#f4f6f6</color>
-    <color name="space_activity_bg_color">#d2d2d2</color>
+    <color name="space_activity_bg_color">#e9e9e9</color>
     <color name="space_xlistview_footer_textcolor">#323131</color>
     <color name="space_listview_bg_color">#FFFFFF</color>
 
     <!-- list item text color -->
     <color name="space_list_item_bg_color">#ffffff</color>
     <color name="space_item_name_color">#172f86</color>
-    <color name="space_item_text_color">#323131</color>
+    <color name="space_item_text_color">#606060</color>
     <color name="space_list_item_content_color">#323131</color>
     <color name="space_cry_happy_text_color">#172f86</color>
 
@@ -20,8 +20,8 @@
     <color name="space_item_comment_contents_color">#323131</color>
 
     <!-- list item expression color -->
-    <drawable name="space_item_btn_bg_normal">#f0f0f0</drawable>
-    <drawable name="space_item_btn_bg_press">#f0f0f0</drawable>
+    <drawable name="space_item_btn_bg_normal">#f2f2f2</drawable>
+    <drawable name="space_item_btn_bg_press">#f2f2f2</drawable>
 
     <!-- bottom tab color -->
     <drawable name="space_bottom_btn_bg_press">#378d86</drawable>
