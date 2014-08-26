@@ -12,7 +12,7 @@
     <!-- list item text color -->
     <color name="space_list_item_bg_color">#ffffff</color>
     <color name="space_item_name_color">#172f86</color>
-    <color name="space_item_text_color">#606060</color>
+    <color name="space_item_text_color">#555555</color>
     <color name="space_list_item_content_color">#323131</color>
     <color name="space_cry_happy_text_color">#172f86</color>
 
