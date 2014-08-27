@@ -147,5 +147,15 @@
     <string name="update">修改</string>
     <string name="tease_me">你是在逗我吗？</string>
     <string name="no_user_photo">为了保护你的隐私，发表秘密不使用您的头像！</string>
+    <string-array name="add_pic">
+        <item>拍照</item>
+        <item>从手机相册选择</item>
+    </string-array>
+    <string-array name="add_pic_delete">
+        <item>拍照</item>
+        <item>从手机相册选择</item>
+        <item>删除</item>
+    </string-array>
+    <string name="add_pic_dialog_title">可别上传淫秽图片哦!</string>
 
 </resources>
