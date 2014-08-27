@@ -32,7 +32,7 @@ import com.huanghua.mysecret.view.xlist.XListView.IXListViewListener;
  * @author huanghua
  *
  */
-public class VeryNewFragment extends FragmentBase2 implements
+public class VeryNewFragment extends FragmentBase implements
         IXListViewListener, View.OnClickListener, OnItemClickListener {
 
     private XListView mListChoiceness;

@@ -30,6 +30,7 @@ public class ChoicenessFragment extends FragmentBase implements
     private View mTopView = null;
     private RadioGroup mTitleRadioGroup = null;
     private ViewPager mPager;
+    private ViewPagerAdapter mPagerAdapter;
     private VeryTopFragment mTopFragment = null;
     private VeryNewFragment mNewFragment = null;
     private static final int TAB_VERY_TOP = 0;
@@ -65,8 +66,10 @@ public class ChoicenessFragment extends FragmentBase implements
 
     private void init() {
         mPager = (ViewPager) findViewById(R.id.pager);
-        mPager.setAdapter(new ViewPagerAdapter(getActivity()
-                .getFragmentManager()));
+        mTopFragment = new VeryTopFragment();
+        mNewFragment = new VeryNewFragment();
+        mPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
+        mPager.setAdapter(mPagerAdapter);
         mPager.setOnPageChangeListener(new PageChangeListener());
 
         mWriteSecret = (ImageButton) findViewById(R.id.write_secret);
@@ -139,14 +142,8 @@ public class ChoicenessFragment extends FragmentBase implements
         public Fragment getItem(int arg0) {
             switch (arg0) {
             case TAB_VERY_TOP:
-                if (mTopFragment == null) {
-                    mTopFragment = new VeryTopFragment();
-                }
                 return mTopFragment;
             case TAB_VERY_NEW:
-                if (mNewFragment == null) {
-                    mNewFragment = new VeryNewFragment();
-                }
                 return mNewFragment;
             }
             return null;
@@ -188,8 +185,4 @@ public class ChoicenessFragment extends FragmentBase implements
         }
     }
 
-    public void onAttachFragment() {
-        mTopFragment = new VeryTopFragment();
-        mNewFragment = new VeryNewFragment();
-    }
 }

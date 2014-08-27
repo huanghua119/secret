@@ -1,9 +1,9 @@
 package com.huanghua.mysecret.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -20,7 +20,7 @@ import com.huanghua.mysecret.manager.UserManager;
 import com.huanghua.mysecret.util.CommonUtils;
 import com.huanghua.mysecret.util.ThemeUtil;
 
-public class BaseActivity extends FragmentActivity {
+public class BaseActivity extends Activity {
 
     CustomApplcation mApplication;
 

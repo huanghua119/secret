@@ -1,12 +1,12 @@
 package com.huanghua.mysecret.ui;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -109,8 +109,7 @@ public class MainActivity extends BaseActivity {
         mMoreFragment = new MoreFragment();
         fragments = new Fragment[] { mChoicenessFrament, mNearSecretFrament,mPicSecretFrament,
                 mMoreFragment };
-        FragmentTransaction trx = getSupportFragmentManager()
-                .beginTransaction();
+        FragmentTransaction trx = getFragmentManager().beginTransaction();
         trx.add(R.id.fragment_container, mChoicenessFrament);
         trx.add(R.id.fragment_container, mNearSecretFrament);
         trx.add(R.id.fragment_container, mPicSecretFrament);
@@ -118,7 +117,7 @@ public class MainActivity extends BaseActivity {
         trx.commit();
         // 添加显示第一个fragment
         if (ThemeUtil.isThemeFinish(this)) {
-            getSupportFragmentManager().beginTransaction()
+            getFragmentManager().beginTransaction()
             .hide(mNearSecretFrament)
             .hide(mChoicenessFrament)
             .hide(mPicSecretFrament)
@@ -127,7 +126,7 @@ public class MainActivity extends BaseActivity {
             mCurrentTabIndex = 3;
             ThemeUtil.setThemeFinish(this, false);
         } else {
-            getSupportFragmentManager().beginTransaction()
+            getFragmentManager().beginTransaction()
             .hide(mNearSecretFrament)
             .hide(mMoreFragment)
             .hide(mPicSecretFrament)
@@ -167,7 +166,7 @@ public class MainActivity extends BaseActivity {
             break;
         }
         if (mCurrentTabIndex != mIndex) {
-            FragmentTransaction trx = getSupportFragmentManager()
+            FragmentTransaction trx = getFragmentManager()
                     .beginTransaction();
             trx.hide(fragments[mCurrentTabIndex]);
             if (!fragments[mIndex].isAdded()) {
@@ -233,16 +232,6 @@ public class MainActivity extends BaseActivity {
             unregisterReceiver(mBroadcastReceiver);
         }
         super.onDestroy();
-    }
-
-    @Override
-    public void onAttachFragment(Fragment fragment) {
-        if (fragment instanceof ChoicenessFragment) {
-            if (mChoicenessFrament != null) {
-                mChoicenessFrament.onAttachFragment();
-            }
-        }
-        super.onAttachFragment(fragment);
     }
 
 }

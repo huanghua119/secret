@@ -33,7 +33,7 @@ import com.huanghua.mysecret.view.xlist.XListView.IXListViewListener;
  * @author huanghua
  *
  */
-public class VeryTopFragment extends FragmentBase2 implements
+public class VeryTopFragment extends FragmentBase implements
         IXListViewListener, View.OnClickListener, OnItemClickListener {
 
     private XListView mListChoiceness;
@@ -222,4 +222,5 @@ public class VeryTopFragment extends FragmentBase2 implements
             mListChoiceness.setSelection(0);
         }
     }
+
 }

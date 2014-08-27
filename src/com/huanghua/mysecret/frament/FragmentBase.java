@@ -3,10 +3,10 @@ package com.huanghua.mysecret.frament;
 import com.huanghua.mysecret.CustomApplcation;
 import com.huanghua.mysecret.R;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -41,7 +41,7 @@ public abstract class FragmentBase extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+        //setRetainInstance(true);
         mApplication = CustomApplcation.getInstance();
         mInflater = LayoutInflater.from(getActivity());
     }
