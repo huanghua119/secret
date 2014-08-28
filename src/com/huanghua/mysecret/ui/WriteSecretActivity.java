@@ -13,6 +13,7 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -377,6 +378,9 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher, Vi
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which) {
                             case 0:
+                                Intent intent2 = new Intent(
+                                        MediaStore.ACTION_IMAGE_CAPTURE);
+                                startActivityForResult(intent2, 2);
                                 break;
                             case 1:
                                 Intent intent = new Intent(
@@ -400,6 +404,9 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher, Vi
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which) {
                             case 0:
+                                Intent intent2 = new Intent(
+                                        MediaStore.ACTION_IMAGE_CAPTURE);
+                                startActivityForResult(intent2, 2);
                                 break;
                             case 1:
                                 Intent intent = new Intent(
@@ -435,27 +442,37 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher, Vi
 
                 }
                 Uri imageUri = arg2.getData();
-                String[] filePathColumn = { MediaStore.Images.Media.DATA };
-
-                Cursor cursor = getContentResolver().query(imageUri,
-                        filePathColumn, null, null, null);
-                cursor.moveToFirst();
-
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                String picturePath = cursor.getString(columnIndex);
-                cursor.close();
-                if (mPicBitmap != null && !mPicBitmap.isRecycled()) {
-                    mPicBitmap.isRecycled();
-                    mPicBitmap = null;
-                    mPicFilePath = null;
-                }
-                mPicFilePath = picturePath;
-                mPicBitmap = BitmapFactory.decodeFile(picturePath);
+                setPicForUri(imageUri);
+            }
+        } else if (arg0 == 2) {
+            if (arg1 == RESULT_OK) {
+                Bundle bundle = arg2.getExtras();
+                mPicBitmap = (Bitmap) bundle.get("data");
                 mAddPic.setImageBitmap(small(mPicBitmap, PIC_SCALE_WIDTH,
                         PIC_SCALE_WIDTH));
-
             }
         }
+    }
+
+    private void setPicForUri(Uri imageUri) {
+        String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+        Cursor cursor = getContentResolver().query(imageUri,
+                filePathColumn, null, null, null);
+        cursor.moveToFirst();
+
+        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+        String picturePath = cursor.getString(columnIndex);
+        cursor.close();
+        if (mPicBitmap != null && !mPicBitmap.isRecycled()) {
+            mPicBitmap.isRecycled();
+            mPicBitmap = null;
+            mPicFilePath = null;
+        }
+        mPicFilePath = picturePath;
+        mPicBitmap = BitmapFactory.decodeFile(picturePath);
+        mAddPic.setImageBitmap(small(mPicBitmap, PIC_SCALE_WIDTH,
+                PIC_SCALE_WIDTH));
     }
 
     private Bitmap small(Bitmap bitmap, float scaleW, float scaleH) {
