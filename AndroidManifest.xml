@@ -3,7 +3,7 @@
     package="com.huanghua.mysecret"
     xmlns:tools="http://schemas.android.com/tools"
     android:versionCode="1"
-    android:versionName="1.3" >
+    android:versionName="1.4" >
 
     <uses-sdk
         android:minSdkVersion="10"
