@@ -159,7 +159,7 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher, Vi
         if (content != null && !"".endsWith(content)) {
             final Dialog dialog = CommonUtils.createLoadingDialog(this, getString(R.string.cominting));
             dialog.show();
-            if (mWriteType == WRITE_TYPE_SECRET) {
+            if (mWriteType == WRITE_TYPE_SECRET || (mWriteType == WRITE_TYPE_PIC_SECRET && mPicBitmap == null)) {
                 Secret s = new Secret();
                 s.setContents(content);
                 s.setUser(userManager.getCurrentUser());

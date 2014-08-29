@@ -193,6 +193,7 @@ public class PicSecretFragment extends FragmentBase implements
             mQuerySecret.setLimit(mListPage * LIST_DEFALUT_LIMIT);
             mQuerySecret.setCachePolicy(CachePolicy.NETWORK_ONLY);
             mQuerySecret.findObjects(getActivity(), mFindSecretListener);
+            mQuerySecret.count(getActivity(), Secret.class, mCountListener);
         }
     }
 
