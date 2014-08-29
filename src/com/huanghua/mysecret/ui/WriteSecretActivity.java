@@ -1,23 +1,29 @@
 package com.huanghua.mysecret.ui;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Date;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.Bitmap.Config;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -33,6 +39,7 @@ import com.huanghua.mysecret.bean.PushMessage;
 import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.service.DateQueryService;
+import com.huanghua.mysecret.util.CacheUtils;
 import com.huanghua.mysecret.util.CommonUtils;
 import com.huanghua.mysecret.util.LocationUtil;
 import com.huanghua.mysecret.view.SupportView;
@@ -68,6 +75,7 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher, Vi
     private ImageView mAddPic = null;
     private Bitmap mPicBitmap = null;
     private String mPicFilePath = null;
+    private String mClickDataTime = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -378,16 +386,20 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher, Vi
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which) {
                             case 0:
-                                Intent intent2 = new Intent(
-                                        MediaStore.ACTION_IMAGE_CAPTURE);
-                                startActivityForResult(intent2, 2);
+                                openCamera();
                                 break;
                             case 1:
-                                Intent intent = new Intent(
-                                        Intent.ACTION_GET_CONTENT);
-                                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                                intent.setType("image/*");
-                                startActivityForResult(intent, 1);
+                                int sdk_int = Build.VERSION.SDK_INT;
+                                if (sdk_int < 19) {
+                                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                                    intent.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*");
+                                    startActivityForResult(intent, 1);
+                                } else {
+                                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                                    intent.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*");
+                                    intent.setComponent(new ComponentName("com.android.gallery3d", "com.android.gallery3d.app.GalleryActivity"));
+                                    startActivityForResult(intent, 1);
+                                }
                                 break;
                             case 2:
                                 mAddPic.setImageResource(R.drawable.add_pic);
@@ -404,22 +416,47 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher, Vi
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which) {
                             case 0:
-                                Intent intent2 = new Intent(
-                                        MediaStore.ACTION_IMAGE_CAPTURE);
-                                startActivityForResult(intent2, 2);
+                                openCamera();
                                 break;
                             case 1:
-                                Intent intent = new Intent(
-                                        Intent.ACTION_GET_CONTENT);
-                                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                                intent.setType("image/*");
-                                startActivityForResult(intent, 1);
+                                int sdk_int = Build.VERSION.SDK_INT;
+                                if (sdk_int < 19) {
+                                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                                    intent.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*");
+                                    startActivityForResult(intent, 1);
+                                } else {
+                                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                                    intent.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*");
+                                    intent.setComponent(new ComponentName("com.android.gallery3d", "com.android.gallery3d.app.GalleryActivity"));
+                                    startActivityForResult(intent, 1);
+                                }
                                 break;
                             }
                         }
                     });
         }
         build.show();
+    }
+
+    private void openCamera() {
+        Date date = new Date(System.currentTimeMillis());
+        mClickDataTime = date.getTime() + "";
+        File f = new File(CacheUtils.getCacheDirectory(this, true, "pic")
+                + mClickDataTime);
+        if (f.exists()) {
+            f.delete();
+        }
+        try {
+            f.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Uri uri = Uri.fromFile(f);
+        Log.e("uri", uri + "");
+
+        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        camera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        startActivityForResult(camera, 2);
     }
 
     @Override
@@ -435,21 +472,24 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher, Vi
         super.onActivityResult(arg0, arg1, arg2);
         if (arg0 == 1) {
             if (arg1 == RESULT_OK) {
-                int sdk_int = Build.VERSION.SDK_INT;
-                if (sdk_int < 19) {
-
-                } else {
-
-                }
                 Uri imageUri = arg2.getData();
                 setPicForUri(imageUri);
             }
         } else if (arg0 == 2) {
             if (arg1 == RESULT_OK) {
-                Bundle bundle = arg2.getExtras();
-                mPicBitmap = (Bitmap) bundle.get("data");
-                mAddPic.setImageBitmap(small(mPicBitmap, PIC_SCALE_WIDTH,
-                        PIC_SCALE_WIDTH));
+                if (mPicBitmap != null && !mPicBitmap.isRecycled()) {
+                    mPicBitmap.isRecycled();
+                    mPicBitmap = null;
+                    mPicFilePath = null;
+                }
+                String files =CacheUtils.getCacheDirectory(this, true, "pic") + mClickDataTime;
+                File file = new File(files);
+                if(file.exists()){
+                    mPicBitmap = compressImageFromFile(files);
+                    mPicFilePath = saveToSdCard(mPicBitmap);
+                    mAddPic.setImageBitmap(small(mPicBitmap, PIC_SCALE_WIDTH,
+                            PIC_SCALE_WIDTH));
+                }
             }
         }
     }
@@ -473,6 +513,54 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher, Vi
         mPicBitmap = BitmapFactory.decodeFile(picturePath);
         mAddPic.setImageBitmap(small(mPicBitmap, PIC_SCALE_WIDTH,
                 PIC_SCALE_WIDTH));
+    }
+
+    private Bitmap compressImageFromFile(String srcPath) {
+        BitmapFactory.Options newOpts = new BitmapFactory.Options();
+        newOpts.inJustDecodeBounds = true;// 只读边,不读内容
+        Bitmap bitmap = BitmapFactory.decodeFile(srcPath, newOpts);
+
+        newOpts.inJustDecodeBounds = false;
+        int w = newOpts.outWidth;
+        int h = newOpts.outHeight;
+        float hh = 800f;//
+        float ww = 480f;//
+        int be = 1;
+        if (w > h && w > ww) {
+            be = (int) (newOpts.outWidth / ww);
+        } else if (w < h && h > hh) {
+            be = (int) (newOpts.outHeight / hh);
+        }
+        if (be <= 0)
+            be = 1;
+        newOpts.inSampleSize = be;// 设置采样率
+
+        newOpts.inPreferredConfig = Config.ARGB_8888;// 该模式是默认的,可不设
+        newOpts.inPurgeable = true;// 同时设置才会有效
+        newOpts.inInputShareable = true;// 。当系统内存不够时候图片自动被回收
+
+        bitmap = BitmapFactory.decodeFile(srcPath, newOpts);
+        // return compressBmpFromBmp(bitmap);//原来的方法调用了这个方法企图进行二次压缩
+        // 其实是无效的,大家尽管尝试
+        return bitmap;
+    }
+
+    private String saveToSdCard(Bitmap bitmap) {
+        String files = CacheUtils.getCacheDirectory(this, true, "pic")
+                + mClickDataTime + "_11";
+        File file = new File(files);
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            if (bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out)) {
+                out.flush();
+                out.close();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file.getAbsolutePath();
     }
 
     private Bitmap small(Bitmap bitmap, float scaleW, float scaleH) {
