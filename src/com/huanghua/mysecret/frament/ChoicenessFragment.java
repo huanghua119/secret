@@ -68,7 +68,11 @@ public class ChoicenessFragment extends FragmentBase implements
         mPager = (ViewPager) findViewById(R.id.pager);
         mTopFragment = new VeryTopFragment();
         mNewFragment = new VeryNewFragment();
-        mPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
+        try {
+            mPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
+        } catch (NoSuchMethodError e) {
+            mPagerAdapter = new ViewPagerAdapter(getFragmentManager());
+        }
         mPager.setAdapter(mPagerAdapter);
         mPager.setOnPageChangeListener(new PageChangeListener());
 

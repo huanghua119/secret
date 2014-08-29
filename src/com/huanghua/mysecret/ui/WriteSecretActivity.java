@@ -8,7 +8,6 @@ import java.util.Date;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -41,6 +40,7 @@ import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.service.DateQueryService;
 import com.huanghua.mysecret.util.CacheUtils;
 import com.huanghua.mysecret.util.CommonUtils;
+import com.huanghua.mysecret.util.DocumentsUtil;
 import com.huanghua.mysecret.util.LocationUtil;
 import com.huanghua.mysecret.view.SupportView;
 
@@ -156,7 +156,7 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher, Vi
             return;
         }
         final String content = mContents.getText().toString();
-        if (content != null && !"".endsWith(content)) {
+        if ((content != null && !"".endsWith(content)) || mPicBitmap != null) {
             final Dialog dialog = CommonUtils.createLoadingDialog(this, getString(R.string.cominting));
             dialog.show();
             if (mWriteType == WRITE_TYPE_SECRET || (mWriteType == WRITE_TYPE_PIC_SECRET && mPicBitmap == null)) {
@@ -389,17 +389,9 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher, Vi
                                 openCamera();
                                 break;
                             case 1:
-                                int sdk_int = Build.VERSION.SDK_INT;
-                                if (sdk_int < 19) {
-                                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                                    intent.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*");
-                                    startActivityForResult(intent, 1);
-                                } else {
-                                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                                    intent.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*");
-                                    intent.setComponent(new ComponentName("com.android.gallery3d", "com.android.gallery3d.app.GalleryActivity"));
-                                    startActivityForResult(intent, 1);
-                                }
+                                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                                intent.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*");
+                                startActivityForResult(intent, 1);
                                 break;
                             case 2:
                                 mAddPic.setImageResource(R.drawable.add_pic);
@@ -419,17 +411,9 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher, Vi
                                 openCamera();
                                 break;
                             case 1:
-                                int sdk_int = Build.VERSION.SDK_INT;
-                                if (sdk_int < 19) {
-                                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                                    intent.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*");
-                                    startActivityForResult(intent, 1);
-                                } else {
-                                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                                    intent.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*");
-                                    intent.setComponent(new ComponentName("com.android.gallery3d", "com.android.gallery3d.app.GalleryActivity"));
-                                    startActivityForResult(intent, 1);
-                                }
+                                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                                intent.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*");
+                                startActivityForResult(intent, 1);
                                 break;
                             }
                         }
@@ -473,7 +457,16 @@ public class WriteSecretActivity extends BaseActivity implements TextWatcher, Vi
         if (arg0 == 1) {
             if (arg1 == RESULT_OK) {
                 Uri imageUri = arg2.getData();
-                setPicForUri(imageUri);
+                int sdk_int = Build.VERSION.SDK_INT;
+                if (sdk_int < 19) {
+                    setPicForUri(imageUri);
+                } else {
+                    String uri = DocumentsUtil.getPath(this, imageUri);
+                    mPicFilePath = uri;
+                    mPicBitmap = BitmapFactory.decodeFile(uri);
+                    mAddPic.setImageBitmap(small(mPicBitmap, PIC_SCALE_WIDTH,
+                            PIC_SCALE_WIDTH));
+                }
             }
         } else if (arg0 == 2) {
             if (arg1 == RESULT_OK) {
