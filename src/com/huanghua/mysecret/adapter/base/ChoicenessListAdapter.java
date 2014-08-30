@@ -79,15 +79,6 @@ public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
         TextView mContents = ViewHolder.get(view, R.id.item_contents);
         ImageView mDeleteView = ViewHolder.get(view, R.id.item_delete);
         mPhoto.setImageResource(CommonUtils.HEAD_RESOURS[secret.getRandomHead()]);
-        ImageView mItemPicView = ViewHolder.get(view, R.id.item_pic);
-        String pic = secret.getPic();
-        if (pic != null && !pic.equals("")) {
-            ImageLoader.getInstance().displayImage(pic, mItemPicView,
-                    ImageLoadOptions.getOptions());
-            mItemPicView.setVisibility(View.VISIBLE);
-        } else {
-            mItemPicView.setVisibility(View.GONE);
-        }
 
         mContents.setText(secret.getContents());
         mName.setText(user.getUsername());

@@ -21,11 +21,10 @@ import com.huanghua.mysecret.util.CacheUtils;
 import com.huanghua.mysecret.util.CommonUtils;
 import com.huanghua.mysecret.util.SharePreferenceUtil;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
-import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
-import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
+import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 /**
  * 自定义全局Applcation类
@@ -66,6 +65,7 @@ public class CustomApplcation extends Application {
     /** 初始化ImageLoader */
     public static void initImageLoader(Context context) {
         File cacheDir = CacheUtils.getCacheDirectory(context, true, "pic");// 获取到缓存的目录地址
+        /*
         // 创建配置ImageLoader(所有的选项都是可选的,只使用那些你真的想定制)，这个可以设定在APPLACATION里面，设置为全局的配置参数
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
                 context)
@@ -82,6 +82,15 @@ public class CustomApplcation extends Application {
                 .build();
         // Initialize ImageLoader with configuration.
         ImageLoader.getInstance().init(config);// 全局初始化此配置
+        */
+
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
+                context).memoryCache(new LruMemoryCache(5 * 1024 * 1024))
+                .memoryCacheSize(10 * 1024 * 1024)
+                .discCache(new UnlimitedDiscCache(cacheDir))
+                .discCacheFileNameGenerator(new HashCodeFileNameGenerator())
+                .build();
+        ImageLoader.getInstance().init(config);
     }
 
     public static CustomApplcation getInstance() {

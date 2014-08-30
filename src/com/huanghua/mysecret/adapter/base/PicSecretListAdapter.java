@@ -7,6 +7,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.SparseArray;
@@ -26,6 +29,8 @@ import com.huanghua.mysecret.bean.Secret;
 import com.huanghua.mysecret.bean.SecretSupport;
 import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.load.DateLoad;
+import com.huanghua.mysecret.ui.BaseActivity;
+import com.huanghua.mysecret.ui.PhotoViewActivity;
 import com.huanghua.mysecret.util.CommonUtils;
 import com.huanghua.mysecret.util.ImageLoadOptions;
 import com.huanghua.mysecret.util.LocationUtil;
@@ -33,6 +38,7 @@ import com.huanghua.mysecret.util.ViewHolder;
 import com.huanghua.mysecret.view.DateTextView;
 import com.huanghua.mysecret.view.SupportView;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 public class PicSecretListAdapter extends BaseListAdapter<Secret> {
 
@@ -80,10 +86,42 @@ public class PicSecretListAdapter extends BaseListAdapter<Secret> {
         ImageView mDeleteView = ViewHolder.get(view, R.id.item_delete);
         mPhoto.setImageResource(CommonUtils.HEAD_RESOURS[secret.getRandomHead()]);
         ImageView mItemPicView = ViewHolder.get(view, R.id.item_pic);
-        String pic = secret.getPic();
+        final String pic = secret.getPic();
         if (pic != null && !pic.equals("")) {
             ImageLoader.getInstance().displayImage(pic, mItemPicView,
-                    ImageLoadOptions.getOptions());
+                    ImageLoadOptions.getOptions(),
+                    new SimpleImageLoadingListener() {
+                        @Override
+                        public void onLoadingComplete(String imageUri,
+                                View view, Bitmap loadedImage) {
+                            super.onLoadingComplete(imageUri, view, loadedImage);
+                            
+                        }
+                    });
+            setOnInViewClickListener(R.id.item_pic, new onInternalClickListener() {
+                @Override
+                public void OnClickListener(View parentV,
+                        View v, Integer position, Object values) {
+                    Intent intent = new Intent();
+                    ImageView image = (ImageView) v;
+                    Drawable d = image.getDrawable();
+                    if (d != null) {
+                        Drawable d1 = mContext.getResources().getDrawable(R.drawable.image_loading);
+                        Drawable d2 = mContext.getResources().getDrawable(R.drawable.umeng_xp_large_gallery_failed);
+                        if (d.equals(d1)) {
+                        } else if (d.equals(d2)) {
+                            return;
+                        } else {
+                            Bitmap bit =  ((BitmapDrawable)image.getDrawable()).getBitmap();
+                            intent.putExtra("photo_bit", bit);
+                        }
+                    }
+                    intent.putExtra("photo_uri", pic);
+                    intent.setClass(mContext, PhotoViewActivity.class);
+                    mContext.startActivity(intent);
+                    ((BaseActivity)mContext).overridePendingTransition(R.anim.slide_up_in, R.anim.push_up_out);
+                }
+            });
             mItemPicView.setVisibility(View.VISIBLE);
         } else {
             mItemPicView.setVisibility(View.GONE);
