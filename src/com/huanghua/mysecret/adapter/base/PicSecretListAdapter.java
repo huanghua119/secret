@@ -113,7 +113,7 @@ public class PicSecretListAdapter extends BaseListAdapter<Secret> {
                             return;
                         } else {
                             Bitmap bit =  ((BitmapDrawable)image.getDrawable()).getBitmap();
-                            intent.putExtra("photo_bit", bit);
+                            //intent.putExtra("photo_bit", bit);
                         }
                     }
                     intent.putExtra("photo_uri", pic);

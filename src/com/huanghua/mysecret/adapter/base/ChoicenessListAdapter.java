@@ -27,12 +27,10 @@ import com.huanghua.mysecret.bean.SecretSupport;
 import com.huanghua.mysecret.bean.User;
 import com.huanghua.mysecret.load.DateLoad;
 import com.huanghua.mysecret.util.CommonUtils;
-import com.huanghua.mysecret.util.ImageLoadOptions;
 import com.huanghua.mysecret.util.LocationUtil;
 import com.huanghua.mysecret.util.ViewHolder;
 import com.huanghua.mysecret.view.DateTextView;
 import com.huanghua.mysecret.view.SupportView;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class ChoicenessListAdapter extends BaseListAdapter<Secret> {
 

@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.huanghua.mysecret.R;
 import com.huanghua.mysecret.util.ImageLoadOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 /**
  * PhotoView
@@ -33,17 +34,28 @@ public class PhotoViewActivity extends BaseActivity {
         setContentView(R.layout.photo_view);
         mImageView = (ImageView) findViewById(R.id.iv_photo);
         Bitmap bit = (Bitmap) getIntent().getParcelableExtra("photo_bit");
-        if (bit == null) {
-            String uri = getIntent().getStringExtra("photo_uri");
-            ImageLoader.getInstance().displayImage(uri, mImageView,
-                    ImageLoadOptions.getOptions());
-        } else {
-            mImageView.setImageBitmap(bit);
-        }
         mAttacher = new PhotoViewAttacher(mImageView);
         mAttacher.setOnMatrixChangeListener(mOatrixChangedListener);
         mAttacher.setOnPhotoTapListener(mOnPhotoTapListener);
         mAttacher.setOnViewTapListener(mViewTapListener);
+        if (bit == null) {
+            String uri = getIntent().getStringExtra("photo_uri");
+            ImageLoader.getInstance().displayImage(uri, mImageView,
+                    ImageLoadOptions.getOptions(),
+                    new SimpleImageLoadingListener() {
+                        @Override
+                        public void onLoadingComplete(String imageUri,
+                                View view, Bitmap loadedImage) {
+                            super.onLoadingComplete(imageUri, view, loadedImage);
+                            int imageWidth = loadedImage.getWidth();
+                            int width = 800;
+                            showLog("pic_view", "imageWidth:" + imageWidth + " scale:" + width / imageWidth );
+                            //mAttacher.setScale(width / imageWidth);
+                        }
+                    });
+        } else {
+            mImageView.setImageBitmap(bit);
+        }
         mRunFinishAnim = false;
         mFirstRun = true;
     }
@@ -65,6 +77,7 @@ public class PhotoViewActivity extends BaseActivity {
         public void onMatrixChanged(RectF arg0) {
             if (!mFirstRun) {
                 mHasTouchPhoto = true;
+                mOnPhotoTapListener.onPhotoTap(null, 0, 0);
             } else {
                 mFirstRun = false;
             }
